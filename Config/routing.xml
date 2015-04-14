@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="dpdpickup.searchroute" path="/module/dpdpickup/{zipcode}/{city}" methods="get">
+        <default key="_controller">DpdPickup\Controller\SearchCityController::searchAction</default>
+        <requirement key="zipcode">\d{5}</requirement>
+        <requirement key="city">.+</requirement>
+    </route>
+
+	<route id="dpdpickup.export" path="/admin/module/dpdpickup/exportgo" methods="post">
+		<default key="_controller">DpdPickup\Controller\Export::exportfile</default>
+	</route>
+
+	<route id="dpdpickup.export.exaprint" path="/admin/module/dpdpickup/export" methods="post">
+		<default key="_controller">DpdPickup\Controller\ExportExaprint::export</default>
+	</route>
+
+	<route id="dpdpickup.edit.prices" path="/admin/module/dpdpickup/prices" methods="post">
+		<default key="_controller">DpdPickup\Controller\EditPrices::editprices</default>
+	</route>
+
+    <route id="dpdpickup.edit.freeshipping" path="/admin/module/dpdpickup/freeshipping" methods="post">
+        <default key="_controller">DpdPickup\Controller\FreeShipping::set</default>
+    </route>
+</routes>

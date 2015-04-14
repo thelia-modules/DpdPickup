@@ -1,0 +1,23 @@
+<div class="panel">
+    {loop type="address.dpdpickup" name="delivery-address" id={order attr="delivery_address"}}
+        <div class="panel-heading">{intl l="Delivery address"}</div>
+        <div class="panel-body">
+            <span class="fn">{loop type="title" name="customer.title.info" id=$TITLE}{$SHORT}{/loop} {$LASTNAME|upper} {$FIRSTNAME|ucwords}</span>
+            <div id="replace_icirelais">
+                <span class="org">{$COMPANY}</span>
+                <address class="adr">
+                    <span class="street-address">{$ADDRESS1}</span><br>
+                    {if $ADDRESS2 != ""}
+                        <span class="street-address">{$ADDRESS2}</span><br>
+                    {/if}
+                    {if $ADDRESS3 != ""}
+                        <span class="street-address">{$ADDRESS3}</span><br>
+                    {/if}
+                    <span class="postal-code">{$ZIPCODE}</span>
+                    <span class="locality">{$CITY}, <span class="country-name">{loop type="country" name="customer.country.info" id=$COUNTRY}{$TITLE}{/loop}</span></span>
+                </address>
+            </div>
+        </div>
+    {/loop}
+
+</div>

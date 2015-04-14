@@ -1,0 +1,187 @@
+<div id="google-map-ici-relais" style="display: none">
+    <script>
+        <!--
+        function loadScript() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&' +
+            'callback=initialize';
+            document.body.appendChild(script);
+        }
+        if(typeof(google) === 'undefined') {
+            loadScript();
+        }
+
+        function show_hide_ici_relais_map(flag) {
+            if(flag) {
+                document.getElementById('google-map-ici-relais').style.display = 'block';
+            } else {
+                document.getElementById('google-map-ici-relais').style.display = 'none';
+            }
+        }
+        function check_selection_relais()
+        {
+            if ($('input[name=choix]:checked').length == 0)
+            {
+                alert("{intl l="Please choose a pick-up & Go store" d="dpdpickup.fo.default" js=1}.");
+                return false;
+            }
+            return true;
+        }
+        function show_relay(url)
+        {
+            window.open(url, "Dpd Pickup", 'width=772,height=570,status=0,menubar=0,location=0,titlebar=0');
+        }
+        function updatemap(url_site, adr_geoloc, locations) {
+            document.getElementById('relaymap').innerHTML = "";
+            // Define MAP
+            var mapOptions = {
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            // On va créer la map dans la div qui a l'id relaymap
+            var map = new google.maps.Map(document.getElementById('relaymap'), mapOptions);
+            // Then, display everything on the map
+            var geocoder = new google.maps.Geocoder();
+            // We get latitude and longitude for the customer's adress
+            var b = [];
+            b['address'] = adr_geoloc;
+            geocoder.geocode(b, function(results, status){
+                if(status == google.maps.GeocoderStatus.OK){
+                    // Et on centre la map sur cette position
+                    map.setCenter(results[0].geometry.location);
+                }
+                else{
+                    // Sinon on met le centre de la map sur Clermont-Ferrand ;)
+                    alert('{intl l="Actual address can't be geolocated" d="dpdpickup.fo.default" js=1}');
+                    var myLatLng = new google.maps.LatLng(45.7789, 3.0782);
+                    map.setCenter(myLatLng);
+                    map.setZoom(3);
+                }
+            });
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+
+            // Pour chaque point relais dans locations on crée un nouveau marker
+            // And Complete table-relais
+            var buf = "";
+            for(i = 0; i < Object.keys(locations).length; i++){
+                buf += '<tr><td style="padding: 5px;">'+locations[i][0]+', '+locations[i][4]+', '+locations[i][5]+' '+locations[i][6];
+                buf += '- '+locations[i][7];
+                buf += '</td><td><input type="radio" name="pr_code" id="pr'+locations[i][3]+'" value="'+locations[i][3]+'" ';
+                if(i == 0) buf += 'checked'
+                buf += '/></td></tr>';
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    // Icone d'un point relai
+                    icon: new google.maps.MarkerImage("{image file="assets/logo_pr.png" source="DpdPickup"}"),
+                    map: map
+                });
+
+                // Lors du clic sur un point relai on affiche une bulle avec les informations
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(locations[i][0]+'<br/>'+locations[i][4]+'<br/>'+locations[i][5]+' '+locations[i][6]+'<br/>'+locations[i][7]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+
+                // Lors de la fermeture de la bulle d'information on déselectionne le bouton radio associé
+                google.maps.event.addListener(infowindow, 'closeclick', (function(marker, i) {
+                    return function() {}
+                })(marker, i));
+
+            }
+            document.getElementById("table-relais").innerHTML =buf;
+        }
+
+        function initialize() {
+            // Get site base url
+            var url_site = '{url path="/"}';
+            // Get customer address
+
+            {loop type="address" name="delivery-selection-icirelais" customer="current" default="true"}
+            var adr_geoloc = "{$ADDRESS1}, {$ZIPCODE} {$CITY}";
+            {/loop}
+            // Get every relay around customer's address
+            var locations = new Array();
+
+            {loop type="dpdpickup.relais.around" name="delivery-selection-icirelais"}
+            locations.push(['{$NAME}', {$LATITUDE}, {$LONGITUDE}, '{$CODE}', '{$ADDRESS}', '{$ZIPCODE}', '{$CITY}', '{$DISTANCE}']);
+            {/loop}
+            updatemap(url_site, adr_geoloc, locations);
+        }
+
+
+        function search_city_relais() {
+            var zipcode = document.getElementById("search-zipcode").value;
+            var city = document.getElementById("search-city").value;
+            if(zipcode == "" || city == "") {
+                alert("{intl l="Please enter a city and a zipcode" d="dpdpickup.fo.default" js=1}");
+                {literal}
+            } else if(!(/\d{5}/.test(zipcode))) {
+                {/literal}
+                alert("{intl l="Please enter a valid zipcode" d="dpdpickup.fo.default" js=1}");
+            } else {
+                // Get site base url
+                var url_site = '{url path="/"}';
+                // Get search address
+                var adr_geoloc = zipcode+" "+city;
+                // Get every relay around customer's address
+                var locations = new Array();
+                $.get(url_site+"module/dpdpickup/"+zipcode+"/"+city, function(data){
+                    locations = JSON.parse(data);
+                    updatemap(url_site, adr_geoloc, locations);
+                });
+            }
+        }
+        // Search city pseudo-form
+        document.getElementById("search-city-submit").onclick = search_city_relais;
+        $('#delivery-module-list-block :radio').on('click', function(){
+            if ($(this).val() == {$dpd_id}) {
+                show_hide_ici_relais_map(true);
+            } else {
+                show_hide_ici_relais_map(false);
+            }
+        });
+
+        $(document).ready(function(){
+            if ($('#delivery-module-list-block :checked').val() == {$dpd_id}) {
+                show_hide_ici_relais_map(true);
+            }
+        });
+        //-->
+    </script>
+    <!-- If delivery method is Ici Relais -->
+    <div id="relaymap" style="width: 450px; height: 420px; float: left;"></div>
+    <table id="table-relais" style="height: 311px;">
+    </table>
+    <!-- Search city -->
+    <div class="panel" style="width: 450px;">
+        <div class="panel-heading clearfix">
+            {intl l="Search relay in a city" d="dpdpickup.fo.default"}
+        </div>
+        <div class="panel-body" style="padding: 5px;">
+            <div class="form-group">
+                <label for="search-city" class="control-label">
+                    {intl l="city" d="dpdpickup.fo.default"} :
+                </label>
+                <input type="text" id="search-city" placeholder="{intl l='city' d="dpdpickup.fo.default"}" class="form-control" style="width: 400px;" onPaste="" {literal}onkeydown="if (event.keyCode == 13) {search_city_relais();return false;}"{/literal}/>
+            </div>
+            <div class="form-group">
+                <label for="search-zipcode" class="control-label">
+                    {intl l="zipcode" d="dpdpickup.fo.default"} :
+                </label>
+
+                <input type="text" id="search-zipcode" placeholder="{intl l='zipcode' d="dpdpickup.fo.default"}" class="form-control" style="width: 400px;" onPaste="" {literal}onkeydown="if (event.keyCode == 13) {search_city_relais();return false;}"{/literal}/>
+            </div>
+
+            <div class="form-group">
+                <input type="button" id="search-city-submit" class="form-submit-button btn btn-sm btn-default" title="{intl l='Search' d="dpdpickup.fo.default"}" value="{intl l='Search' d="dpdpickup.fo.default"}">
+            </div>
+        </div>
+    </div>
+    <!-- --- -->
+</div>

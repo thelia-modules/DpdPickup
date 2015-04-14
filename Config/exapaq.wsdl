@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://exapaq.pickup-services.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://exapaq.pickup-services.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://exapaq.pickup-services.com/">
+      <s:element name="GetPudoList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="address" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="zipCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="city" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="request_id" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="date_from" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPudoListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPudoListResult">
+
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+
+      <s:element name="GetPudoDetails">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pudo_id" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPudoDetailsResponse">
+        <s:complexType>
+
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPudoDetailsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetPudoListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPudoList" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPudoListResponse" />
+
+  </wsdl:message>
+  <wsdl:message name="GetPudoDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPudoDetails" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPudoDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoListHttpGetIn">
+    <wsdl:part name="address" type="s:string" />
+
+    <wsdl:part name="zipCode" type="s:string" />
+    <wsdl:part name="city" type="s:string" />
+    <wsdl:part name="request_id" type="s:string" />
+    <wsdl:part name="date_from" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoListHttpGetOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoDetailsHttpGetIn">
+
+    <wsdl:part name="pudo_id" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoDetailsHttpGetOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoListHttpPostIn">
+    <wsdl:part name="address" type="s:string" />
+    <wsdl:part name="zipCode" type="s:string" />
+    <wsdl:part name="city" type="s:string" />
+
+    <wsdl:part name="request_id" type="s:string" />
+    <wsdl:part name="date_from" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoListHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetPudoDetailsHttpPostIn">
+    <wsdl:part name="pudo_id" type="s:string" />
+  </wsdl:message>
+
+  <wsdl:message name="GetPudoDetailsHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:portType name="exapaqSoap">
+    <wsdl:operation name="GetPudoList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get all pudos nearest to a postal address</wsdl:documentation>
+      <wsdl:input message="tns:GetPudoListSoapIn" />
+      <wsdl:output message="tns:GetPudoListSoapOut" />
+
+    </wsdl:operation>
+    <wsdl:operation name="GetPudoDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get properties of pudo by its ID</wsdl:documentation>
+      <wsdl:input message="tns:GetPudoDetailsSoapIn" />
+      <wsdl:output message="tns:GetPudoDetailsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="exapaqHttpGet">
+
+    <wsdl:operation name="GetPudoList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get all pudos nearest to a postal address</wsdl:documentation>
+      <wsdl:input message="tns:GetPudoListHttpGetIn" />
+      <wsdl:output message="tns:GetPudoListHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPudoDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get properties of pudo by its ID</wsdl:documentation>
+      <wsdl:input message="tns:GetPudoDetailsHttpGetIn" />
+
+      <wsdl:output message="tns:GetPudoDetailsHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="exapaqHttpPost">
+    <wsdl:operation name="GetPudoList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get all pudos nearest to a postal address</wsdl:documentation>
+      <wsdl:input message="tns:GetPudoListHttpPostIn" />
+      <wsdl:output message="tns:GetPudoListHttpPostOut" />
+
+    </wsdl:operation>
+    <wsdl:operation name="GetPudoDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get properties of pudo by its ID</wsdl:documentation>
+      <wsdl:input message="tns:GetPudoDetailsHttpPostIn" />
+      <wsdl:output message="tns:GetPudoDetailsHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="exapaqSoap" type="tns:exapaqSoap">
+
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPudoList">
+      <soap:operation soapAction="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx/GetPudoList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+
+    </wsdl:operation>
+    <wsdl:operation name="GetPudoDetails">
+      <soap:operation soapAction="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx/GetPudoDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="exapaqSoap12" type="tns:exapaqSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPudoList">
+      <soap12:operation soapAction="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx/GetPudoList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPudoDetails">
+      <soap12:operation soapAction="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx/GetPudoDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="exapaqHttpGet" type="tns:exapaqHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetPudoList">
+      <http:operation location="/Exapaq/mypudofull.asmx/Exapaq/mypudofull.asmx/GetPudoList" />
+
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPudoDetails">
+      <http:operation location="/Exapaq/mypudofull.asmx/GetPudoDetails" />
+
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="exapaqHttpPost" type="tns:exapaqHttpPost">
+
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetPudoList">
+      <http:operation location="/Exapaq/mypudofull.asmx/GetPudoList" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+
+    </wsdl:operation>
+    <wsdl:operation name="GetPudoDetails">
+      <http:operation location="/Exapaq/mypudofull.asmx/GetPudoDetails" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="exapaq">
+    <wsdl:port name="exapaqSoap" binding="tns:exapaqSoap">
+      <soap:address location="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx" />
+    </wsdl:port>
+    <wsdl:port name="exapaqSoap12" binding="tns:exapaqSoap12">
+      <soap12:address location="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx" />
+    </wsdl:port>
+
+    <wsdl:port name="exapaqHttpGet" binding="tns:exapaqHttpGet">
+      <http:address location="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx" />
+    </wsdl:port>
+    <wsdl:port name="exapaqHttpPost" binding="tns:exapaqHttpPost">
+      <http:address location="http://exapaq.pickup-services.com/Exapaq/mypudofull.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

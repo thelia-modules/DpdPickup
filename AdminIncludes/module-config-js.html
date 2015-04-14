@@ -1,0 +1,76 @@
+{javascripts file='assets/js/bootstrap-switch/bootstrap-switch.js'}
+<script src='{$asset_url}'></script>
+{/javascripts}
+
+<script>
+    $(document).ready(function() {
+        $(".freeshipping-activation-DpdPickup").bootstrapSwitch();
+        $(".freeshipping-activation-DpdPickup").on("switch-change", function(e, data){
+            var is_checked = data.value;
+            var form = $("#freeshippingform");
+            $('body').append('<div class="modal-backdrop fade in" id="loading-event"><div class="loading"></div></div>');
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize()
+            }).done(function(){
+                $("#loading-event").remove();
+            })
+                    .success(function() {
+                        if (is_checked) {
+                            $('#config-btn-0').removeClass('disabled');
+                            $('#table-prices-icirelais').hide('slow');
+                        } else {
+                            $('#config-btn-0').addClass('disabled');
+                            $('#table-prices-icirelais').show('slow');
+                        }
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown){
+                        $("#loading-event").remove();
+                        $('#freeshipping-failed-body').html(jqXHR.responseJSON.error);
+                        $("#freeshipping-failed").modal("show");
+                    });
+
+        });
+
+        checkboxes = [{loop name="icirelais.get.checkboxes.names" type="dpdpickup.orders"}"{$REF|replace:'.':'-'}",{/loop}];
+        $("#check-all-but").click( function(ev) {
+            checkboxes.forEach(function(entry) {
+               $("#"+entry).prop('checked', true);
+            });
+            ev.preventDefault();
+        });
+        $("#uncheck-all-but").click( function(ev) {
+            checkboxes.forEach(function(entry) {
+                $("#"+entry).prop('checked', false);
+            });
+            ev.preventDefault();
+        });
+        $("#reverse-all-but").click( function(ev) {
+            checkboxes.forEach(function(entry) {
+                var box=$("#"+entry);
+                box.prop('checked', !box.is(":checked"));
+            });
+            ev.preventDefault();
+        });
+        $("button[name=save_mode]").click(function() {
+            var value = $("input[name='exportexaprintselection[new_status_id]']:checked").val();
+            if(value == "sent") {
+                checkboxes.forEach(function(entry) {
+                    var box=$("#"+entry);
+                    if(box.is(":checked")) {
+                        var row= box.parents("tr"); // get first tr parent
+                        row.hide('slow', function() {
+                            row.remove();
+                        });
+                    }
+                });
+            }
+        });
+
+        {if ! empty($current_tab)}
+            $('.nav-tabs a[href="#{$current_tab}"]').trigger("click");
+        {/if}
+    });
+</script>

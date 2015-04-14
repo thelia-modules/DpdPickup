@@ -1,0 +1,27 @@
+{loop name="tracking" type="dpdpickup.urltracking" ref=$REF}
+<br/>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {intl l="Export EXAPRINT file of this order"}
+    </div>
+    <div class="panel-body">
+
+            {form name="dpdpickup.selection"}
+            <form action="{url path="/admin/module/dpdpickup/exportgo"}" method="post">
+                {form_hidden_fields form=$form}
+                {form_field form=$form field="new_status_id"}
+                    <input type="hidden" name="{$name}" value="nochange" />
+                {/form_field}
+
+                {form_field form=$form field={$REF|replace:'.':'-'}}
+                    <input type="hidden" name="{$name}" value="true" />
+                {/form_field}
+                <button type="submit" name="export_order" value="stay" class="form-submit-button btn btn-sm btn-default" title="{intl l='Export'}">{intl l='Export'} <span class="glyphicon glyphicon-ok"></span></button>
+            </form>
+            {/form}
+            <br/>
+
+            Suivi du colis: <a href="{$URL}">ici</a>
+    </div>
+</div>
+{/loop}

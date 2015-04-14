@@ -1,0 +1,26 @@
+<?php
+
+return array(
+    'Activate free shipping: ' => 'Activate free shipping: ',
+    'Can\'t read Config directory' => 'Can\'t read Config directory',
+    'Can\'t read DpdPickup/Config/exportdat.json. Did you save the export information ?' => 'Can\'t read DpdPickup/Config/exportdat.json. Did you save the export information ?',
+    'Can\'t read file' => 'Can\'t read file',
+    'Can\'t write Config directory' => 'Can\'t write Config directory',
+    'Can\'t write DpdPickup/Config/exportdat.json. Please change the rights on the file and/or the directory.' => 'Can\'t write DpdPickup/Config/exportdat.json. Please change the rights on the file and/or the directory.',
+    'Can\'t write file' => 'Can\'t write file',
+    'Change order status to' => 'Change order status to',
+    'Do not change' => 'Do not change',
+    'Got invalid data : %err' => 'Got invalid data : %err',
+    'DpdPickup Sender\'s code' => 'DpdPickup Sender\'s code',
+    'Sender\'s address1' => 'Sender\'s address1',
+    'Sender\'s address2' => 'Sender\'s address2',
+    'Sender\'s city' => 'Sender\'s city',
+    'Sender\'s email' => 'Sender\'s email',
+    'Sender\'s mobile phone' => 'Sender\'s cellular phone',
+    'Sender\'s name' => 'Sender\'s name',
+    'Sender\'s phone' => 'Sender\'s phone',
+    'Sender\'s zipcode' => 'Sender\'s zipcode',
+    'Set orders status as processing' => 'Set orders status as processing',
+    'Set orders status as sent' => 'Set orders status as sent',
+    'The file DpdPickup/Config/exportdat.json is not valid. Please correct it.' => 'The file DpdPickup/Config/exportdat.json is not valid. Please correct it.',
+);
