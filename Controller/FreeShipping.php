@@ -23,7 +23,7 @@
 
 namespace DpdPickup\Controller;
 
-use DpdPickup\Model\DpdPickupFreeshipping;
+use DpdPickup\Model\IcirelaisFreeshipping;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\Response;
