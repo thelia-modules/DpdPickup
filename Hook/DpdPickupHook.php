@@ -33,4 +33,9 @@ class DpdPickupHook extends BaseHook
     {
         $event->add($this->render("delivery-address.html"));
     }
+    public function orderDeliveryStylesheet(HookRenderEvent $event)
+    {
+        $content = $this->addCSS('assets/css/style.css');
+        $event->add($content);
+    }
 }

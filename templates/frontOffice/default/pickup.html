@@ -1,4 +1,4 @@
-<div id="google-map-ici-relais" style="display: none">
+<div id="google-map-ici-relais" style="display:none;">
     <script>
         <!--
         function loadScript() {
@@ -10,11 +10,18 @@
         }
         if(typeof(google) === 'undefined') {
             loadScript();
+        } else {
+            google = null;
+            delete google;
+            loadScript();
         }
 
         function show_hide_ici_relais_map(flag) {
             if(flag) {
                 document.getElementById('google-map-ici-relais').style.display = 'block';
+                var center = map.getCenter();
+                google.maps.event.trigger(map, "resize");
+                map.setCenter(center);                  
             } else {
                 document.getElementById('google-map-ici-relais').style.display = 'none';
             }
@@ -40,7 +47,7 @@
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             }
             // On va créer la map dans la div qui a l'id relaymap
-            var map = new google.maps.Map(document.getElementById('relaymap'), mapOptions);
+            map = new google.maps.Map(document.getElementById('relaymap'), mapOptions);
             // Then, display everything on the map
             var geocoder = new google.maps.Geocoder();
             // We get latitude and longitude for the customer's adress
@@ -58,6 +65,7 @@
                     map.setCenter(myLatLng);
                     map.setZoom(3);
                 }
+            google.maps.event.trigger(document.getElementById('relaymap'), "resize");
             });
 
             var infowindow = new google.maps.InfoWindow();
@@ -68,9 +76,9 @@
             // And Complete table-relais
             var buf = "";
             for(i = 0; i < Object.keys(locations).length; i++){
-                buf += '<tr><td style="padding: 5px;">'+locations[i][0]+', '+locations[i][4]+', '+locations[i][5]+' '+locations[i][6];
+                buf += '<tr><td>'+'<label for="pr'+locations[i][3]+'">'+locations[i][0]+', '+locations[i][4]+', '+locations[i][5]+' '+locations[i][6];
                 buf += '- '+locations[i][7];
-                buf += '</td><td><input type="radio" name="pr_code" id="pr'+locations[i][3]+'" value="'+locations[i][3]+'" ';
+                buf += '</label></td><td><input type="radio" name="pr_code" id="pr'+locations[i][3]+'" value="'+locations[i][3]+'" ';
                 if(i == 0) buf += 'checked'
                 buf += '/></td></tr>';
                 marker = new google.maps.Marker({
@@ -155,33 +163,39 @@
         //-->
     </script>
     <!-- If delivery method is Ici Relais -->
-    <div id="relaymap" style="width: 450px; height: 420px; float: left;"></div>
-    <table id="table-relais" style="height: 311px;">
+    <div id="relaymap" style="height: 650px; float: left;" class="col-sm-6"></div>
+    <table id="table-relais" class="table-striped col-sm-6" style="height: 311px;">
     </table>
     <!-- Search city -->
-    <div class="panel" style="width: 450px;">
-        <div class="panel-heading clearfix">
-            {intl l="Search relay in a city" d="dpdpickup.fo.default"}
-        </div>
-        <div class="panel-body" style="padding: 5px;">
-            <div class="form-group">
-                <label for="search-city" class="control-label">
-                    {intl l="city" d="dpdpickup.fo.default"} :
-                </label>
-                <input type="text" id="search-city" placeholder="{intl l='city' d="dpdpickup.fo.default"}" class="form-control" style="width: 400px;" onPaste="" {literal}onkeydown="if (event.keyCode == 13) {search_city_relais();return false;}"{/literal}/>
-            </div>
-            <div class="form-group">
-                <label for="search-zipcode" class="control-label">
-                    {intl l="zipcode" d="dpdpickup.fo.default"} :
-                </label>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default" id="panel-search-relay-point">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{intl l="Search relay in a city" d="dpdpickup.fo.default"}</h3>   
+                </div> 
+                <div class="panel-body">
+                    <div id="form-search-relay-point" class="form-inline">
+                        <div class="form-group">
+                            <label for="search-city" class="control-label">
+                                {intl l="city" d="dpdpickup.fo.default"} :
+                            </label>
+                            <input type="text" id="search-city" placeholder="{intl l='city' d="dpdpickup.fo.default"}" class="form-control" onPaste="" {literal}onkeydown="if (event.keyCode == 13) {search_city_relais();return false;}"{/literal}/>
+                        </div>
+                        <div class="form-group">
+                            <label for="search-zipcode" class="control-label">
+                                {intl l="zipcode" d="dpdpickup.fo.default"} :
+                            </label>
 
-                <input type="text" id="search-zipcode" placeholder="{intl l='zipcode' d="dpdpickup.fo.default"}" class="form-control" style="width: 400px;" onPaste="" {literal}onkeydown="if (event.keyCode == 13) {search_city_relais();return false;}"{/literal}/>
-            </div>
+                            <input type="text" id="search-zipcode" placeholder="{intl l='zipcode' d="dpdpickup.fo.default"}" class="form-control" onPaste="" {literal}onkeydown="if (event.keyCode == 13) {search_city_relais();return false;}"{/literal}/>
+                        </div>
 
-            <div class="form-group">
-                <input type="button" id="search-city-submit" class="form-submit-button btn btn-sm btn-default" title="{intl l='Search' d="dpdpickup.fo.default"}" value="{intl l='Search' d="dpdpickup.fo.default"}">
+                        <div class="form-group">
+                            <input type="button" id="search-city-submit" class="form-submit-button btn btn-lg btn-default" title="{intl l='Search' d="dpdpickup.fo.default"}" value="{intl l='Search' d="dpdpickup.fo.default"}">
+                        </div>
+                    </div>            
             </div>
-        </div>
+            </div>
+        </div>    
     </div>
     <!-- --- -->
-</div>
+</div>        

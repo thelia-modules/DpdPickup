@@ -1,0 +1,16 @@
+#table-relais td{
+	padding: 10px 15px;
+}
+
+#delivery-module-list-block .table-delivery td{
+	vertical-align: middle;
+}
+
+#panel-search-relay-point{
+	margin-top: 30px;
+}
+
+#form-search-relay-point .form-group {
+    margin-right: 30px;
+}
+
