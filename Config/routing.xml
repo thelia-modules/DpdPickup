@@ -9,9 +9,13 @@
         <requirement key="city">.+</requirement>
     </route>
 
-	<route id="dpdpickup.export" path="/admin/module/dpdpickup/exportgo" methods="post">
-		<default key="_controller">DpdPickup\Controller\Export::exportfile</default>
-	</route>
+    <route id="dpdpickup.import" path="/admin/module/dpdpickup/import" methods="post">
+        <default key="_controller">DpdPickup\Controller\ImportController::importFile</default>
+    </route>
+
+    <route id="dpdpickup.export" path="/admin/module/dpdpickup/exportgo" methods="post">
+        <default key="_controller">DpdPickup\Controller\Export::exportfile</default>
+    </route>
 
 	<route id="dpdpickup.export.exaprint" path="/admin/module/dpdpickup/export" methods="post">
 		<default key="_controller">DpdPickup\Controller\ExportExaprint::export</default>

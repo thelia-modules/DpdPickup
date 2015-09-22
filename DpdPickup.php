@@ -40,6 +40,8 @@ class DpdPickup extends AbstractDeliveryModule
      */
 
     const DOMAIN = 'icirelais';
+    const DELIVERY_REF_COLUMN = 17;
+    const ORDER_REF_COLUMN = 18;
 
     protected $request;
     protected $dispatcher;
