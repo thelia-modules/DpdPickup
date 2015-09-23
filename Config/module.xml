@@ -10,7 +10,7 @@
 
     <descriptive locale="fr_FR">
         <title>Livraison en relais Pickup</title>
-        <subtitle>Livraison 24/ 48H parmi 5 000 relais Pickup</subtitle>
+        <subtitle>Livraison 24/48H parmi 5 000 relais Pickup</subtitle>
         <description>[[<![CDATA[
             <p>Choisissez la livraison sans contrainte avec les relais Pickup !</p>
             <p>Faites-vous livrer dans l’un de nos 5 000 commerces de proximité disponibles sur toute la France.  Vous avez la liberté de choisir le commerce qui vous convient le mieux : près de chez vous ou encore près de votre travail, et d’aller y retirer votre colis 7/7 jours (*).</p>
@@ -31,12 +31,12 @@
         <language>en_US</language>
         <language>fr_FR</language>
     </languages>
-    <version>1.1</version>
+    <version>1.2</version>
     <author>
         <name>Thelia</name>
         <email>info@thelia.net</email>
     </author>
     <type>delivery</type>
     <thelia>2.1.0</thelia>
-    <stability>beta</stability>
+    <stability>prod</stability>
 </module>

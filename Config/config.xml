@@ -21,19 +21,6 @@
         <form name="dpdpickup.freeshipping.form" class="DpdPickup\Form\FreeShipping" />
     </forms>
 
-    <commands>
-        <!--
-        <command class="MyModule\Command\MySuperCommand" />
-        -->
-    </commands>
-
-    <templateDirectives>
-        <!-- Sample definition
-        <templateDirectives class="MyModule\Directive\MyTemplateDirective" name="my_filter"/>
-        -->
-    </templateDirectives>
-
-
     <services>
 		<service id="hook.order.module" class="DpdPickup\Listener\SetDeliveryModule" scope="request">
             <argument type="service" id="request"/>
