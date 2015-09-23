@@ -15,7 +15,6 @@ namespace DpdPickup\Hook;
 use Thelia\Core\Event\Hook\HookRenderEvent;
 use Thelia\Core\Hook\BaseHook;
 
-
 /**
  * Class DpdPickupHook
  * @package DpdPickup\Hook
@@ -23,7 +22,6 @@ use Thelia\Core\Hook\BaseHook;
  */
 class DpdPickupHook extends BaseHook
 {
-
     public function renderDpdPickupChoice(HookRenderEvent $event)
     {
         $event->add($this->render('pickup.html', ['dpd_id' => $event->getArgument('module')]));

@@ -28,6 +28,7 @@ use Thelia\Core\Template\Loop\Address;
 use Thelia\Core\Template\Element\LoopResult;
 use Thelia\Core\Template\Element\LoopResultRow;
 use DpdPickup\DpdPickup;
+
 /**
  * Class DpdPickupDelivery
  * @package DpdPickup\Loop
@@ -68,7 +69,8 @@ class DpdPickupAddress extends Address
                     ->set("ZIPCODE", $address->getZipcode())
                     ->set("CITY", $address->getCity())
                     ->set("COUNTRY", $address->getCountryId())
-                ; $loopResult->addRow($loopResultRow);
+                ;
+                $loopResult->addRow($loopResultRow);
             }
 
             return $loopResult;

@@ -15,10 +15,10 @@
     </loops>
 
     <forms>
-		<form name="dpdpickup.export" class="DpdPickup\Form\ExportExaprintForm"/>
+        <form name="dpdpickup.import" class="DpdPickup\Form\ImportExaprintForm"/>
+        <form name="dpdpickup.export" class="DpdPickup\Form\ExportExaprintForm"/>
         <form name="dpdpickup.selection" class="DpdPickup\Form\ExportExaprintSelection" />
         <form name="dpdpickup.freeshipping.form" class="DpdPickup\Form\FreeShipping" />
-
     </forms>
 
     <commands>

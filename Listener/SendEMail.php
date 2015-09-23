@@ -33,6 +33,7 @@ use Thelia\Mailer\MailerFactory;
 use Thelia\Core\Template\ParserInterface;
 use Thelia\Model\ConfigQuery;
 use Thelia\Model\MessageQuery;
+
 /**
  * Class SendEMail
  * @package DpdPickup\Listener
@@ -40,7 +41,6 @@ use Thelia\Model\MessageQuery;
  */
 class SendEMail extends BaseAction implements EventSubscriberInterface
 {
-
     /**
      * @var MailerFactory
      */
@@ -50,7 +50,7 @@ class SendEMail extends BaseAction implements EventSubscriberInterface
      */
     protected $parser;
 
-    public function __construct(ParserInterface $parser,MailerFactory $mailer)
+    public function __construct(ParserInterface $parser, MailerFactory $mailer)
     {
         $this->parser = $parser;
         $this->mailer = $mailer;
@@ -71,8 +71,7 @@ class SendEMail extends BaseAction implements EventSubscriberInterface
     public function update_status(OrderEvent $event)
     {
         if ($event->getOrder()->getDeliveryModuleId() === DpdPickup::getModuleId()) {
-
-            if ($event->getOrder()->getStatusId() === DpdPickupOrders::STATUS_SENT ) {
+            if ($event->getOrder()->getStatusId() === DpdPickupOrders::STATUS_SENT) {
                 $contact_email = ConfigQuery::read('store_email');
 
                 if ($contact_email) {
@@ -102,11 +101,9 @@ class SendEMail extends BaseAction implements EventSubscriberInterface
                     $message->buildMessage($this->parser, $instance);
 
                     $this->getMailer()->send($instance);
-
                 }
             }
         }
-
     }
 
     /**
@@ -135,5 +132,4 @@ class SendEMail extends BaseAction implements EventSubscriberInterface
             TheliaEvents::ORDER_UPDATE_STATUS => array("update_status", 128)
         );
     }
-
 }

@@ -30,9 +30,9 @@ use Thelia\Core\Template\Element\PropelSearchLoopInterface;
 use Thelia\Core\Template\Element\BaseLoop;
 use Thelia\Core\Template\Element\LoopResult;
 use Thelia\Core\Template\Element\LoopResultRow;
-
 use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
 use Thelia\Core\Template\Loop\Argument\Argument;
+
 /**
  * Class DpdPickupAround
  * @package DpdPickup\Loop
@@ -50,7 +50,7 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
     {
         return new ArgumentCollection(
             Argument::createAnyTypeArgument("zipcode", ""),
-            Argument::createAnyTypeArgument("city","")
+            Argument::createAnyTypeArgument("city", "")
         );
     }
 

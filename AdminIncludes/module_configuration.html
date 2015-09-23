@@ -26,13 +26,47 @@
         <div class="row">
             <div class="col-md-12">
                 <ul id="tabbed-menu" class="nav nav-tabs">
-                    <li class="{if $tab eq "0"}active{/if}"><a data-toggle="tab" href="#export_exaprint">{intl d='icirelais.ai' l="Export EXAPRINT file"}</a></li>
-                    <li class="{if $tab eq "1"}active{/if}"><a data-toggle="tab" href="#configure_export_exaprint">{intl d='icirelais.ai' l="Configure EXAPRINT file"}</a></li>
-                    <li class="{if $tab eq "2"}active{/if}"><a data-toggle="tab" href="#prices_slices_tab">{intl d='icirelais.ai' l="Price slices"}</a></li>
+                    <li class="{if $tab eq "0"}active{/if}"><a data-toggle="tab" href="#import_exaprint">{intl d='icirelais.ai' l="Import EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "1"}active{/if}"><a data-toggle="tab" href="#export_exaprint">{intl d='icirelais.ai' l="Export EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "2"}active{/if}"><a data-toggle="tab" href="#configure_export_exaprint">{intl d='icirelais.ai' l="Configure EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "3"}active{/if}"><a data-toggle="tab" href="#prices_slices_tab">{intl d='icirelais.ai' l="Price slices"}</a></li>
                 </ul>
                 <br/>
                 <div class="tab-content">
-                    <div id="export_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
+                    <div id="import_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
+
+                        {flash type='update-orders-result'}
+                            <div class="alert alert-success">
+                                {$MESSAGE}
+                            </div>
+                        {/flash}
+
+                        {form name='dpdpickup.import'}
+                        <form action="{url path='/admin/module/dpdpickup/import'}" method="post" {form_enctype form=$form}>
+                            {form_hidden_fields form=$form}
+                            {render_form_field form=$form field="success_url" value={url path="/admin/module/DpdPickup"}}
+
+                            {if $form_error}
+                                <div class="alert alert-danger">{$form_error_message}</div>
+                            {/if}
+
+                            {form_field form=$form field="import_file"}
+                                <div class="form-group {if $error}has-error{/if}">
+                                    <label for="{$label_attr.for}" class="control-label">
+                                        {$label} :
+                                    </label>
+
+                                    <input type="file" id="{$label_attr.for}" name="{$name}" value="{$value}" required/>
+                                </div>
+                            {/form_field}
+
+                            <button type="submit" class="btn btn-primary">{intl d='icirelais.ai' l='Upload'}</button>
+
+                        </form>
+                        {/form}
+                    </div>
+
+                    <div id="export_exaprint" class="tab-pane {if $tab eq "1"}active{/if} form-container">
                         {ifloop rel="list.dpdpickup.orders"}
                             {form name="dpdpickup.selection"}
                             <form method="post" action="{url path="/admin/module/dpdpickup/exportgo"}">
@@ -148,7 +182,7 @@
                         {/elseloop}
                     </div>
 
-                    <div id="configure_export_exaprint" class="tab-pane {if $tab eq "1"}active{/if} form-container">
+                    <div id="configure_export_exaprint" class="tab-pane {if $tab eq "2"}active{/if} form-container">
                     {form name="dpdpickup.export"} 
                         <form action="{url path="/admin/module/dpdpickup/export"}" method="POST" {form_enctype form=$form}>
                             {form_hidden_fields form=$form}
@@ -253,7 +287,7 @@
                     {/form}
                     </div>
 
-                    <div id="prices_slices_tab" class="tab-pane {if $tab eq "2"}active{/if} form-container">
+                    <div id="prices_slices_tab" class="tab-pane {if $tab eq "3"}active{/if} form-container">
 
                         <div class="alert alert-info">
                             <p>{intl d='icirelais.ai' l="Ici Relais Module allows you to send your products in France."}</p>

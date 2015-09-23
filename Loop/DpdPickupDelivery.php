@@ -25,8 +25,8 @@ namespace DpdPickup\Loop;
 
 use Thelia\Core\Template\Loop\Delivery;
 use Thelia\Core\Template\Element\LoopResult;
-
 use DpdPickup\DpdPickup;
+
 /**
  * Class DpdPickupDelivery
  * @package DpdPickup\Loop

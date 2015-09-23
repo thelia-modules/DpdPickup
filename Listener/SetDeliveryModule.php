@@ -27,7 +27,6 @@ use DpdPickup\DpdPickup;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
-
 use DpdPickup\Model\OrderAddressIcirelais;
 use Thelia\Core\HttpFoundation\Request;
 use Thelia\Model\OrderAddressQuery;

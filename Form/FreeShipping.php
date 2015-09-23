@@ -52,5 +52,4 @@ class FreeShipping extends BaseForm
     {
         return "icirelaisfreeshipping";
     }
-
 }

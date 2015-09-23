@@ -2,6 +2,7 @@
 
 return array(
     'Activate free shipping: ' => 'Activate free shipping: ',
+    'Bad file format. Plain text or CSV expected.' => 'Bad file format. Plain text or CSV expected.',
     'Can\'t read Config directory' => 'Can\'t read Config directory',
     'Can\'t read DpdPickup/Config/exportdat.json. Did you save the export information ?' => 'Can\'t read DpdPickup/Config/exportdat.json. Did you save the export information ?',
     'Can\'t read file' => 'Can\'t read file',
@@ -10,8 +11,10 @@ return array(
     'Can\'t write file' => 'Can\'t write file',
     'Change order status to' => 'Change order status to',
     'Do not change' => 'Do not change',
-    'Got invalid data : %err' => 'Got invalid data : %err',
     'DpdPickup Sender\'s code' => 'DpdPickup Sender\'s code',
+    'Got invalid data : %err' => 'Got invalid data : %err',
+    'Operation successful. %i orders affected.' => 'Operation successful. %i orders affected.',
+    'Select file to import' => 'Select file to import',
     'Sender\'s address1' => 'Sender\'s address1',
     'Sender\'s address2' => 'Sender\'s address2',
     'Sender\'s city' => 'Sender\'s city',

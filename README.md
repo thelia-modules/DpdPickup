@@ -1,30 +1,17 @@
-DPD Pickup v1.0
+# DPD Pickup
 author: Thelia <info@thelia.net>
 
-=== SUMMARY ===
+## fr_FR
 
-fr_FR:
-I)   Installation
-II)  Utilisation
-III) Intégration
+### Installation
 
-en_US:
-I)   Install notes
-II)  How to use
-III) Integration
-
-
-=== fr_FR ===
-
-I) Installation
----------------
 L'installation du module DpdPickup se fait de la même manière que les autres, vous pouvez soit importer directement le zip dans le back office,
 soit le décompresser dans <dossier de Thélia2>/local/modules.
 
 Il nous vous reste plus qu'à activer le module et à associer vos zones de livraison.
 
-II) Utilisation
----------------
+### Utilisation
+
 Une page de configuration est mise à votre disposition pour vous permettre d'effectuer deux tâches:
 	- exporter un fichier EXAPRINT (export.dat) contenant les informations sur les livraisons effectuées via DPD Pickup
 	- configurer les tranches de prix des livraisons par DPD Pickup
@@ -32,8 +19,7 @@ Une page de configuration est mise à votre disposition pour vous permettre d'ef
 Pour vous y rendre, il vous suffit d'aller dans le back Office, onglet "Modules" et de cliquer sur "Configurer" sur la ligne du module DPD Pickup.
 Pour exporter un fichier EXAPRINT, il faut renseigner tous les champs présents dans le formulaire.
 
-III) Intégration
-----------------
+### Intégration
 
 Le module utilise les hooks, vous n'aurez en principe rien à faire si votre template intègre bien tous les hooks de Thelia.
 
@@ -58,20 +44,22 @@ Pour rajouter l'adresse de suivi du colis dans le mail de confirmation de la com
 elle prend un argument ref, qui est la référence de la commande, et une sortie $URL.
 Si l'url ne peut être générée, elle ne renvoie rien.
 On peut donc l'intégrer de la manière suivante:
+
 {loop name="tracking" type="dpdpickup.urltracking" ref=$REF}
 Vous pouvez suivre votre colis <a href="{$URL}">ici</a>
 {/loop}
-=== en_US ===
 
-I) Install notes
----------------
+## en_US
+
+### Install notes
+
 The install process of DpdPickup module is the same than the other modules, you can import it directly from the back office,
 or unzip it in <path to thelia2>/local/modules.
 
 Then you can activate DPD Pickup module and configure you shipping zones.
 
-II)  How to use
----------------
+### How to use
+
 A configuration page is provided with the module, so you can:
 	- export an EXAPRINT file (export.dat), with informations on all deliveries done with DPD Pickup
 	- configure price slices for shipping zones.
@@ -79,8 +67,7 @@ A configuration page is provided with the module, so you can:
 You can use it in the back office by going to "Modules" tab, then "configure" button on DPD Pickup' line.
 For exporting an EXAPRINT file, you must complete the entire form.
 
-III) Integration
-----------------
+### Integration
 
 This module uses native hooks. If your template use them you have nothing to do.
 
@@ -103,6 +90,7 @@ If you want to add the package tracking link to the order email, you can use the
 It take only one argument ref, that is the order's reference, and it has one output $URL.
 If the link can't be generated, there's no output.
 You can, for exemple, integrate the link like that in the email:
+
 {loop name="tracking" type="dpdpickup.urltracking" ref=$REF}
 You can track your package <a href="{$URL}">here</a>
 {/loop}
