@@ -27,7 +27,6 @@ use DpdPickup\Form\ExportExaprintForm;
 use DpdPickup\DpdPickup;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Translation\Translator;
-
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 
@@ -99,7 +98,6 @@ class ExportExaprint extends BaseAdminController
                     )
                 );
             }
-
         } catch (\Exception $e) {
             $error_message = $e->getMessage();
         }

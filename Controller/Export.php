@@ -30,7 +30,6 @@ use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\Translation\Translator;
-
 use DpdPickup\Model\OrderAddressIcirelaisQuery;
 use Thelia\Core\HttpFoundation\Response;
 use Thelia\Log\Tlog;
@@ -39,7 +38,6 @@ use Thelia\Model\OrderAddressQuery;
 use Thelia\Model\OrderQuery;
 use Thelia\Model\OrderProductQuery;
 use Thelia\Model\CustomerQuery;
-
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Model\OrderStatus;
@@ -179,7 +177,6 @@ class Export extends BaseAdminController
                         ->findOneByCode(OrderStatus::CODE_PROCESSING);
                     $event->setStatus($status->getId());
                     $this->getDispatcher()->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
-
                 } elseif ($status_id == "sent") {
                     $event = new OrderEvent($order);
                     $status = OrderStatusQuery::create()

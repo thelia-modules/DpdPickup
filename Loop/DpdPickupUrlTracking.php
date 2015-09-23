@@ -29,7 +29,6 @@ use Thelia\Core\Template\Element\ArraySearchLoopInterface;
 use Thelia\Core\Template\Element\BaseLoop;
 use Thelia\Core\Template\Element\LoopResult;
 use Thelia\Core\Template\Element\LoopResultRow;
-
 use Thelia\Core\Template\Loop\Argument\Argument;
 use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
 use Thelia\Model\OrderQuery;
@@ -55,9 +54,9 @@ class DpdPickupUrlTracking extends BaseLoop implements ArraySearchLoopInterface
     public function buildArray()
     {
         $path=ExportExaprint::getJSONpath();
-        if(is_readable($path) && ($order=OrderQuery::create()->findOneByRef($this->getRef())) !== null
+        if (is_readable($path) && ($order=OrderQuery::create()->findOneByRef($this->getRef())) !== null
           && $order->getDeliveryModuleId() === DpdPickup::getModuleId()) {
-            $json=json_decode(file_get_contents($path),true);
+            $json=json_decode(file_get_contents($path), true);
 
             return array($this->getRef()=>$json['expcode']);
         } else {
@@ -69,12 +68,11 @@ class DpdPickupUrlTracking extends BaseLoop implements ArraySearchLoopInterface
     {
         foreach ($loopResult->getResultDataCollection() as $ref => $code) {
             $loopResultRow = new LoopResultRow();
-            $loopResultRow->set("URL", sprintf(self::BASE_URL,$ref,$code));
+            $loopResultRow->set("URL", sprintf(self::BASE_URL, $ref, $code));
 
             $loopResult->addRow($loopResultRow);
         }
 
         return $loopResult;
-
     }
 }

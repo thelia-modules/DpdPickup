@@ -68,7 +68,6 @@ class DpdPickup extends AbstractDeliveryModule
             } else {
                 self::$prices = null;
             }
-
         }
 
         return self::$prices;

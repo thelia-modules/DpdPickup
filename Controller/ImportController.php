@@ -38,7 +38,6 @@ class ImportController extends BaseAdminController
 
             // For each line, parse columns
             foreach ($lines as $line) {
-
                 $parsedLine = str_getcsv($line, "\t");
 
                 // Check if there are enough columns to include order ref
@@ -69,7 +68,6 @@ class ImportController extends BaseAdminController
 
             // Redirect
             return new RedirectResponse($form->getSuccessUrl());
-
         } catch (FormValidationException $e) {
             $con->rollback();
 
@@ -104,7 +102,7 @@ class ImportController extends BaseAdminController
             ->findOneByRef($orderRef);
 
         // Check if the order exists and delivery refs are different
-        if ($order !== NULL) {
+        if ($order !== null) {
             if ($order->getDeliveryRef() != $deliveryRef) {
                 $event = new OrderEvent($order);
                 $event->setDeliveryRef($deliveryRef);

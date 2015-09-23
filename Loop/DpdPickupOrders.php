@@ -22,6 +22,7 @@
 /*************************************************************************************/
 
 namespace DpdPickup\Loop;
+
 use Thelia\Core\Template\Loop\Order;
 use DpdPickup\DpdPickup;
 use Thelia\Model\OrderQuery;
@@ -40,7 +41,6 @@ class DpdPickupOrders extends Order
     {
         return OrderQuery::create()
             ->filterByDeliveryModuleId(DpdPickup::getModuleId())
-            ->filterByStatusId(array(self::STATUS_PAID,self::STATUS_PROCESSING));
+            ->filterByStatusId(array(self::STATUS_PAID, self::STATUS_PROCESSING));
     }
-
 }
