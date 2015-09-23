@@ -34,13 +34,10 @@ use Thelia\Model\OrderQuery;
  */
 class DpdPickupOrders extends Order
 {
-    const STATUS_PAID = 2;
-    const STATUS_PROCESSING = 3;
-    const STATUS_SENT = 4;
     public function buildModelCriteria()
     {
         return OrderQuery::create()
             ->filterByDeliveryModuleId(DpdPickup::getModuleId())
-            ->filterByStatusId(array(self::STATUS_PAID, self::STATUS_PROCESSING));
+            ->filterByStatusId([DpdPickup::STATUS_PAID, DpdPickup::STATUS_PROCESSING]);
     }
 }

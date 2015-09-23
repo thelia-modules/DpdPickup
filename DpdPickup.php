@@ -32,16 +32,13 @@ use Thelia\Module\AbstractDeliveryModule;
 
 class DpdPickup extends AbstractDeliveryModule
 {
-    /*
-     * You may now override BaseModuleInterface methods, such as:
-     * install, destroy, preActivation, postActivation, preDeactivation, postDeactivation
-     *
-     * Have fun !
-     */
-
-    const DOMAIN = 'icirelais';
+    const DOMAIN = 'dpdpickup';
     const DELIVERY_REF_COLUMN = 17;
     const ORDER_REF_COLUMN = 18;
+
+    const STATUS_PAID = 2;
+    const STATUS_PROCESSING = 3;
+    const STATUS_SENT = 4;
 
     protected $request;
     protected $dispatcher;

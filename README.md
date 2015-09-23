@@ -1,4 +1,4 @@
-# DPD Pickup v1.0
+# DPD Pickup
 author: Thelia <info@thelia.net>
 
 ## fr_FR

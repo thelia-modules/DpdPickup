@@ -2,6 +2,7 @@
 
 return array(
     'Activate free shipping: ' => 'Activate free shipping: ',
+    'Bad file format. Plain text or CSV expected.' => 'Bad file format. Plain text or CSV expected.',
     'Can\'t read Config directory' => 'Can\'t read Config directory',
     'Can\'t read DpdPickup/Config/exportdat.json. Did you save the export information ?' => 'Can\'t read DpdPickup/Config/exportdat.json. Did you save the export information ?',
     'Can\'t read file' => 'Can\'t read file',

@@ -3,6 +3,7 @@
 namespace DpdPickup\Controller;
 
 use DpdPickup\DpdPickup;
+use DpdPickup\Loop\DpdPickupOrders;
 use Propel\Runtime\Propel;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,8 +32,18 @@ class ImportController extends BaseAdminController
         try {
             $vForm = $this->validateForm($form);
 
-            // Get file and parse it
+            // Get file
             $importedFile = $vForm->getData()['import_file'];
+
+            // Check extension
+            if (!in_array(strtolower($importedFile->getClientOriginalExtension()), ['csv', 'txt'])) {
+                throw new FormValidationException(
+                    Translator::getInstance()->trans('Bad file format. Plain text or CSV expected.',
+                    [],
+                    DpdPickup::DOMAIN)
+                );
+            }
+
             $csvData = file_get_contents($importedFile);
             $lines = explode(PHP_EOL, $csvData);
 
@@ -49,7 +60,7 @@ class ImportController extends BaseAdminController
 
                     // Save delivery ref if there is one
                     if (!empty($deliveryRef)) {
-                        $i = $this->importDeliveryRef($deliveryRef, $orderRef, $i);
+                        $this->importDeliveryRef($deliveryRef, $orderRef, $i);
                     }
                 }
             }
@@ -90,28 +101,33 @@ class ImportController extends BaseAdminController
     /**
      * Update order's delivery ref
      *
-     * @param $deliveryRef
-     * @param $orderRef
-     * @param $i
-     * @return mixed
+     * @param string    $deliveryRef
+     * @param string    $orderRef
+     * @param int       $i
      */
-    public function importDeliveryRef($deliveryRef, $orderRef, $i)
+    public function importDeliveryRef($deliveryRef, $orderRef, &$i)
     {
         // Get order
         $order = OrderQuery::create()
             ->findOneByRef($orderRef);
 
-        // Check if the order exists and delivery refs are different
+        // Check if the order exists
         if ($order !== null) {
+            $event = new OrderEvent($order);
+
+            // Check if delivery refs are different
             if ($order->getDeliveryRef() != $deliveryRef) {
-                $event = new OrderEvent($order);
                 $event->setDeliveryRef($deliveryRef);
                 $this->getDispatcher()->dispatch(TheliaEvents::ORDER_UPDATE_DELIVERY_REF, $event);
+
+                // Set 'sent' order status if not already sent
+                if ($order->getStatusId() != DpdPickup::STATUS_SENT) {
+                    $event->setStatus(DpdPickup::STATUS_SENT);
+                    $this->getDispatcher()->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
+                }
 
                 $i++;
             }
         }
-
-        return $i;
     }
 }

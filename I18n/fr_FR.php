@@ -2,6 +2,7 @@
 
 return array(
     'Activate free shipping: ' => 'Livraison offerte: ',
+    'Bad file format. Plain text or CSV expected.' => 'Mauvais format de fichier. Texte ou CSV attendu.',
     'Can\'t read Config directory' => 'Le dossier Config ne peut être lu',
     'Can\'t read DpdPickup/Config/exportdat.json. Did you save the export information ?' => 'Le fichier DpdPickup/Config/exportdat.json ne peut être lu. Avez vous enregistré les informations d\'export ?',
     'Can\'t read file' => 'Le fichier suivant ne peut être lu',

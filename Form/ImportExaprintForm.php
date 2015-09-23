@@ -26,7 +26,10 @@ class ImportExaprintForm extends BaseForm
                 'import_file', 'file',
                 [
                     'label' => Translator::getInstance()->trans('Select file to import', [], DpdPickup::DOMAIN),
-                    'constraints' => [new Constraints\NotBlank()],
+                    'constraints' => [
+                        new Constraints\NotBlank(),
+                        new Constraints\File(['mimeTypes' => ['text/csv', 'text/plain']])
+                    ],
                     'label_attr' => ['for' => 'import_file']
                 ]
             );
