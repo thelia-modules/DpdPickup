@@ -14,11 +14,14 @@
     {* Calc tab selection *}
     {assign var="tab" value="0"}
     {if isset($smarty.get.current_tab)}
-        {if $smarty.get.current_tab eq "configure_export_exaprint"}
+        {if $smarty.get.current_tab eq "export_exaprint"}
             {assign var="tab" value="1"}
         {/if}
-        {if $smarty.get.current_tab eq "price_slices_tab"}
+        {if $smarty.get.current_tab eq "configure_export_exaprint"}
             {assign var="tab" value="2"}
+        {/if}
+        {if $smarty.get.current_tab eq "price_slices_tab"}
+            {assign var="tab" value="3"}
         {/if}
     {/if}
 
@@ -26,10 +29,10 @@
         <div class="row">
             <div class="col-md-12">
                 <ul id="tabbed-menu" class="nav nav-tabs">
-                    <li class="{if $tab eq "0"}active{/if}"><a data-toggle="tab" href="#import_exaprint">{intl d='icirelais.ai' l="Import EXAPRINT file"}</a></li>
-                    <li class="{if $tab eq "1"}active{/if}"><a data-toggle="tab" href="#export_exaprint">{intl d='icirelais.ai' l="Export EXAPRINT file"}</a></li>
-                    <li class="{if $tab eq "2"}active{/if}"><a data-toggle="tab" href="#configure_export_exaprint">{intl d='icirelais.ai' l="Configure EXAPRINT file"}</a></li>
-                    <li class="{if $tab eq "3"}active{/if}"><a data-toggle="tab" href="#prices_slices_tab">{intl d='icirelais.ai' l="Price slices"}</a></li>
+                    <li class="{if $tab eq "0"}active{/if}"><a data-toggle="tab" href="#import_exaprint">{intl d='dpdpickup.ai' l="Import EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "1"}active{/if}"><a data-toggle="tab" href="#export_exaprint">{intl d='dpdpickup.ai' l="Export EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "2"}active{/if}"><a data-toggle="tab" href="#configure_export_exaprint">{intl d='dpdpickup.ai' l="Configure EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "3"}active{/if}"><a data-toggle="tab" href="#prices_slices_tab">{intl d='dpdpickup.ai' l="Price slices"}</a></li>
                 </ul>
                 <br/>
                 <div class="tab-content">
@@ -60,7 +63,7 @@
                                 </div>
                             {/form_field}
 
-                            <button type="submit" class="btn btn-primary">{intl d='icirelais.ai' l='Upload'}</button>
+                            <button type="submit" class="btn btn-primary">{intl d='dpdpickup.ai' l='Upload'}</button>
 
                         </form>
                         {/form}
@@ -73,7 +76,7 @@
                                 <div class="panel panel-default">
 
                                     <div class="panel-heading clearfix">
-                                        {intl d='icirelais.ai' l="Change orders status after export"}
+                                        {intl d='dpdpickup.ai' l="Change orders status after export"}
                                     </div>
 
                                     <div class="panel-body">
@@ -81,7 +84,7 @@
                                         <table>
                                             <tr>
                                                 <td>
-                                                    <label for="nochange">{intl d='icirelais.ai' l="Do not change"}</label>&nbsp;
+                                                    <label for="nochange">{intl d='dpdpickup.ai' l="Do not change"}</label>&nbsp;
                                                 </td>
                                                 <td>
                                                     <input type="radio"  id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
@@ -89,7 +92,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <label for="processing">{intl d='icirelais.ai' l="Processing"}</label>&nbsp;
+                                                    <label for="processing">{intl d='dpdpickup.ai' l="Processing"}</label>&nbsp;
                                                 </td>
                                                 <td>
                                                     <input type="radio"  id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
@@ -97,11 +100,11 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <label for="sent">{intl d='icirelais.ai' l="Sent"}</label>&nbsp;
+                                                    <label for="sent">{intl d='dpdpickup.ai' l="Sent"}</label>&nbsp;
                                                 </td>
                                                 <td>
                                                     <input type="radio"  id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
-                                                    <span>{intl d='icirelais.ai' l="If you choose this option, the exported orders would not be available on this page anymore"}</span>
+                                                    <span>{intl d='dpdpickup.ai' l="If you choose this option, the exported orders would not be available on this page anymore"}</span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -115,19 +118,19 @@
                                     <thead>
                                         <tr>
                                             <th>
-                                                {intl d='icirelais.ai' l="REF"}
+                                                {intl d='dpdpickup.ai' l="REF"}
                                             </th>
                                             <th>
-                                                {intl d='icirelais.ai' l="Date"}
+                                                {intl d='dpdpickup.ai' l="Date"}
                                             </th>
                                             <th class="text-right">
-                                                {intl d='icirelais.ai' l="Total taxed amount"}
+                                                {intl d='dpdpickup.ai' l="Total taxed amount"}
                                             </th>
                                             <th class="text-center">
-                                                {intl d='icirelais.ai' l="Package warranty"}
+                                                {intl d='dpdpickup.ai' l="Package warranty"}
                                             </th>
                                             <th class="text-center">
-                                                {intl d='icirelais.ai' l="Export"}
+                                                {intl d='dpdpickup.ai' l="Export"}
                                             </th>
                                         </tr>
                                     </thead>
@@ -144,7 +147,7 @@
                                                     {format_date date=$CREATE_DATE output="datetime"}
                                                 </td>
                                                 <td class="text-right">
-                                                    {loop name="list.icirelais.getcurrency" type="currency" id=$CURRENCY}
+                                                    {loop name="list.dpdpickup.getcurrency" type="currency" id=$CURRENCY}
                                                         {format_money number=$TOTAL_TAXED_AMOUNT symbol=$SYMBOL}
                                                     {/loop}
                                                 </td>
@@ -164,12 +167,12 @@
                                     </tbody>
                                 </table>
 
-                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-primary" title="{intl d='icirelais.ai' l='Export'}">{intl d='icirelais.ai' l='Export'} <span class="glyphicon glyphicon-ok"></span></button>
+                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-primary" title="{intl d='dpdpickup.ai' l='Export'}">{intl d='dpdpickup.ai' l='Export'} <span class="glyphicon glyphicon-ok"></span></button>
 
                                 <div class="pull-right">
-                                    <button type="button" id="check-all-but" title="{intl d='icirelais.ai' l="Check all"}" class="btn btn-xs btn-default">{intl d='icirelais.ai' l="Check all"}</button>
-                                    <button type="button" id="uncheck-all-but" title="{intl d='icirelais.ai' l="Uncheck all"}" class="btn btn-xs btn-default">{intl d='icirelais.ai' l="Uncheck all"}</button>
-                                    <button type="button" id="reverse-all-but" title="{intl d='icirelais.ai' l="Reverse selection"}" class="btn btn-xs btn-default">{intl d='icirelais.ai' l="Reverse selection"}</button>
+                                    <button type="button" id="check-all-but" title="{intl d='dpdpickup.ai' l="Check all"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Check all"}</button>
+                                    <button type="button" id="uncheck-all-but" title="{intl d='dpdpickup.ai' l="Uncheck all"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Uncheck all"}</button>
+                                    <button type="button" id="reverse-all-but" title="{intl d='dpdpickup.ai' l="Reverse selection"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Reverse selection"}</button>
                                 </div>
                             </form>
                             {/form}
@@ -197,7 +200,7 @@
                                     {$label} :
                                 </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='name'}" class="form-control" required/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='name'}" class="form-control" required/>
                             </div>
                             {/form_field}
 
@@ -207,7 +210,7 @@
                                     {$label} :
                                 </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='addr'}" class="form-control" required/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='addr'}" class="form-control" required/>
                             </div>
                             {/form_field}
 
@@ -216,7 +219,7 @@
                                 <label for="{$label_attr.for}" class="control-label">
                                     {$label} :
                                 </label>
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='addr2'}" class="form-control"/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='addr2'}" class="form-control"/>
                             </div>
                             {/form_field}
 
@@ -226,7 +229,7 @@
                                     {$label} :
                                 </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='zipcode'}" class="form-control" {literal}pattern="((2[A-B])|(\d{2}))\d{3}"{/literal} required/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='zipcode'}" class="form-control" {literal}pattern="((2[A-B])|(\d{2}))\d{3}"{/literal} required/>
                             </div>
                             {/form_field}
 
@@ -236,7 +239,7 @@
                                     {$label} :
                                 </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='city'}" class="form-control" required/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='city'}" class="form-control" required/>
                             </div>
                             {/form_field}
 
@@ -246,7 +249,7 @@
                                     {$label} :
                                 </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control" required/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control" required/>
                             </div>
                             {/form_field}
 
@@ -256,7 +259,7 @@
                                     {$label} :
                                 </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='mobile'}" {literal}pattern="0[6-7]{1}\d{8}"{/literal} class="form-control" required/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='mobile'}" {literal}pattern="0[6-7]{1}\d{8}"{/literal} class="form-control" required/>
                             </div>
                             {/form_field}
 
@@ -266,7 +269,7 @@
                                     {$label} :
                                 </label>
 
-                                <input type="email" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='mail'}" class="form-control" required/>
+                                <input type="email" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='mail'}" class="form-control" required/>
                             </div>
                             {/form_field}
 
@@ -276,12 +279,12 @@
                                     {$label} :
                                 </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='icirelais.ai' l='expcode'}" class="form-control" {literal}pattern="\d{8}"{/literal}/>
+                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='expcode'}" class="form-control" {literal}pattern="\d{8}"{/literal}/>
                             </div>
                             {/form_field}
 
                             <div class="form-group">
-                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success" title="{intl d='icirelais.ai' l='Save changes'}">{intl d='icirelais.ai' l='Save changes'} <span class="glyphicon glyphicon-ok"></span></button>
+                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success" title="{intl d='dpdpickup.ai' l='Save changes'}">{intl d='dpdpickup.ai' l='Save changes'} <span class="glyphicon glyphicon-ok"></span></button>
                             </div>
                         </form>
                     {/form}
@@ -290,7 +293,7 @@
                     <div id="prices_slices_tab" class="tab-pane {if $tab eq "3"}active{/if} form-container">
 
                         <div class="alert alert-info">
-                            <p>{intl d='icirelais.ai' l="Ici Relais Module allows you to send your products in France."}</p>
+                            <p>{intl d='dpdpickup.ai' l="Ici Relais Module allows you to send your products in France."}</p>
                         </div>
 
                         <div class="general-block-decorator">
@@ -320,9 +323,9 @@
                                 {capture name="create_dialog"}
                                     <input type="hidden" name="operation" value="add"/>
                                     <input type="hidden" name="area" value="{$ID}" />
-                                    <label for="weight_{$ID}">{intl d='icirelais.ai' l="Weight up to ... (kg)"}</label>
+                                    <label for="weight_{$ID}">{intl d='dpdpickup.ai' l="Weight up to ... (kg)"}</label>
                                     <input type="text" id="weight_{$ID}" name="weight" value="1" class="form-control" pattern="\d+\.?\d*" required/>
-                                    <label for="price_{$ID}">{intl d='icirelais.ai' l="Price (%sym)" sym=$currencySymbol}</label>
+                                    <label for="price_{$ID}">{intl d='dpdpickup.ai' l="Price (%sym)" sym=$currencySymbol}</label>
                                     <input type="text" id="price_{$ID}" name="price" value="1" class="form-control" pattern="\d+\.?\d*" required/>
                                 {/capture}
                                 
@@ -330,29 +333,29 @@
                                     file = "includes/generic-create-dialog.html"
 
                                     dialog_id    = "price_slice_create_dialog_{$ID}"
-                                    dialog_title = {intl d='icirelais.ai' l="Create a price slice"}
+                                    dialog_title = {intl d='dpdpickup.ai' l="Create a price slice"}
                                     dialog_body  = {$smarty.capture.create_dialog nofilter}
 
                                     form_action= {url path='/admin/module/dpdpickup/prices'}
 
-                                    dialog_ok_label     = {intl d='icirelais.ai' l="Create"}
-                                    dialog_cancel_label = {intl d='icirelais.ai' l="Cancel"}
+                                    dialog_ok_label     = {intl d='dpdpickup.ai' l="Create"}
+                                    dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
                                 }
                                 <div class="table-responsive">
                                     <table class="table table-striped table-condensed table-left-aligned">
                                         <caption class="clearfix">
-                                            {intl d='icirelais.ai' l="Area : "}{$NAME}
+                                            {intl d='dpdpickup.ai' l="Area : "}{$NAME}
                                             {loop type="auth" name="can_create" role="ADMIN" module="icirelais" access="CREATE"}
-                                            <a class="btn btn-default btn-primary pull-right" title="{intl d='icirelais.ai' l='Create a new price slice'}" href="#price_slice_create_dialog_{$ID}" data-toggle="modal">
+                                            <a class="btn btn-default btn-primary pull-right" title="{intl d='dpdpickup.ai' l='Create a new price slice'}" href="#price_slice_create_dialog_{$ID}" data-toggle="modal">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             </a>
                                             {/loop}
                                         </caption>
                                         <thead>
                                         <tr>
-                                            <th class="col-md-3">{intl d='icirelais.ai' l="Weight up to ... (kg)"}</th>
-                                            <th class="col-md-5">{intl d='icirelais.ai' l="Price (%sym)" sym=$currencySymbol}</th>
-                                            <th class="col-md-1">{intl d='icirelais.ai' l="Actions"}</th>
+                                            <th class="col-md-3">{intl d='dpdpickup.ai' l="Weight up to ... (kg)"}</th>
+                                            <th class="col-md-5">{intl d='dpdpickup.ai' l="Price (%sym)" sym=$currencySymbol}</th>
+                                            <th class="col-md-1">{intl d='dpdpickup.ai' l="Actions"}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -364,7 +367,7 @@
                                             <input type="hidden" name="operation" value="add"/>
                                             <input type="hidden" name="area" value="{$ID}"/>
                                             <input type="hidden" name="weight" value="{$MAX_WEIGHT}"/>
-                                            <label for="price_edit_{$ID}_{$MAX_WEIGHT}">{intl d='icirelais.ai' l='Price (%sym)' sym=$currencySymbol}</label>
+                                            <label for="price_edit_{$ID}_{$MAX_WEIGHT}">{intl d='dpdpickup.ai' l='Price (%sym)' sym=$currencySymbol}</label>
                                             <input type="text" id="price_edit_{$ID}_{$MAX_WEIGHT}" class="form-control" name="price" value="{$PRICE}" pattern="\d+\.?\d*" required/>
                                         {/capture}
 
@@ -373,12 +376,12 @@
                                         {include
                                             file = "includes/generic-confirm-dialog.html"
                                             dialog_id    = "price_slice_edit_dialog_{$dialog_id}"
-                                            dialog_title = {intl d='icirelais.ai' l='Edit a price slice'}
+                                            dialog_title = {intl d='dpdpickup.ai' l='Edit a price slice'}
                                             dialog_message = {$smarty.capture.edit_dialog nofilter}
 
                                             form_action= {url path="/admin/module/dpdpickup/prices"}
-                                            dialog_ok_label     = {intl d='icirelais.ai' l="Edit"}
-                                            dialog_cancel_label = {intl d='icirelais.ai' l="Cancel"}
+                                            dialog_ok_label     = {intl d='dpdpickup.ai' l="Edit"}
+                                            dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
                                         }
 
                                         {* -- Delete price slice confirmation dialog ----------------------------------- *}
@@ -387,19 +390,19 @@
                                             <input type="hidden" name="operation" value="delete"/>
                                             <input type="hidden" name="area" value="{$ID}"/>
                                             <input type="hidden" name="weight" value="{$MAX_WEIGHT}"/>
-                                            {intl d='icirelais.ai' l="Do you really want to delete this slice ?"}
+                                            {intl d='dpdpickup.ai' l="Do you really want to delete this slice ?"}
                                         {/capture}
 
                                         {include
                                             file = "includes/generic-confirm-dialog.html"
 
                                             dialog_id    = "price_slice_delete_dialog_{$dialog_id}"
-                                            dialog_title = {intl d='icirelais.ai' l="Delete a price slice"}
+                                            dialog_title = {intl d='dpdpickup.ai' l="Delete a price slice"}
                                             dialog_message  = {$smarty.capture.delete_dialog nofilter}
 
                                             form_action= {url path="/admin/module/dpdpickup/prices"}
-                                            dialog_ok_label     = {intl d='icirelais.ai' l="Delete"}
-                                            dialog_cancel_label = {intl d='icirelais.ai' l="Cancel"}
+                                            dialog_ok_label     = {intl d='dpdpickup.ai' l="Delete"}
+                                            dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
                                         }
 
                                         <tr>
@@ -407,11 +410,11 @@
                                             <td>{$PRICE}</td>
                                             <td>
                                                 <div class="btn-group">
-                                                    {loop type="auth" name="can_change" role="ADMIN" module="icirelais" access="UPDATE"}
-                                                    <a class="btn btn-default btn-xs" title="{intl d='icirelais.ai' l='Edit this price slice'}" href="#price_slice_edit_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
+                                                    {loop type="auth" name="can_change" role="ADMIN" module="dpdpickup" access="UPDATE"}
+                                                    <a class="btn btn-default btn-xs" title="{intl d='dpdpickup.ai' l='Edit this price slice'}" href="#price_slice_edit_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
                                                         <span class="glyphicon glyphicon-edit"></span>
                                                     </a>
-                                                    <a class="btn btn-default btn-xs" title="{intl d='icirelais.ai' l='Delete this price slice'}" href="#price_slice_delete_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
+                                                    <a class="btn btn-default btn-xs" title="{intl d='dpdpickup.ai' l='Delete this price slice'}" href="#price_slice_delete_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
                                                         <span class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                     {/loop}
