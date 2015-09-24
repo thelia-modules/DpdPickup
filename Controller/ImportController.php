@@ -3,10 +3,7 @@
 namespace DpdPickup\Controller;
 
 use DpdPickup\DpdPickup;
-use DpdPickup\Loop\DpdPickupOrders;
 use Propel\Runtime\Propel;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
@@ -14,7 +11,13 @@ use Thelia\Core\Translation\Translator;
 use Thelia\Form\Exception\FormValidationException;
 use Thelia\Model\Map\OrderTableMap;
 use Thelia\Model\OrderQuery;
+use Thelia\Tools\URL;
 
+/**
+ * Class ImportController
+ * @package DpdPickup\Controller
+ * @author Etienne Perriere - OpenStudio <eperriere@openstudio.fr>
+ */
 class ImportController extends BaseAdminController
 {
     /**
@@ -78,7 +81,7 @@ class ImportController extends BaseAdminController
             );
 
             // Redirect
-            return new RedirectResponse($form->getSuccessUrl());
+            return $this->generateRedirect(URL::getInstance()->absoluteUrl($form->getSuccessUrl(), ['current_tab' => 'import_exaprint']));
         } catch (FormValidationException $e) {
             $con->rollback();
 
