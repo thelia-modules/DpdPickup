@@ -2,7 +2,7 @@
 	<!-- Errors -->
 	{loop name="checkrights" type="dpdpickup.check.rights"}
 	<div class="alert alert-danger">
-    	<p>{$ERRMES} {$ERRFILE} | {intl d='icirelais.ai' l="Please change the access rights"}.</p>
+    	<p>{$ERRMES} {$ERRFILE} | {intl d='dpdpickup.ai' l="Please change the access rights"}.</p>
     </div>
 	{/loop}
 </div>
@@ -14,7 +14,7 @@
     {* Calc tab selection *}
     {assign var="tab" value="0"}
     {if isset($smarty.get.current_tab)}
-        {if $smarty.get.current_tab eq "export_exaprint"}
+        {if $smarty.get.current_tab eq "import_exaprint"}
             {assign var="tab" value="1"}
         {/if}
         {if $smarty.get.current_tab eq "configure_export_exaprint"}
@@ -29,47 +29,15 @@
         <div class="row">
             <div class="col-md-12">
                 <ul id="tabbed-menu" class="nav nav-tabs">
-                    <li class="{if $tab eq "0"}active{/if}"><a data-toggle="tab" href="#import_exaprint">{intl d='dpdpickup.ai' l="Import EXAPRINT file"}</a></li>
-                    <li class="{if $tab eq "1"}active{/if}"><a data-toggle="tab" href="#export_exaprint">{intl d='dpdpickup.ai' l="Export EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "0"}active{/if}"><a data-toggle="tab" href="#export_exaprint">{intl d='dpdpickup.ai' l="Export EXAPRINT file"}</a></li>
+                    <li class="{if $tab eq "1"}active{/if}"><a data-toggle="tab" href="#import_exaprint">{intl d='dpdpickup.ai' l="Import EXAPRINT file"}</a></li>
                     <li class="{if $tab eq "2"}active{/if}"><a data-toggle="tab" href="#configure_export_exaprint">{intl d='dpdpickup.ai' l="Configure EXAPRINT file"}</a></li>
                     <li class="{if $tab eq "3"}active{/if}"><a data-toggle="tab" href="#prices_slices_tab">{intl d='dpdpickup.ai' l="Price slices"}</a></li>
                 </ul>
                 <br/>
                 <div class="tab-content">
-                    <div id="import_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
 
-                        {flash type='update-orders-result'}
-                            <div class="alert alert-success">
-                                {$MESSAGE}
-                            </div>
-                        {/flash}
-
-                        {form name='dpdpickup.import'}
-                        <form action="{url path='/admin/module/dpdpickup/import'}" method="post" {form_enctype form=$form}>
-                            {form_hidden_fields form=$form}
-                            {render_form_field form=$form field="success_url" value={url path="/admin/module/DpdPickup"}}
-
-                            {if $form_error}
-                                <div class="alert alert-danger">{$form_error_message}</div>
-                            {/if}
-
-                            {form_field form=$form field="import_file"}
-                                <div class="form-group {if $error}has-error{/if}">
-                                    <label for="{$label_attr.for}" class="control-label">
-                                        {$label} :
-                                    </label>
-
-                                    <input type="file" id="{$label_attr.for}" name="{$name}" value="{$value}" required/>
-                                </div>
-                            {/form_field}
-
-                            <button type="submit" class="btn btn-primary">{intl d='dpdpickup.ai' l='Upload'}</button>
-
-                        </form>
-                        {/form}
-                    </div>
-
-                    <div id="export_exaprint" class="tab-pane {if $tab eq "1"}active{/if} form-container">
+                    <div id="export_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
                         {ifloop rel="list.dpdpickup.orders"}
                             {form name="dpdpickup.selection"}
                             <form method="post" action="{url path="/admin/module/dpdpickup/exportgo"}">
@@ -183,6 +151,39 @@
                                 {intl l="There are currently no pending order to ship by DpdPickup."}
                             </div>
                         {/elseloop}
+                    </div>
+
+                    <div id="import_exaprint" class="tab-pane {if $tab eq "1"}active{/if} form-container">
+
+                        {flash type='update-orders-result'}
+                            <div class="alert alert-success">
+                                {$MESSAGE}
+                            </div>
+                        {/flash}
+
+                        {form name='dpdpickup.import'}
+                            <form action="{url path='/admin/module/dpdpickup/import'}" method="post" {form_enctype form=$form}>
+                                {form_hidden_fields form=$form}
+                                {render_form_field form=$form field="success_url" value={url path="/admin/module/DpdPickup"} current_tab="import_exaprint"}
+
+                                {if $form_error}
+                                    <div class="alert alert-danger">{$form_error_message}</div>
+                                {/if}
+
+                                {form_field form=$form field="import_file"}
+                                    <div class="form-group {if $error}has-error{/if}">
+                                        <label for="{$label_attr.for}" class="control-label">
+                                            {$label} :
+                                        </label>
+
+                                        <input type="file" id="{$label_attr.for}" name="{$name}" value="{$value}" required/>
+                                    </div>
+                                {/form_field}
+
+                                <button type="submit" class="btn btn-primary">{intl d='dpdpickup.ai' l='Upload'}</button>
+
+                            </form>
+                        {/form}
                     </div>
 
                     <div id="configure_export_exaprint" class="tab-pane {if $tab eq "2"}active{/if} form-container">
