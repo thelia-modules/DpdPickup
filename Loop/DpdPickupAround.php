@@ -138,13 +138,13 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
             }
 
             // Then define all the variables
-            $loopResultRow->set("NAME", $item->NAME)
+            $loopResultRow->set("NAME", htmlspecialchars($item->NAME))
                 ->set("LONGITUDE", str_replace(",", ".", $item->LONGITUDE))
                 ->set("LATITUDE", str_replace(",", ".", $item->LATITUDE))
                 ->set("CODE", $item->PUDO_ID)
-                ->set("ADDRESS", $item->ADDRESS1)
+                ->set("ADDRESS", htmlspecialchars($item->ADDRESS1))
                 ->set("ZIPCODE", $item->ZIPCODE)
-                ->set("CITY", $item->CITY)
+                ->set("CITY", htmlspecialchars($item->CITY))
                 ->set("DISTANCE", $distance);
             $loopResult->addRow($loopResultRow);
         }
