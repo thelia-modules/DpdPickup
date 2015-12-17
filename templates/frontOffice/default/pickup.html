@@ -117,7 +117,7 @@
             var locations = new Array();
 
             {loop type="dpdpickup.relais.around" name="delivery-selection-icirelais"}
-            locations.push(['{$NAME}', {$LATITUDE}, {$LONGITUDE}, '{$CODE}', '{$ADDRESS}', '{$ZIPCODE}', '{$CITY}', '{$DISTANCE}']);
+                locations.push(['{addslashes($NAME)}', {$LATITUDE}, {$LONGITUDE}, '{addslashes($CODE)}', '{addslashes($ADDRESS)}', '{addslashes($ZIPCODE)}', '{addslashes($CITY)}', '{addslashes($DISTANCE)}']);
             {/loop}
             updatemap(url_site, adr_geoloc, locations);
         }

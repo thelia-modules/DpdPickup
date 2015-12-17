@@ -71,7 +71,7 @@ class SendEMail extends BaseAction implements EventSubscriberInterface
     public function update_status(OrderEvent $event)
     {
         if ($event->getOrder()->getDeliveryModuleId() === DpdPickup::getModuleId()) {
-            if ($event->getOrder()->getStatusId() === DpdPickupOrders::STATUS_SENT) {
+            if ($event->getOrder()->getStatusId() === DpdPickup::STATUS_SENT) {
                 $contact_email = ConfigQuery::read('store_email');
 
                 if ($contact_email) {
