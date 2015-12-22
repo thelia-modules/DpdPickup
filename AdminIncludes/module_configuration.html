@@ -89,6 +89,9 @@
                                                 {intl d='dpdpickup.ai' l="REF"}
                                             </th>
                                             <th>
+                                                {intl d='dpdpickup.ai' l="Customer"}
+                                            </th>
+                                            <th>
                                                 {intl d='dpdpickup.ai' l="Date"}
                                             </th>
                                             <th class="text-right">
@@ -112,6 +115,11 @@
                                                     </label>
                                                 </td>
                                                 <td>
+                                                    {loop type='customer' name='pickup.customer' id=$CUSTOMER}
+                                                        {$LASTNAME} {$FIRSTNAME}
+                                                    {/loop}
+                                                </td>
+                                                <td>
                                                     {format_date date=$CREATE_DATE output="datetime"}
                                                 </td>
                                                 <td class="text-right">
@@ -121,13 +129,13 @@
                                                 </td>
                                                 {assign var="assurref" value="`$REF|replace:'.':'-'`-assur"}
                                                 {form_field form=$form field=$assurref}
-                                                <td>
-                                                    <input type="checkbox" name="{$name}" value="true" class="form-control" />
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="{$name}" value="true" />
                                                 </td>
                                                 {/form_field}
                                                 {form_field form=$form field=$REF|replace:'.':'-'}
-                                                <td>
-                                                    <input type="checkbox" name="{$name}" id="{$label_attr.for}" value=="true" class="form-control"/>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="{$name}" id="{$label_attr.for}" value=="true" />
                                                 </td>
                                                 {/form_field}
                                             </tr>
