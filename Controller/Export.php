@@ -25,7 +25,6 @@ namespace DpdPickup\Controller;
 
 use DpdPickup\Form\ExportExaprintSelection;
 use DpdPickup\DpdPickup;
-use DpdPickup\Loop\DpdPickupOrders;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
@@ -36,7 +35,6 @@ use Thelia\Log\Tlog;
 use Thelia\Model\AddressQuery;
 use Thelia\Model\OrderAddressQuery;
 use Thelia\Model\OrderQuery;
-use Thelia\Model\OrderProductQuery;
 use Thelia\Model\CustomerQuery;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
@@ -48,6 +46,7 @@ use Thelia\Model\OrderStatusQuery;
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
  * @original_author etienne roudeix <eroudeix@openstudio.fr>
+ * @contributor Etienne Perriere <eperriere@openstudio.fr>
  */
 class Export extends BaseAdminController
 {
@@ -164,12 +163,18 @@ class Export extends BaseAdminController
             );
         }
 
-        //---
+        // For each selected order
         foreach ($orders as $order) {
+
             $orderRef = str_replace(".", "-", $order->getRef());
 
             if ($vform->get($orderRef)->getData()) {
+
+                // Get if the package is assured, how many packages there are & their weight
                 $assur_package = $vform->get($orderRef . "-assur")->getData();
+                $pkgNumber = $vform->get($orderRef . '-pkgNumber')->getData();
+                $pkgWeight = $vform->get($orderRef . '-pkgWeight')->getData();
+
                 if ($status_id == "processing") {
                     $event = new OrderEvent($order);
 
@@ -196,10 +201,6 @@ class Export extends BaseAdminController
                 $icirelais_code = OrderAddressIcirelaisQuery::create()
                     ->findPK($order->getDeliveryOrderAddressId());
                 if ($icirelais_code !== null) {
-                    //Get OrderProduct object
-                    $products = OrderProductQuery::create()
-                        ->filterByOrderId($order->getId())
-                        ->find();
 
                     // Get Customer's cellphone
                     $cellphone = AddressQuery::create()
@@ -209,19 +210,17 @@ class Export extends BaseAdminController
                         ->getCellphone();
 
                     //Weigth & price calc
-                    $weight = 0.0;
                     $price = 0;
                     $price = $order->getTotalAmount($price, false); // tax = 0 && include postage = flase
-                    foreach ($products as $p) {
-                        $weight += ((float)$p->getWeight()) * (int)$p->getQuantity();
-                    }
-                    $weight = floor($weight * 100);
+
+                    $pkgWeight = floor($pkgWeight * 100);
+
                     $assur_price = ($assur_package == 'true') ? $price : 0;
-                    $date_format = date("d/m/Y", $order->getUpdatedAt()->getTimestamp());
+                    $date_format = date("d/m/y", $order->getUpdatedAt()->getTimestamp());
 
                     $res .= self::harmonise($order->getRef(), 'alphanumeric', 35);
                     $res .= self::harmonise("", 'alphanumeric', 2);
-                    $res .= self::harmonise($weight, 'numeric', 8);
+                    $res .= self::harmonise($pkgWeight, 'numeric', 8);
                     $res .= self::harmonise("", 'alphanumeric', 15);
                     $res .= self::harmonise($customer->getLastname(), 'alphanumeric', 35);
                     $res .= self::harmonise($customer->getFirstname(), 'alphanumeric', 35);
