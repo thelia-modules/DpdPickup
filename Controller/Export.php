@@ -308,10 +308,10 @@ class Export extends BaseAdminController
         }
 
         $response = new Response(
-            $res,
+            utf8_decode(mb_strtoupper($res)),
             200,
             array(
-                'Content-Type' => 'application/csv-tab-delimited-table',
+                'Content-Type' => 'application/csv-tab-delimited-table;charset=iso-8859-1',
                 'Content-disposition' => 'filename=export.dat'
             )
         );
