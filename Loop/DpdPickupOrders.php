@@ -23,6 +23,7 @@
 
 namespace DpdPickup\Loop;
 
+use Propel\Runtime\ActiveQuery\Criteria;
 use Thelia\Core\Template\Loop\Order;
 use DpdPickup\DpdPickup;
 use Thelia\Model\OrderQuery;
@@ -38,6 +39,7 @@ class DpdPickupOrders extends Order
     {
         return OrderQuery::create()
             ->filterByDeliveryModuleId(DpdPickup::getModuleId())
-            ->filterByStatusId([DpdPickup::STATUS_PAID, DpdPickup::STATUS_PROCESSING]);
+            ->filterByStatusId([DpdPickup::STATUS_PAID, DpdPickup::STATUS_PROCESSING])
+            ->orderByCreatedAt(Criteria::DESC);
     }
 }

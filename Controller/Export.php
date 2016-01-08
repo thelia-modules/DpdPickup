@@ -33,6 +33,7 @@ use DpdPickup\Model\OrderAddressIcirelaisQuery;
 use Thelia\Core\HttpFoundation\Response;
 use Thelia\Log\Tlog;
 use Thelia\Model\AddressQuery;
+use Thelia\Model\Order;
 use Thelia\Model\OrderAddressQuery;
 use Thelia\Model\OrderQuery;
 use Thelia\Model\CustomerQuery;
@@ -164,8 +165,8 @@ class Export extends BaseAdminController
         }
 
         // For each selected order
+        /** @var Order $order */
         foreach ($orders as $order) {
-
             $orderRef = str_replace(".", "-", $order->getRef());
 
             if ($vform->get($orderRef)->getData()) {
@@ -175,9 +176,9 @@ class Export extends BaseAdminController
                 $pkgNumber = $vform->get($orderRef . '-pkgNumber')->getData();
                 $pkgWeight = $vform->get($orderRef . '-pkgWeight')->getData();
 
+                // Check if status has to be changed
                 if ($status_id == "processing") {
                     $event = new OrderEvent($order);
-
                     $status = OrderStatusQuery::create()
                         ->findOneByCode(OrderStatus::CODE_PROCESSING);
                     $event->setStatus($status->getId());
@@ -189,7 +190,8 @@ class Export extends BaseAdminController
                     $event->setStatus($status->getId());
                     $this->getDispatcher()->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
                 }
-                //Get OrderAddress object - customer's address
+
+                //Get invoice address
                 $address = OrderAddressQuery::create()
                     ->findPK($order->getInvoiceOrderAddressId());
 
@@ -200,16 +202,16 @@ class Export extends BaseAdminController
                 //Get OrderAddressDpdPickup object
                 $icirelais_code = OrderAddressIcirelaisQuery::create()
                     ->findPK($order->getDeliveryOrderAddressId());
+
                 if ($icirelais_code !== null) {
 
                     // Get Customer's cellphone
-                    $cellphone = AddressQuery::create()
-                        ->filterByCustomerId($order->getCustomerId())
-                        ->filterByIsDefault("1")
-                        ->findOne()
-                        ->getCellphone();
+                    if (null == $cellphone = $address->getCellphone())
+                    {
+                        $address->getPhone();
+                    }
 
-                    //Weigth & price calc
+                    //Weight & price calc
                     $price = 0;
                     $price = $order->getTotalAmount($price, false); // tax = 0 && include postage = flase
 
@@ -218,89 +220,53 @@ class Export extends BaseAdminController
                     $assur_price = ($assur_package == 'true') ? $price : 0;
                     $date_format = date("d/m/y", $order->getUpdatedAt()->getTimestamp());
 
-                    $res .= self::harmonise($order->getRef(), 'alphanumeric', 35);
+                    $res .= self::harmonise($order->getRef(), 'alphanumeric', 35);              // Order ref
                     $res .= self::harmonise("", 'alphanumeric', 2);
-                    $res .= self::harmonise($pkgWeight, 'numeric', 8);
+                    $res .= self::harmonise($pkgWeight, 'numeric', 8);                          // Package weight
                     $res .= self::harmonise("", 'alphanumeric', 15);
-                    $res .= self::harmonise($customer->getLastname(), 'alphanumeric', 35);
-                    $res .= self::harmonise($customer->getFirstname(), 'alphanumeric', 35);
-                    $res .= self::harmonise($address->getAddress2(), 'alphanumeric', 35);
+                    $res .= self::harmonise($address->getLastname(), 'alphanumeric', 35);       // Charged customer
+                    $res .= self::harmonise($address->getFirstname(), 'alphanumeric', 35);
+                    $res .= self::harmonise($address->getAddress2(), 'alphanumeric', 35);       // Invoice address info
                     $res .= self::harmonise($address->getAddress3(), 'alphanumeric', 35);
                     $res .= self::harmonise("", 'alphanumeric', 35);
                     $res .= self::harmonise("", 'alphanumeric', 35);
-                    $res .= self::harmonise($address->getZipcode(), 'alphanumeric', 10);
+                    $res .= self::harmonise($address->getZipcode(), 'alphanumeric', 10);        // Invoice address
                     $res .= self::harmonise($address->getCity(), 'alphanumeric', 35);
                     $res .= self::harmonise("", 'alphanumeric', 10);
                     $res .= self::harmonise($address->getAddress1(), 'alphanumeric', 35);
                     $res .= self::harmonise("", 'alphanumeric', 10);
-                    $res .= self::harmonise(
-                        "F",
-                        'alphanumeric',
-                        3
-                    );                                // CODE PAYS DESTINATAIRE PAR DEFAUT F
-                    $res .= self::harmonise($address->getPhone(), 'alphanumeric', 30);
+                    $res .= self::harmonise("F", 'alphanumeric', 3);                            // Default invoice country code
+                    $res .= self::harmonise($address->getPhone(), 'alphanumeric', 30);          // Invoice phone
                     $res .= self::harmonise("", 'alphanumeric', 15);
-                    $res .= self::harmonise($exp_name, 'alphanumeric', 35);                        // DEBUT EXPEDITEUR
-                    $res .= self::harmonise($exp_address2, 'alphanumeric', 35);
+                    $res .= self::harmonise($exp_name, 'alphanumeric', 35);                     // Expeditor name
+                    $res .= self::harmonise($exp_address2, 'alphanumeric', 35);                 // Expeditor address
                     $res .= self::harmonise("", 'alphanumeric', 140);
                     $res .= self::harmonise($exp_zipcode, 'alphanumeric', 10);
                     $res .= self::harmonise($exp_city, 'alphanumeric', 35);
                     $res .= self::harmonise("", 'alphanumeric', 10);
                     $res .= self::harmonise($exp_address1, 'alphanumeric', 35);
                     $res .= self::harmonise("", 'alphanumeric', 10);
-                    $res .= self::harmonise(
-                        "F",
-                        'alphanumeric',
-                        3
-                    );                                // CODE PAYS EXPEDITEUR PAR DEFAUT F
-                    $res .= self::harmonise($exp_phone, 'alphanumeric', 30);
-                    $res .= self::harmonise(
-                        "",
-                        'alphanumeric',
-                        35
-                    );                                // COMMENTAIRE 1 DE LA COMMANDE
-                    $res .= self::harmonise(
-                        "",
-                        'alphanumeric',
-                        35
-                    );                                // COMMENTAIRE 2 DE LA COMMANDE
-                    $res .= self::harmonise(
-                        "",
-                        'alphanumeric',
-                        35
-                    );                                // COMMENTAIRE 3 DE LA COMMANDE
-                    $res .= self::harmonise(
-                        "",
-                        'alphanumeric',
-                        35
-                    );                                // COMMENTAIRE 3 DE LA COMMANDE
-                    $res .= self::harmonise($date_format, 'alphanumeric', 10);
-                    $res .= self::harmonise(
-                        $exp_code,
-                        'numeric',
-                        8
-                    );                                        // N° COMPTE CHARGEUR ICIRELAIS ?
-                    $res .= self::harmonise("", 'alphanumeric', 35);                                // CODE BARRE
-                    $res .= self::harmonise($customer->getRef(), 'alphanumeric', 35);
+                    $res .= self::harmonise("F", 'alphanumeric', 3);                            // Default expeditor country code
+                    $res .= self::harmonise($exp_phone, 'alphanumeric', 30);                    // Expeditor phone
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 1
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 2
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 3
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 4
+                    $res .= self::harmonise($date_format.' ', 'alphanumeric', 10);              // Date
+                    $res .= self::harmonise($exp_code, 'numeric', 8);                           // Expeditor DPD code
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Bar code
+                    $res .= self::harmonise($customer->getRef(), 'alphanumeric', 35);           // Customer ref
                     $res .= self::harmonise("", 'alphanumeric', 29);
-                    $res .= self::harmonise(
-                        $assur_price,
-                        'float',
-                        9
-                    );                                // MONTANT DE LA VALEUR MARCHANDE A ASSURER EX: 20 euros -> 000020.00
+                    $res .= self::harmonise($assur_price, 'float', 9);                          // Insured value
                     $res .= self::harmonise("", 'alphanumeric', 8);
-                    $res .= self::harmonise($customer->getId(), 'alphanumeric', 35);
+                    $res .= self::harmonise($customer->getId(), 'alphanumeric', 35);            // Customer ID
                     $res .= self::harmonise("", 'alphanumeric', 46);
-                    $res .= self::harmonise($exp_email, 'alphanumeric', 80);
-                    $res .= self::harmonise($exp_cellphone, 'alphanumeric', 35);
-                    $res .= self::harmonise($customer->getEmail(), 'alphanumeric', 80);
-                    $res .= self::harmonise($cellphone, 'alphanumeric', 35);
+                    $res .= self::harmonise($exp_email, 'alphanumeric', 80);                    // Expeditor email
+                    $res .= self::harmonise($exp_cellphone, 'alphanumeric', 35);                // Expeditor cellphone
+                    $res .= self::harmonise($customer->getEmail(), 'alphanumeric', 80);         // Customer email
+                    $res .= self::harmonise($cellphone, 'alphanumeric', 35);                    // Invoice cellphone
                     $res .= self::harmonise("", 'alphanumeric', 96);
-                    $res .= self::harmonise(
-                        $icirelais_code->getCode(),
-                        'alphanumeric',
-                        8
-                    );        // IDENTIFIANT ESPACE ICIRELAIS
+                    $res .= self::harmonise($icirelais_code->getCode(), 'alphanumeric', 8);     // DPD relay ID
 
                     $res .= "\r\n";
                 }
