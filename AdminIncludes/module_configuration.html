@@ -23,6 +23,9 @@
         {if $smarty.get.current_tab eq "price_slices_tab"}
             {assign var="tab" value="3"}
         {/if}
+        {if $smarty.get.current_tab eq "config_tab"}
+            {assign var="tab" value="4"}
+        {/if}
     {/if}
 
     <div class="general-block-decorator">
@@ -33,9 +36,57 @@
                     <li class="{if $tab eq "1"}active{/if}"><a data-toggle="tab" href="#import_exaprint">{intl d='dpdpickup.ai' l="Import EXAPRINT file"}</a></li>
                     <li class="{if $tab eq "2"}active{/if}"><a data-toggle="tab" href="#configure_export_exaprint">{intl d='dpdpickup.ai' l="Configure EXAPRINT file"}</a></li>
                     <li class="{if $tab eq "3"}active{/if}"><a data-toggle="tab" href="#prices_slices_tab">{intl d='dpdpickup.ai' l="Price slices"}</a></li>
+                    <li class="{if $tab eq "4"}active{/if}"><a data-toggle="tab" href="#configuration_tab">{intl d='dpdpickup.ai' l="Configuration"}</a></li>
                 </ul>
                 <br/>
                 <div class="tab-content">
+
+                    <!-- Configuration tab -->
+                    <div id="configuration_tab" class="tab-pane {if $tab eq "4"}active{/if} form-container">
+                        {form name='dpdpickup.config.form'}
+                            <form action="{url path='/admin/module/dpdpickup/config'}" method="post">
+                                {form_hidden_fields form=$form}
+
+                                {if $form_error}
+                                    <div class="alert alert-danger">{$form_error_message}</div>
+                                {/if}
+
+                                {form_field form=$form field="default_status"}
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <label for="nochange">{intl l="Do not change"}</label>&nbsp;
+                                            </td>
+                                            <td>
+                                                <input type="radio" id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="processing">{intl l="Processing"}</label>&nbsp;
+                                            </td>
+                                            <td>
+                                                <input type="radio" id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="sent">{intl l="Sent"}</label>&nbsp;
+                                            </td>
+                                            <td>
+                                                <input type="radio" id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
+                                                <span>{intl l="If you choose this option, the exported orders would not be available on this page anymore"}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                {/form_field}
+
+                                <br>
+                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success">{intl l='Save changes'} <span class="glyphicon glyphicon-ok"></span></button>
+
+                            </form>
+                        {/form}
+                    </div><!-- /config tab -->
 
                     <div id="export_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
                         {ifloop rel="list.dpdpickup.orders"}

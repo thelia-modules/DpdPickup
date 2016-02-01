@@ -6,6 +6,7 @@ return array(
     'Cancel' => 'Annuler',
     'Change orders status after export' => 'Modifier le statut des commandes après l\'export',
     'Check all' => 'Tout cocher',
+    'Configuration' => 'Configuration',
     'Configure EXAPRINT file' => 'Configuration du fichier EXAPRINT',
     'Create' => 'Créer',
     'Create a new price slice' => 'Créer une nouvelle tranche de prix',

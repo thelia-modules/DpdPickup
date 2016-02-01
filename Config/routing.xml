@@ -28,4 +28,8 @@
     <route id="dpdpickup.edit.freeshipping" path="/admin/module/dpdpickup/freeshipping" methods="post">
         <default key="_controller">DpdPickup\Controller\FreeShipping::set</default>
     </route>
+
+    <route id="dpdpickup.config" path="/admin/module/dpdpickup/config" methods="post">
+        <default key="_controller">DpdPickup\Controller\ConfigurationController::configureAction</default>
+    </route>
 </routes>

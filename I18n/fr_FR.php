@@ -12,6 +12,7 @@ return array(
     'Change order status to' => 'Modifier le statut des commandes après l\'export',
     'Do not change' => 'Ne pas changer',
     'DpdPickup Sender\'s code' => 'Code DpdPickup de l\'expéditeur',
+    'Error while updating status' => 'Erreur lors du changement du statut par défaut',
     'Got invalid data : %err' => 'Données invalides reçues : %err',
     'Operation successful. %i orders affected.' => 'Opération effectuée avec succès. %i commandes affectées.',
     'Select file to import' => 'Sélectionner un fichier à importer',
@@ -25,5 +26,6 @@ return array(
     'Sender\'s zipcode' => 'Code postal  de l\'expéditeur',
     'Set orders status as processing' => 'Traitement',
     'Set orders status as sent' => 'Envoyée',
+    'Sorry, an error occurred: %err' => 'Désolé, une erreur s\'est produite : %err',
     'The file DpdPickup/Config/exportdat.json is not valid. Please correct it.' => 'Le fichier DpdPickup/Config/exportdat.json n\'est pas valide. Veuillez le corriger.',
 );

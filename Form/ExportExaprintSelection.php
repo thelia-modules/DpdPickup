@@ -42,6 +42,10 @@ class ExportExaprintSelection extends BaseForm
 
     protected function buildForm()
     {
+        if (null === $data = DpdPickup::getConfigValue('default_status')){
+            $data = DpdPickup::NO_CHANGE;
+        }
+
         $entries = OrderQuery::create()
             ->filterByDeliveryModuleId(DpdPickup::getModuleId())
             ->find();
@@ -53,14 +57,14 @@ class ExportExaprintSelection extends BaseForm
                 array(
                     'label' => Translator::getInstance()->trans('Change order status to', [], DpdPickup::DOMAIN),
                     'choices' => array(
-                        "nochange" => Translator::getInstance()->trans("Do not change", [], DpdPickup::DOMAIN),
-                        "processing" => Translator::getInstance()->trans("Set orders status as processing", [], DpdPickup::DOMAIN),
-                        "sent" => Translator::getInstance()->trans("Set orders status as sent", [], DpdPickup::DOMAIN)
+                        DpdPickup::NO_CHANGE => Translator::getInstance()->trans("Do not change", [], DpdPickup::DOMAIN),
+                        DpdPickup::PROCESS => Translator::getInstance()->trans("Set orders status as processing", [], DpdPickup::DOMAIN),
+                        DpdPickup::SEND => Translator::getInstance()->trans("Set orders status as sent", [], DpdPickup::DOMAIN)
                     ),
                     'required' => true,
                     'expanded' => true,
                     'multiple' => false,
-                    'data' => 'nochange'
+                    'data' => $data
                 )
             );
 
