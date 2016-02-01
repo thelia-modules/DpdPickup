@@ -40,6 +40,10 @@ class DpdPickup extends AbstractDeliveryModule
     const STATUS_PROCESSING = 3;
     const STATUS_SENT = 4;
 
+    const NO_CHANGE = 'nochange';
+    const PROCESS = 'processing';
+    const SEND = 'sent';
+
     protected $request;
     protected $dispatcher;
 
