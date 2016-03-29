@@ -46,10 +46,6 @@ class ExportExaprintSelection extends BaseForm
             $data = DpdPickup::NO_CHANGE;
         }
 
-        $entries = OrderQuery::create()
-            ->filterByDeliveryModuleId(DpdPickup::getModuleId())
-            ->find();
-
         $this->formBuilder
             ->add(
                 'new_status_id',
@@ -66,34 +62,55 @@ class ExportExaprintSelection extends BaseForm
                     'multiple' => false,
                     'data' => $data
                 )
-            );
+            )
 
-        foreach ($entries as $order) {
-            $orderRef = str_replace(".", "-", $order->getRef());
+            // Collections
 
-            $this->formBuilder
-                ->add(
-                    $orderRef,
-                    'checkbox',
-                    array(
-                        'label' => $orderRef,
-                        'label_attr' => array(
-                            'for' => $orderRef
-                        )
-                    )
+            ->add(
+                'order_ref_check',
+                'collection',
+                array(
+                    'type'         => 'checkbox',
+                    'allow_add'    => true,
+                    'allow_delete' => true,
                 )
-                ->add(
-                    $orderRef . "-assur",
-                    'checkbox'
+            )
+            ->add(
+                'order_ref',
+                'collection',
+                array(
+                    'type'         => 'text',
+                    'allow_add'    => true,
+                    'allow_delete' => true,
                 )
-                ->add(
-                    $orderRef . "-pkgNumber",
-                    'number'
+            )
+            ->add(
+                'assur',
+                'collection',
+                array(
+                    'type'         => 'checkbox',
+                    'allow_add'    => true,
+                    'allow_delete' => true,
                 )
-                ->add(
-                    $orderRef . "-pkgWeight",
-                    'number'
-                );
-        }
+            )
+            ->add(
+                'pkgNumber',
+                'collection',
+                array(
+                    'type'         => 'number',
+                    'allow_add'    => true,
+                    'allow_delete' => true,
+                )
+            )
+            ->add(
+                'pkgWeight',
+                'collection',
+                array(
+                    'type'         => 'number',
+                    'allow_add'    => true,
+                    'allow_delete' => true,
+                )
+            )
+        ;
     }
 }

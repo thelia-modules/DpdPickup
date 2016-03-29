@@ -13,7 +13,11 @@
                     <input type="hidden" name="{$name}" value="nochange" />
                 {/form_field}
 
-                {form_field form=$form field={$REF|replace:'.':'-'}}
+                {form_field form=$form field="order_ref" value_key=0}
+                    <input type="hidden" name="{$name}" value="{$REF|replace:'.':'-'}" />
+                {/form_field}
+
+                {form_field form=$form field="order_ref_check" value_key=0}
                     <input type="hidden" name="{$name}" value="true" />
                 {/form_field}
                 <button type="submit" name="export_order" value="stay" class="form-submit-button btn btn-sm btn-default" title="{intl l='Export'}">{intl l='Export'} <span class="glyphicon glyphicon-ok"></span></button>
