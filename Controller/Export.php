@@ -169,12 +169,15 @@ class Export extends BaseAdminController
         foreach ($orders as $order) {
             $orderRef = str_replace(".", "-", $order->getRef());
 
-            if ($vform->get($orderRef)->getData()) {
+            $collectionKey = array_search($orderRef, $vform->getData()['order_ref']);
+            if (false !== $collectionKey
+                && array_key_exists($collectionKey, $vform->getData()['order_ref_check'])
+                && $vform->getData()['order_ref_check'][$collectionKey]) {
 
                 // Get if the package is assured, how many packages there are & their weight
-                $assur_package = $vform->get($orderRef . "-assur")->getData();
-                $pkgNumber = $vform->get($orderRef . '-pkgNumber')->getData();
-                $pkgWeight = $vform->get($orderRef . '-pkgWeight')->getData();
+                $assur_package = array_key_exists($collectionKey, $vform->getData()['assur']) ? $vform->getData()['assur'][$collectionKey] : false;
+                $pkgNumber = array_key_exists($collectionKey, $vform->getData()['pkgNumber']) ? $vform->getData()['pkgNumber'][$collectionKey] : null;
+                $pkgWeight = array_key_exists($collectionKey, $vform->getData()['pkgWeight']) ? $vform->getData()['pkgWeight'][$collectionKey] : null;
 
                 // Check if status has to be changed
                 if ($status_id == "processing") {
