@@ -34,25 +34,16 @@
 
         });
 
-        checkboxes = [{loop name="icirelais.get.checkboxes.names" type="dpdpickup.orders"}"{$REF|replace:'.':'-'}",{/loop}];
-        $("#check-all-but").click( function(ev) {
-            checkboxes.forEach(function(entry) {
-               $("#"+entry).prop('checked', true);
-            });
-            ev.preventDefault();
+        $("#check-all-but").click( function() {
+            $(".export-checkbox").prop('checked', true);
         });
-        $("#uncheck-all-but").click( function(ev) {
-            checkboxes.forEach(function(entry) {
-                $("#"+entry).prop('checked', false);
-            });
-            ev.preventDefault();
+        $("#uncheck-all-but").click( function() {
+            $(".export-checkbox").prop('checked', false);
         });
-        $("#reverse-all-but").click( function(ev) {
-            checkboxes.forEach(function(entry) {
-                var box=$("#"+entry);
-                box.prop('checked', !box.is(":checked"));
+        $("#reverse-all-but").click( function() {
+            $(".export-checkbox").each(function() {
+                $(this).prop('checked', ($(this).prop('checked')) ? false : true);
             });
-            ev.preventDefault();
         });
         $("button[name=save_mode]").click(function() {
             var value = $("input[name='exportexaprintselection[new_status_id]']:checked").val();
