@@ -29,6 +29,7 @@ use Thelia\Exception\OrderException;
 use Thelia\Install\Database;
 use Thelia\Model\Country;
 use Thelia\Module\AbstractDeliveryModule;
+use Thelia\Module\Exception\DeliveryException;
 
 class DpdPickup extends AbstractDeliveryModule
 {
@@ -119,7 +120,7 @@ class DpdPickup extends AbstractDeliveryModule
 
             /* check if DpdPickup delivers the asked area */
             if (!isset($prices[$areaId]) || !isset($prices[$areaId]["slices"])) {
-                throw new OrderException(
+                throw new DeliveryException(
                     "Ici Relais delivery unavailable for the chosen delivery country",
                     OrderException::DELIVERY_MODULE_UNAVAILABLE
                 );
@@ -132,7 +133,7 @@ class DpdPickup extends AbstractDeliveryModule
             end($areaPrices);
             $maxWeight = key($areaPrices);
             if ($weight > $maxWeight) {
-                throw new OrderException(
+                throw new DeliveryException(
                     sprintf("Ici Relais delivery unavailable for this cart weight (%s kg)", $weight),
                     OrderException::DELIVERY_MODULE_UNAVAILABLE
                 );
