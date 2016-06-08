@@ -23,8 +23,6 @@
 
 namespace DpdPickup\Loop;
 
-use DpdPickup\Controller\ExportExaprint;
-use DpdPickup\DpdPickup;
 use Thelia\Core\Template\Element\ArraySearchLoopInterface;
 use Thelia\Core\Template\Element\BaseLoop;
 use Thelia\Core\Template\Element\LoopResult;
@@ -37,13 +35,17 @@ use Thelia\Model\OrderQuery;
  * Class DpdPickupUrlTracking
  * @package DpdPickup\Loop
  * @author Thelia <info@thelia.net>
+ * @method string getRef
+ *
+ * @deprecated This loop is became useless, you can use the order loop
  */
 class DpdPickupUrlTracking extends BaseLoop implements ArraySearchLoopInterface
 {
     /**
      * @return ArgumentCollection
      */
-    const BASE_URL="http://e-trace.ils-consult.fr/ici-webtrace/webclients.aspx?verknr=%s&versdat=&kundenr=%s&cmd=VERKNR_SEARCH";
+    const BASE_URL = "http://www.dpd.fr/traces_info_%s";
+
     protected function getArgDefinitions()
     {
         return new ArgumentCollection(
@@ -53,22 +55,18 @@ class DpdPickupUrlTracking extends BaseLoop implements ArraySearchLoopInterface
 
     public function buildArray()
     {
-        $path=ExportExaprint::getJSONpath();
-        if (is_readable($path) && ($order=OrderQuery::create()->findOneByRef($this->getRef())) !== null
-          && $order->getDeliveryModuleId() === DpdPickup::getModuleId()) {
-            $json=json_decode(file_get_contents($path), true);
-
-            return array($this->getRef()=>$json['expcode']);
-        } else {
-            return array();
+        if (null !== $order = OrderQuery::create()->findOneByRef($this->getRef())) {
+            return [$order->getRef() => $order->getDeliveryRef()];
         }
+
+        return [];
     }
 
     public function parseResults(LoopResult $loopResult)
     {
         foreach ($loopResult->getResultDataCollection() as $ref => $code) {
             $loopResultRow = new LoopResultRow();
-            $loopResultRow->set("URL", sprintf(self::BASE_URL, $ref, $code));
+            $loopResultRow->set("URL", sprintf(self::BASE_URL, $code));
 
             $loopResult->addRow($loopResultRow);
         }
