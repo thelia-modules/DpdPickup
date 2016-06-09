@@ -85,12 +85,3 @@ There's also a route to get 10 pick-p & go stores in another city: /module/dpdpi
 This route uses "SearchCityController" controller. It generate a json output, which you can use with, for example, jquery/ajax.
 
 If you want to show the store's address as delivery address, you just have to replace the "delivery-address" loop type by address.dpdpickup
-
-If you want to add the package tracking link to the order email, you can use the loop: "dpdpickup.urltracking"
-It take only one argument ref, that is the order's reference, and it has one output $URL.
-If the link can't be generated, there's no output.
-You can, for exemple, integrate the link like that in the email:
-
-{loop name="tracking" type="dpdpickup.urltracking" ref=$REF}
-You can track your package <a href="{$URL}">here</a>
-{/loop}
