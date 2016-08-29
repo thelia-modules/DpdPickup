@@ -90,7 +90,7 @@ class EditPrices extends BaseAdminController
             throw new \ErrorException("Arguments are missing or invalid");
         }
 
-        return $this->redirectToRoute("admin.module.configure", array(),
+        return $this->generateRedirectFromRoute("admin.module.configure", array(),
             array( 'module_code'=>"DpdPickup",
                 'current_tab'=>"price_slices_tab",
                 '_controller' => 'Thelia\\Controller\\Admin\\ModuleController::configureAction'
