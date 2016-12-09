@@ -125,7 +125,7 @@ class DpdPickup extends AbstractDeliveryModule
         return false;
     }
 
-    public static function getPostageAmount($areaId, $weight, $cartAmount = 0, $deliverModeCode = null)
+    public static function getPostageAmount($areaId, $weight, $cartAmount = 0)
     {
         $freeshipping = IcirelaisFreeshippingQuery::create()->getLast();
         $postage=0;
@@ -176,11 +176,15 @@ class DpdPickup extends AbstractDeliveryModule
 
     public function getPostage(Country $country)
     {
+        $request = $this->getRequest();
+
         $cartWeight = $this->getRequest()->getSession()->getSessionCart($this->getDispatcher())->getWeight();
+        $cartAmount = $request->getSession()->getSessionCart($this->getDispatcher())->getTaxedAmount($country);
 
         $postage = self::getPostageAmount(
             $country->getAreaId(),
-            $cartWeight
+            $cartWeight,
+            $cartAmount
         );
 
         return $postage;
