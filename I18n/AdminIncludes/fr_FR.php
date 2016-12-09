@@ -52,4 +52,5 @@ return array(
     'name' => 'Nom',
     'tel' => 'Téléphone',
     'zipcode' => 'Code postal',
+    'Or activate free shipping from (€) :' => 'Ou activer les frais de port gratuits à partir de (€)',
 );

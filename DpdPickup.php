@@ -59,6 +59,20 @@ class DpdPickup extends AbstractDeliveryModule
         $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
     }
 
+    public static function getFreeShippingAmount()
+    {
+        if (!null !== $amount = self::getConfigValue('free_shipping_amount')) {
+            return (float) $amount;
+        }
+
+        return 0;
+    }
+
+    public static function setFreeShippingAmount($amount)
+    {
+        self::setConfigValue('free_shipping_amount', $amount);
+    }
+
     public static function getPrices()
     {
         if (null === self::$prices) {
@@ -111,11 +125,18 @@ class DpdPickup extends AbstractDeliveryModule
         return false;
     }
 
-    public static function getPostageAmount($areaId, $weight)
+    public static function getPostageAmount($areaId, $weight, $cartAmount = 0, $deliverModeCode = null)
     {
         $freeshipping = IcirelaisFreeshippingQuery::create()->getLast();
         $postage=0;
         if (!$freeshipping) {
+            $freeShippingAmount = (float) self::getFreeShippingAmount();
+
+            //If a min price for freeShipping is define and the amount of cart reach this montant return 0
+            if ($freeShippingAmount > 0 && $freeShippingAmount <= $cartAmount) {
+                return 0;
+            }
+
             $prices = self::getPrices();
 
             /* check if DpdPickup delivers the asked area */
