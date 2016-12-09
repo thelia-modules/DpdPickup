@@ -61,5 +61,4 @@ class FreeShippingAmount extends BaseForm
     {
         return "dpdpickupfreeshippingamount";
     }
-
 }
