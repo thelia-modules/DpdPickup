@@ -12,6 +12,7 @@
         <loop name="dpdpickup.check.rights" class="DpdPickup\Loop\CheckRightsLoop" />
         <loop name="dpdpickup.orders" class="DpdPickup\Loop\DpdPickupOrders" />
         <loop name="dpdpickup.urltracking" class="DpdPickup\Loop\DpdPickupUrlTracking" />
+        <loop name="dpdpickup.delivery.mode" class="DpdPickup\Loop\DpdPickupDeliveryMode" />
     </loops>
 
     <forms>
@@ -19,6 +20,7 @@
         <form name="dpdpickup.export" class="DpdPickup\Form\ExportExaprintForm"/>
         <form name="dpdpickup.selection" class="DpdPickup\Form\ExportExaprintSelection" />
         <form name="dpdpickup.freeshipping.form" class="DpdPickup\Form\FreeShipping" />
+        <form name="dpdpickup.freeshipping.amount.form" class="DpdPickup\Form\FreeShippingAmount" />
         <form name="dpdpickup.config.form" class="DpdPickup\Form\ConfigurationForm" />
     </forms>
 

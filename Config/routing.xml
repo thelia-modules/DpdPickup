@@ -29,6 +29,10 @@
         <default key="_controller">DpdPickup\Controller\FreeShipping::set</default>
     </route>
 
+    <route id="dpdpickup.edit.freeshipping_amount" path="/admin/module/dpdpickup/freeshipping_amount" methods="post">
+        <default key="_controller">DpdPickup\Controller\FreeShipping::amountAction</default>
+    </route>
+
     <route id="dpdpickup.config" path="/admin/module/dpdpickup/config" methods="post">
         <default key="_controller">DpdPickup\Controller\ConfigurationController::configureAction</default>
     </route>

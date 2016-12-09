@@ -23,12 +23,14 @@
 
 namespace DpdPickup\Controller;
 
+use DpdPickup\DpdPickup;
 use DpdPickup\Model\IcirelaisFreeshipping;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\Response;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
+use Thelia\Tools\URL;
 
 class FreeShipping extends BaseAdminController
 {
@@ -53,5 +55,33 @@ class FreeShipping extends BaseAdminController
         }
 
         return $response;
+    }
+
+    public function amountAction()
+    {
+        $form = new \DpdPickup\Form\FreeShippingAmount($this->getRequest());
+
+        try {
+            $vform = $this->validateForm($form);
+            $data = $vform->get('amount')->getData();
+
+            DpdPickup::setFreeShippingAmount($data);
+        } catch (\Exception $e) {
+            $form->setErrorMessage($e->getMessage());
+
+            $this->getParserContext()->addForm($form);
+
+            return $this->render(
+                'module-configure',
+                [
+                    'module_code' => DpdPickup::getModuleCode(),
+                    'current_tab' => "prices_slices_tab"
+                ]
+            );
+        }
+
+        return $this->generateRedirect(
+            URL::getInstance()->absoluteUrl('/admin/module/DpdPickup', ['current_tab' => 'prices_slices_tab'])
+        );
     }
 }
