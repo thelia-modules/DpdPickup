@@ -23,6 +23,7 @@
 
 namespace DpdPickup\Loop;
 
+use DpdPickup\DpdPickup;
 use Thelia\Log\Tlog;
 use Thelia\Model\AddressQuery;
 use Thelia\Core\Template\Loop\Address;
@@ -58,17 +59,17 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
     {
         $zipcode = $this->getZipcode();
         $city = $this->getCity();
-        if (!empty($zipcode) and !empty($city)) {
+        if (!empty($zipcode) && !empty($city)) {
             $this->zipcode = $zipcode;
             $this->city = $city;
-            $this->addressflag =  false;
+            $this->addressflag = false;
         } else {
-            $search = AddressQuery::create();
+            if (null !== $customer = $this->securityContext->getCustomerUser()) {
+                $search = AddressQuery::create();
 
-            $customer=$this->securityContext->getCustomerUser();
-            if ($customer !== null) {
-                $search->filterByCustomerId($customer->getId());
-                $search->filterByIsDefault("1");
+                $search
+                    ->filterByCustomerId($customer->getId())
+                    ->filterByIsDefault(true);
             } else {
                 throw new \ErrorException("Customer not connected.");
             }
@@ -79,12 +80,18 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
 
     public function parseResults(LoopResult $loopResult)
     {
+        $excludeZipCodes = DpdPickup::getConfigExcludeZipCode();
+
         $date = date('d/m/Y');
         try {
             $getPudoSoap = new \SoapClient(__DIR__ . "/../Config/exapaq.wsdl", array('soap_version' => SOAP_1_2));
 
             if ($this->addressflag) {
                 foreach ($loopResult->getResultDataCollection() as $address) {
+                    if (in_array($address->getZipcode(), $excludeZipCodes)) {
+                        return $loopResult;
+                    }
+
                     $response = $getPudoSoap->GetPudoList(
                         array(
                             "address"    => str_replace(" ", "%", $address->getAddress1()),
@@ -96,6 +103,10 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
                     );
                 }
             } else {
+                if (in_array($this->zipcode, $excludeZipCodes)) {
+                    return $loopResult;
+                }
+
                 $response = $getPudoSoap->GetPudoList(
                     array(
                         "zipCode"    => $this->zipcode,

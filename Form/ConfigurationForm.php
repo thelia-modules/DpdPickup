@@ -2,6 +2,7 @@
 
 namespace DpdPickup\Form;
 
+use DpdPickup\DataTransformer\ZipCodeListTransformer;
 use DpdPickup\DpdPickup;
 use Thelia\Form\BaseForm;
 
@@ -42,6 +43,31 @@ class ConfigurationForm extends BaseForm
                     'multiple' => false,
                     'data' => $data
                 ]
+            )
+            ->add(
+                'google_map_key',
+                'text',
+                [
+                    'required' => false,
+                    'constraints' => [],
+                    'data'        => DpdPickup::getConfigGoogleMapKey(),
+                    'label'       => $this->translator->trans("Google map API key", [], DpdPickup::DOMAIN),
+                    'label_attr'  => ['for' => 'google_map_key']
+                ]
+            )
+            ->add(
+                'exclude_zip_code',
+                'textarea',
+                [
+                    'required' => false,
+                    'constraints' => [],
+                    'data'        => DpdPickup::getConfigExcludeZipCode(),
+                    'label'       => $this->translator->trans("Exclude ZipCode", [], DpdPickup::DOMAIN),
+                    'label_attr'  => ['for' => 'exclude_zip_code', 'help' => $this->translator->trans('List of zip code separated by commas.')]
+                ]
             );
+
+        $this->formBuilder->get('exclude_zip_code')
+            ->addModelTransformer(new ZipCodeListTransformer());
     }
 }

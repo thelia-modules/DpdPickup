@@ -23,6 +23,7 @@
 
 namespace DpdPickup;
 
+use DpdPickup\DataTransformer\ZipCodeListTransformer;
 use DpdPickup\Model\IcirelaisFreeshippingQuery;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Thelia\Exception\OrderException;
@@ -188,5 +189,25 @@ class DpdPickup extends AbstractDeliveryModule
         );
 
         return $postage;
+    }
+
+    public static function getConfigExcludeZipCode()
+    {
+        return (new ZipCodeListTransformer())->reverseTransform(self::getConfigValue('exclude_zip_code'));
+    }
+
+    public static function setConfigExcludeZipCode($value)
+    {
+        self::setConfigValue('exclude_zip_code', (new ZipCodeListTransformer())->transform($value));
+    }
+
+    public static function getConfigGoogleMapKey()
+    {
+        return self::getConfigValue('google_map_key');
+    }
+
+    public static function setConfigGoogleMapKey($value)
+    {
+        self::setConfigValue('google_map_key', $value);
     }
 }
