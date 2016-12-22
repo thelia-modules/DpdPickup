@@ -32,6 +32,8 @@ class ConfigurationController extends BaseAdminController
 
             // Save data
             DpdPickup::setConfigValue('default_status', $data["default_status"]);
+            DpdPickup::setConfigGoogleMapKey($data["google_map_key"]);
+            DpdPickup::setConfigExcludeZipCode($data["exclude_zip_code"]);
 
         } catch (FormValidationException $ex) {
             $errorMessage = $this->createStandardFormValidationErrorMessage($ex);
@@ -40,7 +42,6 @@ class ConfigurationController extends BaseAdminController
         }
 
         if ($errorMessage !== null) {
-
             $this->setupFormErrorContext(
                 Translator::getInstance()->trans(
                     "Error while updating status",
