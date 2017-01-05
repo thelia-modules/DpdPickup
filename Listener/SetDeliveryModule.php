@@ -29,6 +29,7 @@ use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
 use DpdPickup\Model\OrderAddressIcirelais;
 use Thelia\Core\HttpFoundation\Request;
+use Thelia\Core\Translation\Translator;
 use Thelia\Model\OrderAddressQuery;
 use DpdPickup\Model\AddressIcirelais;
 use DpdPickup\Model\AddressIcirelaisQuery;
@@ -103,7 +104,7 @@ class SetDeliveryModule implements EventSubscriberInterface
                     ->setCountryId($customer_name->getCountryId())
                     ->save();
             } else {
-                throw new \ErrorException("No pick-up & go store chosen for DpdPickup delivery module");
+                throw new \ErrorException(Translator::getInstance()->trans("No pick-up & go store chosen for DpdPickup delivery module", [], DpdPickup::DOMAIN));
             }
         } elseif (null !== $address) {
             $address->delete();
@@ -118,7 +119,7 @@ class SetDeliveryModule implements EventSubscriberInterface
                 ->findPk($request->getSession()->get('DpdPickupDeliveryId'));
 
             if ($tmp_address === null) {
-                throw new \ErrorException("Got an error with DpdPickup module. Please try again to checkout.");
+                throw new \ErrorException(Translator::getInstance()->trans("Got an error with DpdPickup module. Please try again to checkout.", [], DpdPickup::DOMAIN));
             }
 
             $savecode = new OrderAddressIcirelais();
