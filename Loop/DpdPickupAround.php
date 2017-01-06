@@ -24,6 +24,7 @@
 namespace DpdPickup\Loop;
 
 use DpdPickup\DpdPickup;
+use Thelia\Core\Translation\Translator;
 use Thelia\Log\Tlog;
 use Thelia\Model\AddressQuery;
 use Thelia\Core\Template\Loop\Address;
@@ -148,6 +149,19 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
                 $distance = str_replace(".", ",", $distance) . " km";
             }
 
+            $hours = [];
+            foreach ($item->OPENING_HOURS_ITEMS->OPENING_HOURS_ITEM as $openingHoursItem) {
+
+                $day = Translator::getInstance()->trans('day_' . (string)$openingHoursItem->DAY_ID, [], DpdPickup::DOMAIN);
+                if (!isset($hours[$day])) {
+                    $hours[$day] = [];
+                }
+                $hours[$day][] = [
+                    'START_TM' => (string)$openingHoursItem->START_TM,
+                    'END_TM' => (string)$openingHoursItem->END_TM
+                ];
+            }
+
             // Then define all the variables
             $loopResultRow->set("NAME", $item->NAME)
                 ->set("LONGITUDE", str_replace(",", ".", $item->LONGITUDE))
@@ -156,7 +170,10 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
                 ->set("ADDRESS", $item->ADDRESS1)
                 ->set("ZIPCODE", $item->ZIPCODE)
                 ->set("CITY", $item->CITY)
-                ->set("DISTANCE", $distance);
+                ->set("DISTANCE", $distance)
+                ->set("HOURS", $hours)
+            ;
+
             $loopResult->addRow($loopResultRow);
         }
 
