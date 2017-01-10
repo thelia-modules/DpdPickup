@@ -51,8 +51,8 @@ use Thelia\Model\OrderStatusQuery;
  */
 class Export extends BaseAdminController
 {
-    // FONCTION POUR LE FICHIER D'EXPORT BY Maitre eroudeix@openstudio.fr
-    // extended by bperche9@gmail.com
+    // L'arrivée de Maitre Guigit détrône les anciens maitres pour corriger le soucis de json qui se supprime à chaque composer install
+    // Esclaves : Ex Maitre Roudeix @ Espeche
     public static function harmonise($value, $type, $len)
     {
         switch ($type) {
@@ -94,48 +94,51 @@ class Export extends BaseAdminController
     public function exportfile()
     {
         if (null !== $response = $this->checkAuth(
-            array(AdminResources::MODULE),
-            array('DpdPickup'),
-            AccessManager::UPDATE
-        )) {
+                array(AdminResources::MODULE),
+                array('DpdPickup'),
+                AccessManager::UPDATE
+            )) {
             return $response;
         }
-        if (is_readable(ExportExaprint::getJSONpath())) {
-            $admici = json_decode(file_get_contents(ExportExaprint::getJSONpath()), true);
-            $keys = array("name", "addr", "zipcode", "city", "tel", "mobile", "mail", "expcode");
-            $valid = true;
-            foreach ($keys as $key) {
-                $valid &= isset($admici[$key]) && ($key === "assur" ? true : !empty($admici[$key]));
+
+        $keys = array(
+            DpdPickup::CONF_EXA_NAME,
+            DpdPickup::CONF_EXA_ADDR,
+            DpdPickup::CONF_EXA_ZIPCODE,
+            DpdPickup::CONF_EXA_CITY,
+            DpdPickup::CONF_EXA_TEL,
+            DpdPickup::CONF_EXA_MOBILE,
+            DpdPickup::CONF_EXA_MAIL,
+            DpdPickup::CONF_EXA_EXPCODE
+        );
+        $valid = true;
+        foreach ($keys as $key) {
+            if (null === DpdPickup::getConfigValue($key)) {
+                $valid = false;
+                break;
             }
-            if (!$valid) {
-                return Response::create(
-                    Translator::getInstance()->trans(
-                        "The file DpdPickup/Config/exportdat.json is not valid. Please correct it.",
-                        [],
-                        DpdPickup::DOMAIN
-                    ),
-                    500
-                );
-            }
-        } else {
+        }
+
+        if (!$valid) {
             return Response::create(
                 Translator::getInstance()->trans(
-                    "Can't read DpdPickup/Config/exportdat.json. Did you save the export information ?",
+                    "The EXAPRINT configuration is missing. Please correct it.",
                     [],
                     DpdPickup::DOMAIN
                 ),
                 500
             );
         }
-        $exp_name = $admici['name'];
-        $exp_address1 = $admici['addr'];
-        $exp_address2 = isset($admici['addr2']) ? $admici['addr2'] : "";
-        $exp_zipcode = $admici['zipcode'];
-        $exp_city = $admici['city'];
-        $exp_phone = $admici['tel'];
-        $exp_cellphone = $admici['mobile'];
-        $exp_email = $admici['mail'];
-        $exp_code = $admici['expcode'];
+
+        $exp_name = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_NAME);
+        $exp_address1 = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_ADDR);
+        $exp_address2 = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_ADDR2, '');
+        $exp_zipcode = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_ZIPCODE);
+        $exp_city = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_CITY);
+        $exp_phone = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_TEL);
+        $exp_cellphone = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_MOBILE);
+        $exp_email = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_MAIL);
+        $exp_code = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_EXPCODE);;
         $res = self::harmonise('$' . "VERSION=110", 'alphanumeric', 12) . "\r\n";
 
         $orders = OrderQuery::create()
@@ -176,7 +179,7 @@ class Export extends BaseAdminController
 
                 // Get if the package is assured, how many packages there are & their weight
                 $assur_package = array_key_exists($collectionKey, $vform->getData()['assur']) ? $vform->getData()['assur'][$collectionKey] : false;
-                $pkgNumber = array_key_exists($collectionKey, $vform->getData()['pkgNumber']) ? $vform->getData()['pkgNumber'][$collectionKey] : null;
+                // $pkgNumber = array_key_exists($collectionKey, $vform->getData()['pkgNumber']) ? $vform->getData()['pkgNumber'][$collectionKey] : null;
                 $pkgWeight = array_key_exists($collectionKey, $vform->getData()['pkgWeight']) ? $vform->getData()['pkgWeight'][$collectionKey] : null;
 
                 // Check if status has to be changed

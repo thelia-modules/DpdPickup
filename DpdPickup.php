@@ -46,6 +46,16 @@ class DpdPickup extends AbstractDeliveryModule
     const PROCESS = 'processing';
     const SEND = 'sent';
 
+    const CONF_EXA_NAME = 'conf_exa_name';
+    const CONF_EXA_ADDR = 'conf_exa_addr';
+    const CONF_EXA_ADDR2 = 'conf_exa_addr2';
+    const CONF_EXA_ZIPCODE = 'conf_exa_zipcode';
+    const CONF_EXA_CITY = 'conf_exa_city';
+    const CONF_EXA_TEL = 'conf_exa_tel';
+    const CONF_EXA_MOBILE = 'conf_exa_mobile';
+    const CONF_EXA_MAIL = 'conf_exa_mail';
+    const CONF_EXA_EXPCODE = 'conf_exa_expcode';
+
     protected $request;
     protected $dispatcher;
 
