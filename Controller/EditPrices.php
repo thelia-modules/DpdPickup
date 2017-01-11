@@ -23,7 +23,10 @@
 
 namespace DpdPickup\Controller;
 
-use DpdPickup\DpdPickup;
+use DpdPickup\Event\DpdPickupEvents;
+use DpdPickup\Event\DpdPickupPriceEvent;
+use DpdPickup\Model\DpdpickupPrice;
+use DpdPickup\Model\DpdpickupPriceQuery;
 use Thelia\Model\AreaQuery;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\Resource\AdminResources;
@@ -50,38 +53,30 @@ class EditPrices extends BaseAdminController
         if (preg_match("#^add|delete$#", $operation) &&
             preg_match("#^\d+$#", $area) &&
             preg_match("#^\d+\.?\d*$#", $weight)
-          ) {
+        ) {
             // check if area exists in db
             $exists = AreaQuery::create()
                 ->findPK($area);
             if ($exists !== null) {
-                $json_path= __DIR__."/../".DpdPickup::JSON_PRICE_RESOURCE;
 
-                if (is_readable($json_path)) {
-                    $json_data = json_decode(file_get_contents($json_path), true);
-                } elseif (!file_exists($json_path)) {
-                    $json_data = array();
-                } else {
-                    throw new \Exception("Can't read DpdPickup".DpdPickup::JSON_PRICE_RESOURCE.". Please change the rights on the file.");
-                }
-                if ((float) $weight > 0 && $operation == "add"
-                  && preg_match("#\d+\.?\d*#", $price)) {
-                    $json_data[$area]['slices'][$weight] = $price;
-                } elseif ($operation == "delete") {
-                    if (isset($json_data[$area]['slices'][$weight])) {
-                        unset($json_data[$area]['slices'][$weight]);
-                    }
-                } else {
+                if ((float) $weight <= 0) {
                     throw new \Exception("Weight must be superior to 0");
                 }
-                ksort($json_data[$area]['slices']);
-                if ((file_exists($json_path) ?is_writable($json_path):is_writable(__DIR__."/../"))) {
-                    $file = fopen($json_path, 'w');
-                    fwrite($file, json_encode($json_data));
+
+                if (null === $dpdPickupPrice = DpdpickupPriceQuery::create()->filterByAreaId($area)->filterByWeightMax($weight)->findOne()) {
+                    $dpdPickupPrice = new DpdpickupPrice();
+                    $dpdPickupPrice
+                        ->setAreaId($area)
+                        ->setWeightMax($weight)
                     ;
-                    fclose($file);
+                }
+                $dpdPickupPrice->setPrice($price);
+                $dpdPickupPriceEvent = new DpdPickupPriceEvent($dpdPickupPrice);
+
+                if ($operation === 'delete') {
+                    $this->getDispatcher()->dispatch(DpdPickupEvents::DPDPICKUP_PRICE_DELETE, $dpdPickupPriceEvent);
                 } else {
-                    throw new \Exception("Can't write DpdPickup".DpdPickup::JSON_PRICE_RESOURCE.". Please change the rights on the file.");
+                    $this->getDispatcher()->dispatch(DpdPickupEvents::DPDPICKUP_PRICE_UPDATE, $dpdPickupPriceEvent);
                 }
             } else {
                 throw new \Exception("Area not found");

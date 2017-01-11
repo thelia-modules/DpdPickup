@@ -37,18 +37,13 @@ use Thelia\Core\Security\AccessManager;
  */
 class ExportExaprint extends BaseAdminController
 {
-    public static function getJSONpath()
-    {
-        return __DIR__ . "/../Config/exportdat.json";
-    }
-
     public function export()
     {
         if (null !== $response = $this->checkAuth(
-            array(AdminResources::MODULE),
-            array('DpdPickup'),
-            AccessManager::UPDATE
-        )) {
+                array(AdminResources::MODULE),
+                array('DpdPickup'),
+                AccessManager::UPDATE
+            )) {
             return $response;
         }
 
@@ -57,47 +52,25 @@ class ExportExaprint extends BaseAdminController
         try {
             $vform = $this->validateForm($form);
 
-            $file_path = self::getJSONpath();
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_NAME, $vform->get('name')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_ADDR, $vform->get('addr')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_ADDR2, $vform->get('addr2')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_ZIPCODE, $vform->get('zipcode')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_CITY, $vform->get('city')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_TEL, $vform->get('tel')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_MOBILE, $vform->get('mobile')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_MAIL, $vform->get('mail')->getData());
+            DpdPickup::setConfigValue(DpdPickup::CONF_EXA_EXPCODE, $vform->get('expcode')->getData());
 
-            if ((file_exists($file_path) ? is_writable($file_path) : is_writable(__DIR__ . "/../Config/"))) {
-                $file = fopen(self::getJSONpath(), 'w');
-                fwrite(
-                    $file,
-                    json_encode(
-                        array(
-                            "name" => $vform->get('name')->getData(),
-                            "addr" => $vform->get('addr')->getData(),
-                            "addr2" => $vform->get('addr2')->getData(),
-                            "zipcode" => $vform->get('zipcode')->getData(),
-                            "city" => $vform->get('city')->getData(),
-                            "tel" => $vform->get('tel')->getData(),
-                            "mobile" => $vform->get('mobile')->getData(),
-                            "mail" => $vform->get('mail')->getData(),
-                            "expcode" => ($vform->get('expcode')->getData())
-                        )
-                    )
-                );
-
-                fclose($file);
-
-                return $this->generateRedirectFromRoute(
-                    "admin.module.configure",
-                    [],
-                    [
-                        'module_code' => "DpdPickup",
-                        'current_tab' => "configure_export_exaprint",
-                        '_controller' => 'Thelia\\Controller\\Admin\\ModuleController::configureAction'
-                    ]
-                );
-            } else {
-                throw new \Exception(
-                    Translator::getInstance()->trans(
-                        "Can't write DpdPickup/Config/exportdat.json. Please change the rights on the file and/or the directory.",
-                        [],
-                        DpdPickup::DOMAIN
-                    )
-                );
-            }
+            return $this->generateRedirectFromRoute(
+                "admin.module.configure",
+                [],
+                [
+                    'module_code' => "DpdPickup",
+                    'current_tab' => "configure_export_exaprint",
+                    '_controller' => 'Thelia\\Controller\\Admin\\ModuleController::configureAction'
+                ]
+            );
         } catch (\Exception $e) {
             $error_message = $e->getMessage();
         }

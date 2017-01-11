@@ -5,10 +5,10 @@
         xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
 
     <loops>
-    	<loop name="delivery.dpdpickup" class="DpdPickup\Loop\DpdPickupDelivery" />
-    	<loop name="address.dpdpickup" class="DpdPickup\Loop\DpdPickupAddress" />
-    	<loop name="dpdpickup" class="DpdPickup\Loop\DpdPickupPrice" />
-    	<loop name="dpdpickup.relais.around" class="DpdPickup\Loop\DpdPickupAround" />
+        <loop name="delivery.dpdpickup" class="DpdPickup\Loop\DpdPickupDelivery" />
+        <loop name="address.dpdpickup" class="DpdPickup\Loop\DpdPickupAddress" />
+        <loop name="dpdpickup" class="DpdPickup\Loop\DpdPickupPrice" />
+        <loop name="dpdpickup.relais.around" class="DpdPickup\Loop\DpdPickupAround" />
         <loop name="dpdpickup.check.rights" class="DpdPickup\Loop\CheckRightsLoop" />
         <loop name="dpdpickup.orders" class="DpdPickup\Loop\DpdPickupOrders" />
         <loop name="dpdpickup.urltracking" class="DpdPickup\Loop\DpdPickupUrlTracking" />
@@ -25,7 +25,10 @@
     </forms>
 
     <services>
-		<service id="hook.order.module" class="DpdPickup\Listener\SetDeliveryModule" scope="request">
+        <service id="dpd.pickup.price.action" class="DpdPickup\Listener\DpdPickupPriceListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service id="hook.order.module" class="DpdPickup\Listener\SetDeliveryModule" scope="request">
             <argument type="service" id="request"/>
             <tag name="kernel.event_subscriber"/>
         </service>

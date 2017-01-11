@@ -24,17 +24,27 @@
 namespace DpdPickup;
 
 use DpdPickup\DataTransformer\ZipCodeListTransformer;
+use DpdPickup\Model\DpdpickupPriceQuery;
 use DpdPickup\Model\IcirelaisFreeshippingQuery;
+use DpdPickup\Model\Map\DpdpickupPriceTableMap;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\ActiveQuery\Join;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Symfony\Component\Finder\Finder;
 use Thelia\Exception\OrderException;
 use Thelia\Install\Database;
 use Thelia\Model\Country;
+use Thelia\Model\Map\AreaTableMap;
 use Thelia\Module\AbstractDeliveryModule;
 use Thelia\Module\Exception\DeliveryException;
 
 class DpdPickup extends AbstractDeliveryModule
 {
     const DOMAIN = 'dpdpickup';
+
+    /** @var string */
+    const UPDATE_PATH = __DIR__ . DS . 'Config' . DS . 'update';
+
     const DELIVERY_REF_COLUMN = 17;
     const ORDER_REF_COLUMN = 18;
 
@@ -46,18 +56,51 @@ class DpdPickup extends AbstractDeliveryModule
     const PROCESS = 'processing';
     const SEND = 'sent';
 
+    const CONF_EXA_NAME = 'conf_exa_name';
+    const CONF_EXA_ADDR = 'conf_exa_addr';
+    const CONF_EXA_ADDR2 = 'conf_exa_addr2';
+    const CONF_EXA_ZIPCODE = 'conf_exa_zipcode';
+    const CONF_EXA_CITY = 'conf_exa_city';
+    const CONF_EXA_TEL = 'conf_exa_tel';
+    const CONF_EXA_MOBILE = 'conf_exa_mobile';
+    const CONF_EXA_MAIL = 'conf_exa_mail';
+    const CONF_EXA_EXPCODE = 'conf_exa_expcode';
+
     protected $request;
     protected $dispatcher;
 
     private static $prices = null;
-
-    const JSON_PRICE_RESOURCE = "/Config/prices.json";
 
     public function postActivation(ConnectionInterface $con = null)
     {
         $database = new Database($con->getWrappedConnection());
 
         $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param string $currentVersion
+     * @param string $newVersion
+     * @param ConnectionInterface|null $con
+     */
+    public function update($currentVersion, $newVersion, ConnectionInterface $con = null)
+    {
+        $finder = (new Finder())->files()->name('#.*?\.sql#')->sortByName()->in(self::UPDATE_PATH);
+
+        if ($finder->count() === 0) {
+            return;
+        }
+
+        $database = new Database($con);
+
+        /** @var \Symfony\Component\Finder\SplFileInfo $updateSQLFile */
+        foreach ($finder as $updateSQLFile) {
+            if (version_compare($currentVersion, str_replace('.sql', '', $updateSQLFile->getFilename()), '<')) {
+                $database->insertSql(null, [$updateSQLFile->getPathname()]);
+            }
+        }
     }
 
     public static function getFreeShippingAmount()
@@ -77,13 +120,28 @@ class DpdPickup extends AbstractDeliveryModule
     public static function getPrices()
     {
         if (null === self::$prices) {
-            if (is_readable(sprintf('%s/%s', __DIR__, self::JSON_PRICE_RESOURCE))) {
-                self::$prices = json_decode(
-                    file_get_contents(sprintf('%s/%s', __DIR__, self::JSON_PRICE_RESOURCE)),
-                    true
-                );
-            } else {
-                self::$prices = null;
+            self::$prices = [];
+
+            $areaJoin = new Join(DpdpickupPriceTableMap::AREA_ID, AreaTableMap::ID, Criteria::INNER_JOIN);
+            $dpdPickupPrices = DpdpickupPriceQuery::create()
+                ->addJoinObject($areaJoin)
+                ->withColumn(AreaTableMap::NAME, 'NAME')
+                ->orderByAreaId()
+                ->orderByWeightMax()
+                ->find()
+            ;
+
+            /** @var \DpdPickup\Model\DpdpickupPrice $dpdPickupPrice */
+            foreach ($dpdPickupPrices as $dpdPickupPrice) {
+
+                if (!array_key_exists($dpdPickupPrice->getAreaId(), self::$prices)) {
+                    self::$prices[$dpdPickupPrice->getAreaId()] = [
+                        '_info' => 'area ' . $dpdPickupPrice->getAreaId() . ' : ' . $dpdPickupPrice->getVirtualColumn('NAME'),
+                        'slices' => []
+                    ];
+                }
+
+                self::$prices[$dpdPickupPrice->getAreaId()]['slices'][(string)$dpdPickupPrice->getWeightMax()] = $dpdPickupPrice->getPrice();
             }
         }
 

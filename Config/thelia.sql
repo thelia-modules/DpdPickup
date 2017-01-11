@@ -1,4 +1,3 @@
-
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
@@ -67,6 +66,27 @@ CREATE TABLE `icirelais_freeshipping`
 ) ENGINE=InnoDB;
 
 INSERT INTO `icirelais_freeshipping`(`active`, `created_at`, `updated_at`) VALUES(0, NOW(), NOW());
+
+-- ---------------------------------------------------------------------
+-- dpdpickup_price
+-- ---------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `dpdpickup_price`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `area_id` INTEGER NOT NULL,
+    `weight_max` FLOAT NOT NULL,
+    `price` DECIMAL(16,6) DEFAULT 0.000000,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`),
+    INDEX `FI_dpdpickup_price_area_id` (`area_id`),
+    CONSTRAINT `fk_dpdpickup_price_area_id`
+        FOREIGN KEY (`area_id`)
+        REFERENCES `area` (`id`)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- Mail templates for icirelais
