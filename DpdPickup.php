@@ -192,7 +192,8 @@ class DpdPickup extends AbstractDeliveryModule
             $freeShippingAmount = (float) self::getFreeShippingAmount();
 
             //If a min price for freeShipping is define and the amount of cart reach this montant return 0
-            if ($freeShippingAmount > 0 && $freeShippingAmount <= $cartAmount) {
+            //Be carefull ! Thelia cartAmount is a decimal with 6 in precision ! That's why we must round cart amount
+            if ($freeShippingAmount > 0 && $freeShippingAmount <= round($cartAmount, 2)) {
                 return 0;
             }
 
