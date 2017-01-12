@@ -163,13 +163,14 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
             }
 
             // Then define all the variables
-            $loopResultRow->set("NAME", $item->NAME)
+            $loopResultRow
+                ->set("NAME", self::cleanString($item->NAME))
                 ->set("LONGITUDE", str_replace(",", ".", $item->LONGITUDE))
                 ->set("LATITUDE", str_replace(",", ".", $item->LATITUDE))
                 ->set("CODE", $item->PUDO_ID)
-                ->set("ADDRESS", $item->ADDRESS1)
-                ->set("ZIPCODE", $item->ZIPCODE)
-                ->set("CITY", $item->CITY)
+                ->set("ADDRESS", self::cleanString($item->ADDRESS1))
+                ->set("ZIPCODE", self::cleanString($item->ZIPCODE))
+                ->set("CITY", self::cleanString($item->CITY))
                 ->set("DISTANCE", $distance)
                 ->set("HOURS", $hours)
             ;
@@ -178,5 +179,14 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
         }
 
         return $loopResult;
+    }
+
+    public static function cleanString($string)
+    {
+        return str_replace(
+            array('"'),
+            array('\''),
+            $string
+        );
     }
 }
