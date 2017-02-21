@@ -136,8 +136,6 @@ class SetDeliveryModule implements EventSubscriberInterface
                 ->setZipcode($tmp_address->getZipcode())
                 ->setCity($tmp_address->getCity())
                 ->save();
-
-            $tmp_address->delete();
         }
     }
 
