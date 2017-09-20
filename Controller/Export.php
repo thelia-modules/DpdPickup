@@ -237,7 +237,7 @@ class Export extends BaseAdminController
                 if ($icirelais_code !== null) {
                     // Get Customer's cellphone
                     if (null == $cellphone = $address->getCellphone()) {
-                        $address->getPhone();
+                        $cellphone = $address->getPhone();
                     }
 
                     //Weight & price calc
