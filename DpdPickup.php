@@ -41,6 +41,7 @@ use Thelia\Module\Exception\DeliveryException;
 class DpdPickup extends AbstractDeliveryModule
 {
     const DOMAIN = 'dpdpickup';
+    const DOMAIN_ADMIN = "dpdpickup.ai";
 
     /** @var string */
     const UPDATE_PATH = __DIR__ . DS . 'Config' . DS . 'update';
@@ -56,15 +57,28 @@ class DpdPickup extends AbstractDeliveryModule
     const PROCESS = 'processing';
     const SEND = 'sent';
 
-    const CONF_EXA_NAME = 'conf_exa_name';
-    const CONF_EXA_ADDR = 'conf_exa_addr';
-    const CONF_EXA_ADDR2 = 'conf_exa_addr2';
-    const CONF_EXA_ZIPCODE = 'conf_exa_zipcode';
-    const CONF_EXA_CITY = 'conf_exa_city';
-    const CONF_EXA_TEL = 'conf_exa_tel';
-    const CONF_EXA_MOBILE = 'conf_exa_mobile';
-    const CONF_EXA_MAIL = 'conf_exa_mail';
-    const CONF_EXA_EXPCODE = 'conf_exa_expcode';
+    const KEY_EXPEDITOR_NAME = 'conf_exa_name';
+    const KEY_EXPEDITOR_ADDR = 'conf_exa_addr';
+    const KEY_EXPEDITOR_ADDR2 = 'conf_exa_addr2';
+    const KEY_EXPEDITOR_ZIPCODE = 'conf_exa_zipcode';
+    const KEY_EXPEDITOR_CITY = 'conf_exa_city';
+    const KEY_EXPEDITOR_TEL = 'conf_exa_tel';
+    const KEY_EXPEDITOR_MOBILE = 'conf_exa_mobile';
+    const KEY_EXPEDITOR_MAIL = 'conf_exa_mail';
+    const KEY_EXPEDITOR_DPDCODE = 'conf_exa_expcode';
+
+    const KEY_RETURN_NAME = 'return_name';
+    const KEY_RETURN_ADDR = 'return_addr';
+    const KEY_RETURN_ADDR2 = 'return_addr2';
+    const KEY_RETURN_ZIPCODE = 'return_zipcode';
+    const KEY_RETURN_CITY = 'return_city';
+    const KEY_RETURN_TEL = 'return_tel';
+
+    const KEY_RETURN_TYPE = 'return_type';
+
+    const RETURN_NONE = 0;
+    const RETURN_ON_DEMAND = 3;
+    const RETURN_PREPARED = 4;
 
     protected $request;
     protected $dispatcher;

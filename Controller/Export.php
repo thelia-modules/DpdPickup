@@ -32,7 +32,6 @@ use Thelia\Core\Translation\Translator;
 use DpdPickup\Model\OrderAddressIcirelaisQuery;
 use Thelia\Core\HttpFoundation\Response;
 use Thelia\Log\Tlog;
-use Thelia\Model\AddressQuery;
 use Thelia\Model\Order;
 use Thelia\Model\OrderAddressQuery;
 use Thelia\Model\OrderQuery;
@@ -101,16 +100,29 @@ class Export extends BaseAdminController
             return $response;
         }
 
+        $return_type = DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_TYPE, DpdPickup::RETURN_NONE);
+
+        // Check required infos
+
         $keys = array(
-            DpdPickup::CONF_EXA_NAME,
-            DpdPickup::CONF_EXA_ADDR,
-            DpdPickup::CONF_EXA_ZIPCODE,
-            DpdPickup::CONF_EXA_CITY,
-            DpdPickup::CONF_EXA_TEL,
-            DpdPickup::CONF_EXA_MOBILE,
-            DpdPickup::CONF_EXA_MAIL,
-            DpdPickup::CONF_EXA_EXPCODE
+            DpdPickup::KEY_EXPEDITOR_NAME,
+            DpdPickup::KEY_EXPEDITOR_ADDR,
+            DpdPickup::KEY_EXPEDITOR_ZIPCODE,
+            DpdPickup::KEY_EXPEDITOR_CITY,
+            DpdPickup::KEY_EXPEDITOR_TEL,
+            DpdPickup::KEY_EXPEDITOR_MOBILE,
+            DpdPickup::KEY_EXPEDITOR_MAIL,
+            DpdPickup::KEY_EXPEDITOR_DPDCODE
         );
+
+        if ($return_type != DpdPickup::RETURN_NONE) {
+            $keys[] = DpdPickup::KEY_RETURN_NAME;
+            $keys[] = DpdPickup::KEY_RETURN_ADDR;
+            $keys[] = DpdPickup::KEY_RETURN_ZIPCODE;
+            $keys[] = DpdPickup::KEY_RETURN_CITY;
+            $keys[] = DpdPickup::KEY_RETURN_TEL;
+        }
+
         $valid = true;
         foreach ($keys as $key) {
             if (null === DpdPickup::getConfigValue($key)) {
@@ -130,15 +142,28 @@ class Export extends BaseAdminController
             );
         }
 
-        $exp_name = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_NAME);
-        $exp_address1 = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_ADDR);
-        $exp_address2 = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_ADDR2, '');
-        $exp_zipcode = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_ZIPCODE);
-        $exp_city = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_CITY);
-        $exp_phone = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_TEL);
-        $exp_cellphone = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_MOBILE);
-        $exp_email = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_MAIL);
-        $exp_code = DpdPickup::getConfigValue(DpdPickup::CONF_EXA_EXPCODE);;
+        // Get configuration
+
+        $exp_name = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_NAME);
+        $exp_address1 = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_ADDR);
+        $exp_address2 = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_ADDR2, '');
+        $exp_zipcode = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_ZIPCODE);
+        $exp_city = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_CITY);
+        $exp_phone = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_TEL);
+        $exp_cellphone = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_MOBILE);
+        $exp_email = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_MAIL);
+        $exp_code = DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_DPDCODE);
+
+
+        if ($return_type != DpdPickup::RETURN_NONE) {
+            $return_name = DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_NAME);
+            $return_address1 = DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_ADDR);
+            $return_address2 = DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_ADDR2, '');
+            $return_zipcode = DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_ZIPCODE);
+            $return_city = DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_CITY);
+            $return_phone = DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_TEL);
+        }
+        
         $res = self::harmonise('$' . "VERSION=110", 'alphanumeric', 12) . "\r\n";
 
         $orders = OrderQuery::create()
@@ -199,80 +224,121 @@ class Export extends BaseAdminController
 
                 //Get invoice address
                 $address = OrderAddressQuery::create()
-                    ->findPK($order->getInvoiceOrderAddressId());
+                    ->findPk($order->getInvoiceOrderAddressId());
 
                 //Get Customer object
                 $customer = CustomerQuery::create()
-                    ->findPK($order->getCustomerId());
+                    ->findPk($order->getCustomerId());
 
                 //Get OrderAddressDpdPickup object
                 $icirelais_code = OrderAddressIcirelaisQuery::create()
-                    ->findPK($order->getDeliveryOrderAddressId());
+                    ->findPk($order->getDeliveryOrderAddressId());
 
                 if ($icirelais_code !== null) {
-
                     // Get Customer's cellphone
-                    if (null == $cellphone = $address->getCellphone())
-                    {
-                        $address->getPhone();
+                    if (null == $cellphone = $address->getCellphone()) {
+                        $cellphone = $address->getPhone();
                     }
 
                     //Weight & price calc
                     $price = 0;
-                    $price = $order->getTotalAmount($price, false); // tax = 0 && include postage = flase
+                    $price = $order->getTotalAmount($price, false); // tax = 0 && include postage = false
 
                     $pkgWeight = floor($pkgWeight * 100);
 
                     $assur_price = ($assur_package == 'true') ? $price : 0;
-                    $date_format = date("d/m/y", $order->getUpdatedAt()->getTimestamp());
+                    $date_format = date("d/m/Y", $order->getUpdatedAt()->getTimestamp());
 
-                    $res .= self::harmonise($order->getRef(), 'alphanumeric', 35);              // Order ref
-                    $res .= self::harmonise("", 'alphanumeric', 2);
-                    $res .= self::harmonise($pkgWeight, 'numeric', 8);                          // Package weight
-                    $res .= self::harmonise("", 'alphanumeric', 15);
-                    $res .= self::harmonise($address->getLastname(), 'alphanumeric', 35);       // Charged customer
-                    $res .= self::harmonise($address->getFirstname(), 'alphanumeric', 35);
-                    $res .= self::harmonise($address->getAddress2(), 'alphanumeric', 35);       // Invoice address info
-                    $res .= self::harmonise($address->getAddress3(), 'alphanumeric', 35);
-                    $res .= self::harmonise("", 'alphanumeric', 35);
-                    $res .= self::harmonise("", 'alphanumeric', 35);
-                    $res .= self::harmonise($address->getZipcode(), 'alphanumeric', 10);        // Invoice address
-                    $res .= self::harmonise($address->getCity(), 'alphanumeric', 35);
-                    $res .= self::harmonise("", 'alphanumeric', 10);
-                    $res .= self::harmonise($address->getAddress1(), 'alphanumeric', 35);
-                    $res .= self::harmonise("", 'alphanumeric', 10);
-                    $res .= self::harmonise("F", 'alphanumeric', 3);                            // Default invoice country code
-                    $res .= self::harmonise($address->getPhone(), 'alphanumeric', 30);          // Invoice phone
-                    $res .= self::harmonise("", 'alphanumeric', 15);
-                    $res .= self::harmonise($exp_name, 'alphanumeric', 35);                     // Expeditor name
-                    $res .= self::harmonise($exp_address2, 'alphanumeric', 35);                 // Expeditor address
-                    $res .= self::harmonise("", 'alphanumeric', 140);
-                    $res .= self::harmonise($exp_zipcode, 'alphanumeric', 10);
-                    $res .= self::harmonise($exp_city, 'alphanumeric', 35);
-                    $res .= self::harmonise("", 'alphanumeric', 10);
-                    $res .= self::harmonise($exp_address1, 'alphanumeric', 35);
-                    $res .= self::harmonise("", 'alphanumeric', 10);
-                    $res .= self::harmonise("F", 'alphanumeric', 3);                            // Default expeditor country code
-                    $res .= self::harmonise($exp_phone, 'alphanumeric', 30);                    // Expeditor phone
-                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 1
-                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 2
-                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 3
-                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Order comment 4
-                    $res .= self::harmonise($date_format.' ', 'alphanumeric', 10);              // Date
-                    $res .= self::harmonise($exp_code, 'numeric', 8);                           // Expeditor DPD code
-                    $res .= self::harmonise("", 'alphanumeric', 35);                            // Bar code
-                    $res .= self::harmonise($customer->getRef(), 'alphanumeric', 35);           // Customer ref
-                    $res .= self::harmonise("", 'alphanumeric', 29);
-                    $res .= self::harmonise($assur_price, 'float', 9);                          // Insured value
-                    $res .= self::harmonise("", 'alphanumeric', 8);
-                    $res .= self::harmonise($customer->getId(), 'alphanumeric', 35);            // Customer ID
-                    $res .= self::harmonise("", 'alphanumeric', 46);
-                    $res .= self::harmonise($exp_email, 'alphanumeric', 80);                    // Expeditor email
-                    $res .= self::harmonise($exp_cellphone, 'alphanumeric', 35);                // Expeditor cellphone
-                    $res .= self::harmonise($customer->getEmail(), 'alphanumeric', 80);         // Customer email
-                    $res .= self::harmonise($cellphone, 'alphanumeric', 35);                    // Invoice cellphone
-                    $res .= self::harmonise("", 'alphanumeric', 96);
-                    $res .= self::harmonise($icirelais_code->getCode(), 'alphanumeric', 8);     // DPD relay ID
+
+                    // Delivery address
+
+                    $res .= self::harmonise($order->getRef(), 'alphanumeric', 35);              // 1. Customer ref #1 = Order ref | MANDATORY
+                    $res .= self::harmonise("", 'alphanumeric', 2);                             // 2. Filler
+                    $res .= self::harmonise($pkgWeight, 'numeric', 8);                          // 3. Package weight
+                    $res .= self::harmonise("", 'alphanumeric', 15);                            // 4. Filler
+                    $res .= self::harmonise($address->getLastname(), 'alphanumeric', 35);       // 5. Delivery name | MANDATORY
+                    $res .= self::harmonise($address->getFirstname(), 'alphanumeric', 35);      // 6. Delivery firstname
+                    $res .= self::harmonise($address->getAddress2(), 'alphanumeric', 35);       // 7. Delivery address 2
+                    $res .= self::harmonise($address->getAddress3(), 'alphanumeric', 35);       // 8. Delivery address 3
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 9. Delivery address 4 | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 10. Delivery address 5 | SKIPPED
+                    $res .= self::harmonise($address->getZipcode(), 'alphanumeric', 10);        // 11. Delivery zipcode | MANDATORY
+                    $res .= self::harmonise($address->getCity(), 'alphanumeric', 35);           // 12. Delivery city | MANDATORY
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 13. Filler
+                    $res .= self::harmonise($address->getAddress1(), 'alphanumeric', 35);       // 14. Delivery street | MANDATORY
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 15. Filler
+                    $res .= self::harmonise("F", 'alphanumeric', 3);                            // 16. Delivery country code | MANDATORY
+                    $res .= self::harmonise($address->getPhone(), 'alphanumeric', 20);          // 17. Delivery phone
+
+
+                    // Expeditor address
+
+                    $res .= self::harmonise("", 'alphanumeric', 25);                            // 18. Filler
+                    $res .= self::harmonise($exp_name, 'alphanumeric', 35);                     // 19. Expeditor name
+                    $res .= self::harmonise($exp_address2, 'alphanumeric', 35);                 // 20. Expeditor address
+                    $res .= self::harmonise("", 'alphanumeric', 140);                           // 21-24. Filler
+                    $res .= self::harmonise($exp_zipcode, 'alphanumeric', 10);                  // 25. Expeditor zipcode
+                    $res .= self::harmonise($exp_city, 'alphanumeric', 35);                     // 26. Expeditor city
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 27. Filler
+                    $res .= self::harmonise($exp_address1, 'alphanumeric', 35);                 // 28. Expeditor street
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 29. Filler
+                    $res .= self::harmonise("F", 'alphanumeric', 3);                            // 30. Expeditor country code
+                    $res .= self::harmonise($exp_phone, 'alphanumeric', 20);                    // 31. Expeditor phone
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 32. Filler
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 33. Order comment 1
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 34. Order comment 2
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 35. Order comment 3
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 36. Order comment 4
+                    $res .= self::harmonise($date_format, 'alphanumeric', 10);                  // 37. Expedition date
+                    $res .= self::harmonise($exp_code, 'numeric', 8);                           // 38. Expeditor DPD code
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 39. Bar code
+                    $res .= self::harmonise($customer->getRef(), 'alphanumeric', 35);           // 40. Customer ref #2
+                    $res .= self::harmonise("", 'alphanumeric', 29);                            // 41. Filler
+                    $res .= self::harmonise($assur_price, 'float', 9);                          // 42. Insured value
+                    $res .= self::harmonise("", 'alphanumeric', 8);                             // 43. Filler
+                    $res .= self::harmonise($customer->getId(), 'alphanumeric', 35);            // 44. Customer ref #3
+                    $res .= self::harmonise("", 'alphanumeric', 1);                             // 45. Filler
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 46. Consolidation number | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 47. Filler
+                    $res .= self::harmonise($exp_email, 'alphanumeric', 80);                    // 48. Expeditor email
+                    $res .= self::harmonise($exp_cellphone, 'alphanumeric', 35);                // 49. Expeditor cellphone
+                    $res .= self::harmonise($customer->getEmail(), 'alphanumeric', 80);         // 50. Customer email
+                    $res .= self::harmonise($cellphone, 'alphanumeric', 35);                    // 51. Customer cellphone
+                    $res .= self::harmonise("", 'alphanumeric', 96);                            // 52. Filler
+                    $res .= self::harmonise($icirelais_code->getCode(), 'alphanumeric', 8);     // 53. DPD relay ID
+                    $res .= self::harmonise("", 'alphanumeric', 113);                           // 54. Filler
+                    $res .= self::harmonise("", 'alphanumeric', 2);                             // 55. Consolidation type | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 2);                             // 56. Consolidation attribute | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 1);                             // 57. Filler
+                    $res .= self::harmonise("", 'numeric', 1);                                  // 58. Predict | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 35);                            // 59. Contact name | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 60. Digicode1 | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 61. Digicode2 | SKIPPED
+                    $res .= self::harmonise("", 'alphanumeric', 10);                            // 62. Intercom | SKIPPED
+
+
+                    // Return address
+
+                    if ($return_type != DpdPickup::RETURN_NONE) {
+                        $res .= self::harmonise("", 'alphanumeric', 200);                           // 63. Filler
+                        $res .= self::harmonise($return_type, 'numeric', 1);                        // 64. Return type
+                        $res .= self::harmonise("", 'alphanumeric', 15);                            // 65. Filler
+                        $res .= self::harmonise($return_name, 'alphanumeric', 35);                  // 66. Return name
+                        $res .= self::harmonise($return_address2, 'alphanumeric', 35);              // 67. Return address 1
+                        $res .= self::harmonise("", 'alphanumeric', 35);                            // 68. Return address 2 | SKIPPED
+                        $res .= self::harmonise("", 'alphanumeric', 35);                            // 69. Return address 3 | SKIPPED
+                        $res .= self::harmonise("", 'alphanumeric', 35);                            // 70. Return address 4 | SKIPPED
+                        $res .= self::harmonise("", 'alphanumeric', 35);                            // 71. Return address 5 | SKIPPED
+                        $res .= self::harmonise($return_zipcode, 'alphanumeric', 10);               // 72. Return zipcode
+                        $res .= self::harmonise($return_city, 'alphanumeric', 35);                  // 73. Return city
+                        $res .= self::harmonise("", 'alphanumeric', 10);                            // 74. Filler
+                        $res .= self::harmonise($return_address1, 'alphanumeric', 35);              // 75. Return street
+                        $res .= self::harmonise("", 'alphanumeric', 10);                            // 76. Filler
+                        $res .= self::harmonise("F", 'alphanumeric', 3);                            // 77. Return country code
+                        $res .= self::harmonise($return_phone, 'alphanumeric', 30);                 // 78. Return phone
+                        $res .= self::harmonise("", 'alphanumeric', 18);                            // 79. CargoID | SKIPPED
+                        $res .= self::harmonise("", 'alphanumeric', 35);                            // 80. Customer ref #4 | SKIPPED
+                    }
 
                     $res .= "\r\n";
                 }
@@ -280,7 +346,7 @@ class Export extends BaseAdminController
         }
 
         $response = new Response(
-            utf8_decode(mb_strtoupper($res)),
+            utf8_decode($res),
             200,
             array(
                 'Content-Type' => 'application/csv-tab-delimited-table;charset=iso-8859-1',

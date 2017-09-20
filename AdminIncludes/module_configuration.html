@@ -55,7 +55,7 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                <label for="nochange">{intl l="Do not change"}</label>&nbsp;
+                                                <label for="nochange">{intl l="Do not change" d='dpdpickup.ai'}</label>&nbsp;
                                             </td>
                                             <td>
                                                 <input type="radio" id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
@@ -63,7 +63,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label for="processing">{intl l="Processing"}</label>&nbsp;
+                                                <label for="processing">{intl l="Processing" d='dpdpickup.ai'}</label>&nbsp;
                                             </td>
                                             <td>
                                                 <input type="radio" id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
@@ -71,11 +71,11 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label for="sent">{intl l="Sent"}</label>&nbsp;
+                                                <label for="sent">{intl l="Sent" d='dpdpickup.ai'}</label>&nbsp;
                                             </td>
                                             <td>
                                                 <input type="radio" id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
-                                                <span>{intl l="If you choose this option, the exported orders would not be available on this page anymore"}</span>
+                                                <span>{intl l="If you choose this option, the exported orders would not be available on this page anymore" d='dpdpickup.ai'}</span>
                                             </td>
                                         </tr>
                                     </table>
@@ -88,7 +88,7 @@
 								  {render_form_field field="exclude_zip_code"}
 
                                 <br>
-                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success">{intl l='Save changes'} <span class="glyphicon glyphicon-ok"></span></button>
+                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success">{intl l='Save changes' d='dpdpickup.ai'} <span class="glyphicon glyphicon-ok"></span></button>
 
                             </form>
                         {/form}
@@ -231,7 +231,7 @@
 
                         {elseloop rel='list.dpdpickup.orders'}
                             <div class="alert alert-warning">
-                                {intl l="There are currently no pending order to ship by DpdPickup."}
+                                {intl l="There are currently no pending order to ship by DpdPickup." d='dpdpickup.ai'}
                             </div>
                         {/elseloop}
                     </div>
@@ -277,95 +277,189 @@
                             {if $form_error}
                                 <div class="alert alert-danger">{$form_error_message}</div>
                             {/if}
+        
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="panel panel-default">
+                                        <h3 class="panel-heading">{intl l="Delivery" d='dpdpickup.ai'}</h3>
+                                        <div class="panel-body">
 
-                            {form_field form=$form field="name"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
+                                            {form_field form=$form field="exp_name"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
 
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='name'}" class="form-control" required/>
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_name'}" class="form-control" required/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_addr"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_addr'}" class="form-control" required/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_addr2"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_addr2'}" class="form-control"/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_zipcode"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_zipcode'}" class="form-control" {literal}pattern="((2[A-B])|(\d{2}))\d{3}"{/literal} required/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_city"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_city'}" class="form-control" required/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_tel"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control" required/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_mobile"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_mobile'}" {literal}pattern="0[6-7]{1}\d{8}"{/literal} class="form-control" required/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_mail"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="email" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_mail'}" class="form-control" required/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="exp_dpdcode"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_dpdcode'}" class="form-control" required/>
+                                            </div>
+                                            {/form_field}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel panel-default">
+                                        <h3 class="panel-heading">{intl l="Return" d='dpdpickup.ai'}</h3>
+                                        <div class="panel-body">
+
+                                            {form_field form=$form field="return_type"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <select id="{$label_attr.for}" name="{$name}" class="form-control js_select_return_type">
+                                                    <option value="0" {if $value == 0}selected{/if}>{intl l='No return' d='dpdpickup.ai'}</option>
+                                                    <option value="3" {if $value == 3}selected{/if}>{intl l='Return on demand' d='dpdpickup.ai'}</option>
+                                                    <option value="4" {if $value == 4}selected{/if}>{intl l='Prepared return' d='dpdpickup.ai'}</option>
+                                                </select>
+                                            </div>
+                                            {/form_field}
+
+                                            <a id="js_btn_fill_return_field" href="#" class="btn btn-info  js_input_return_field">{intl l="Use the expeditor's address as return" d='dpdpickup.ai'}</a>
+
+                                            <hr>
+
+                                            {form_field form=$form field="return_name"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_name'}" class="form-control js_input_return_field"/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="return_addr"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_addr'}" class="form-control js_input_return_field"/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="return_addr2"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_addr2'}" class="form-control js_input_return_field"/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="return_zipcode"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_zipcode'}" class="form-control js_input_return_field" {literal}pattern="((2[A-B])|(\d{2}))\d{3}"{/literal}/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="return_city"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_city'}" class="form-control js_input_return_field"/>
+                                            </div>
+                                            {/form_field}
+
+                                            {form_field form=$form field="return_tel"}
+                                            <div class="form-group {if $error}has-error{/if}">
+                                                <label for="{$label_attr.for}" class="control-label">
+                                                    {$label} :
+                                                </label>
+
+                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control  js_input_return_field"/>
+                                            </div>
+                                            {/form_field}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            {/form_field}
-
-                            {form_field form=$form field="addr"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='addr'}" class="form-control" required/>
-                            </div>
-                            {/form_field}
-
-                            {form_field form=$form field="addr2"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='addr2'}" class="form-control"/>
-                            </div>
-                            {/form_field}
-
-                            {form_field form=$form field="zipcode"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='zipcode'}" class="form-control" {literal}pattern="((2[A-B])|(\d{2}))\d{3}"{/literal} required/>
-                            </div>
-                            {/form_field}
-
-                            {form_field form=$form field="city"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='city'}" class="form-control" required/>
-                            </div>
-                            {/form_field}
-
-                            {form_field form=$form field="tel"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control" required/>
-                            </div>
-                            {/form_field}
-
-                            {form_field form=$form field="mobile"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='mobile'}" {literal}pattern="0[6-7]{1}\d{8}"{/literal} class="form-control" required/>
-                            </div>
-                            {/form_field}
-
-                            {form_field form=$form field="mail"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-
-                                <input type="email" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='mail'}" class="form-control" required/>
-                            </div>
-                            {/form_field}
-
-                            {form_field form=$form field="expcode"}
-                            <div class="form-group {if $error}has-error{/if}">
-                                <label for="{$label_attr.for}" class="control-label">
-                                    {$label} :
-                                </label>
-
-                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='expcode'}" class="form-control" />
-                            </div>
-                            {/form_field}
 
                             <div class="form-group">
                                 <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success" title="{intl d='dpdpickup.ai' l='Save changes'}">{intl d='dpdpickup.ai' l='Save changes'} <span class="glyphicon glyphicon-ok"></span></button>

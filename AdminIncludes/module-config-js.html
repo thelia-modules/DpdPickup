@@ -63,5 +63,24 @@
         {if ! empty($current_tab)}
             $('.nav-tabs a[href="#{$current_tab}"]').trigger("click");
         {/if}
+
+
+        var $selectReturnType = $(".js_select_return_type");
+        $selectReturnType.change(function(e){
+            $('.js_input_return_field').attr("disabled", ($(this).val() == 0));
+        });
+
+        $selectReturnType.trigger('change');
+
+        $('#js_btn_fill_return_field').click(function (e) {
+            e.preventDefault();
+            $("#return_name").val($("#exp_name").val());
+            $("#return_addr").val($("#exp_addr").val());
+            $("#return_addr2").val($("#exp_addr2").val());
+            $("#return_zipcode").val($("#exp_zipcode").val());
+            $("#return_city").val($("#exp_city").val());
+            $("#return_tel").val($("#exp_tel").val());
+        });
+
     });
 </script>
