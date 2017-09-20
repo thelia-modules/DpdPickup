@@ -55,7 +55,7 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                <label for="nochange">{intl l="Do not change"}</label>&nbsp;
+                                                <label for="nochange">{intl l="Do not change" d='dpdpickup.ai'}</label>&nbsp;
                                             </td>
                                             <td>
                                                 <input type="radio" id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
@@ -63,7 +63,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label for="processing">{intl l="Processing"}</label>&nbsp;
+                                                <label for="processing">{intl l="Processing" d='dpdpickup.ai'}</label>&nbsp;
                                             </td>
                                             <td>
                                                 <input type="radio" id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
@@ -71,11 +71,11 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label for="sent">{intl l="Sent"}</label>&nbsp;
+                                                <label for="sent">{intl l="Sent" d='dpdpickup.ai'}</label>&nbsp;
                                             </td>
                                             <td>
                                                 <input type="radio" id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
-                                                <span>{intl l="If you choose this option, the exported orders would not be available on this page anymore"}</span>
+                                                <span>{intl l="If you choose this option, the exported orders would not be available on this page anymore" d='dpdpickup.ai'}</span>
                                             </td>
                                         </tr>
                                     </table>
@@ -88,7 +88,7 @@
 								  {render_form_field field="exclude_zip_code"}
 
                                 <br>
-                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success">{intl l='Save changes'} <span class="glyphicon glyphicon-ok"></span></button>
+                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success">{intl l='Save changes' d='dpdpickup.ai'} <span class="glyphicon glyphicon-ok"></span></button>
 
                             </form>
                         {/form}
@@ -231,7 +231,7 @@
 
                         {elseloop rel='list.dpdpickup.orders'}
                             <div class="alert alert-warning">
-                                {intl l="There are currently no pending order to ship by DpdPickup."}
+                                {intl l="There are currently no pending order to ship by DpdPickup." d='dpdpickup.ai'}
                             </div>
                         {/elseloop}
                     </div>

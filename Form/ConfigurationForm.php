@@ -63,7 +63,7 @@ class ConfigurationForm extends BaseForm
                     'constraints' => [],
                     'data'        => DpdPickup::getConfigExcludeZipCode(),
                     'label'       => $this->translator->trans("Exclude ZipCode", [], DpdPickup::DOMAIN),
-                    'label_attr'  => ['for' => 'exclude_zip_code', 'help' => $this->translator->trans('List of zip code separated by commas.')]
+                    'label_attr'  => ['for' => 'exclude_zip_code', 'help' => $this->translator->trans('List of zip code separated by commas.', [], DpdPickup::DOMAIN)]
                 ]
             );
 
