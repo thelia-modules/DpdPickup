@@ -3,6 +3,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="dpdpickup.saveslice" path="/admin/module/dpdpickup/saveslice" methods="post">
+        <default key="_controller">DpdPickup:Slice:saveSlice</default>
+    </route>
+
+    <route id="dpdpickup.deleteslice" path="/admin/module/dpdpickup/deleteslice" methods="post">
+        <default key="_controller">DpdPickup:Slice:deleteSlice</default>
+    </route>
+
     <route id="dpdpickup.searchroute" path="/module/dpdpickup/{zipcode}/{city}" methods="get">
         <default key="_controller">DpdPickup\Controller\SearchCityController::searchAction</default>
         <requirement key="zipcode">\d{5}</requirement>

@@ -24,14 +24,14 @@ use Thelia\Model\Area;
  *
  * @method     ChildDpdpickupPriceQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildDpdpickupPriceQuery orderByAreaId($order = Criteria::ASC) Order by the area_id column
- * @method     ChildDpdpickupPriceQuery orderByWeightMax($order = Criteria::ASC) Order by the weight_max column
+ * @method     ChildDpdpickupPriceQuery orderByWeight($order = Criteria::ASC) Order by the weight column
  * @method     ChildDpdpickupPriceQuery orderByPrice($order = Criteria::ASC) Order by the price column
  * @method     ChildDpdpickupPriceQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildDpdpickupPriceQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     ChildDpdpickupPriceQuery groupById() Group by the id column
  * @method     ChildDpdpickupPriceQuery groupByAreaId() Group by the area_id column
- * @method     ChildDpdpickupPriceQuery groupByWeightMax() Group by the weight_max column
+ * @method     ChildDpdpickupPriceQuery groupByWeight() Group by the weight column
  * @method     ChildDpdpickupPriceQuery groupByPrice() Group by the price column
  * @method     ChildDpdpickupPriceQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildDpdpickupPriceQuery groupByUpdatedAt() Group by the updated_at column
@@ -49,14 +49,14 @@ use Thelia\Model\Area;
  *
  * @method     ChildDpdpickupPrice findOneById(int $id) Return the first ChildDpdpickupPrice filtered by the id column
  * @method     ChildDpdpickupPrice findOneByAreaId(int $area_id) Return the first ChildDpdpickupPrice filtered by the area_id column
- * @method     ChildDpdpickupPrice findOneByWeightMax(double $weight_max) Return the first ChildDpdpickupPrice filtered by the weight_max column
+ * @method     ChildDpdpickupPrice findOneByWeight(double $weight) Return the first ChildDpdpickupPrice filtered by the weight column
  * @method     ChildDpdpickupPrice findOneByPrice(string $price) Return the first ChildDpdpickupPrice filtered by the price column
  * @method     ChildDpdpickupPrice findOneByCreatedAt(string $created_at) Return the first ChildDpdpickupPrice filtered by the created_at column
  * @method     ChildDpdpickupPrice findOneByUpdatedAt(string $updated_at) Return the first ChildDpdpickupPrice filtered by the updated_at column
  *
  * @method     array findById(int $id) Return ChildDpdpickupPrice objects filtered by the id column
  * @method     array findByAreaId(int $area_id) Return ChildDpdpickupPrice objects filtered by the area_id column
- * @method     array findByWeightMax(double $weight_max) Return ChildDpdpickupPrice objects filtered by the weight_max column
+ * @method     array findByWeight(double $weight) Return ChildDpdpickupPrice objects filtered by the weight column
  * @method     array findByPrice(string $price) Return ChildDpdpickupPrice objects filtered by the price column
  * @method     array findByCreatedAt(string $created_at) Return ChildDpdpickupPrice objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return ChildDpdpickupPrice objects filtered by the updated_at column
@@ -148,7 +148,7 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT ID, AREA_ID, WEIGHT_MAX, PRICE, CREATED_AT, UPDATED_AT FROM dpdpickup_price WHERE ID = :p0';
+        $sql = 'SELECT ID, AREA_ID, WEIGHT, PRICE, CREATED_AT, UPDATED_AT FROM dpdpickup_price WHERE ID = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -322,13 +322,13 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the weight_max column
+     * Filter the query on the weight column
      *
      * Example usage:
      * <code>
-     * $query->filterByWeightMax(1234); // WHERE weight_max = 1234
-     * $query->filterByWeightMax(array(12, 34)); // WHERE weight_max IN (12, 34)
-     * $query->filterByWeightMax(array('min' => 12)); // WHERE weight_max > 12
+     * $query->filterByWeight(1234); // WHERE weight= 1234
+     * $query->filterByWeight(array(12, 34)); // WHERE weight IN (12, 34)
+     * $query->filterByWeight(array('min' => 12)); // WHERE weight > 12
      * </code>
      *
      * @param     mixed $weightMax The value to use as filter.
@@ -339,16 +339,16 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
      *
      * @return ChildDpdpickupPriceQuery The current query, for fluid interface
      */
-    public function filterByWeightMax($weightMax = null, $comparison = null)
+    public function filterByWeight($weight = null, $comparison = null)
     {
-        if (is_array($weightMax)) {
+        if (is_array($weight)) {
             $useMinMax = false;
-            if (isset($weightMax['min'])) {
-                $this->addUsingAlias(DpdpickupPriceTableMap::WEIGHT_MAX, $weightMax['min'], Criteria::GREATER_EQUAL);
+            if (isset($weight['min'])) {
+                $this->addUsingAlias(DpdpickupPriceTableMap::WEIGHT, $weight['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($weightMax['max'])) {
-                $this->addUsingAlias(DpdpickupPriceTableMap::WEIGHT_MAX, $weightMax['max'], Criteria::LESS_EQUAL);
+            if (isset($weight['max'])) {
+                $this->addUsingAlias(DpdpickupPriceTableMap::WEIGHT, $weight['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -359,7 +359,7 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DpdpickupPriceTableMap::WEIGHT_MAX, $weightMax, $comparison);
+        return $this->addUsingAlias(DpdpickupPriceTableMap::WEIGHT, $weight, $comparison);
     }
 
     /**

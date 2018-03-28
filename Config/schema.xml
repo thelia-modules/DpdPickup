@@ -33,5 +33,15 @@
         <column name="active" required="true" type="BOOLEAN" />
         <behavior name="timestampable" />
     </table>
-	<external-schema filename="/home/benjamin/dev/thelia2/local/config/schema.xml" referenceOnly="true" />
+
+	<table name="dpdpickup_price" namespace="DpdPickup\Model">
+		<column name="id" primaryKey="true" autoIncrement="true" required="true" type="INTEGER" />
+		<column name="area_id" required="true" type="INTEGER" />
+		<column name="weight" type="DECIMAL" scale="2" size="16"  />
+		<column name="price" required="true" type="DECIMAL" scale="2" size="16"  />
+		<column name="created_at" type="TIMESTAMP" />
+		<column name="updated_at" type="TIMESTAMP" />
+	</table>
+
+	<external-schema filename="local/config/schema.xml" referenceOnly="true" />
 </database>

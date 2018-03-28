@@ -69,10 +69,10 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     protected $area_id;
 
     /**
-     * The value for the weight_max field.
+     * The value for the weight field.
      * @var        double
      */
-    protected $weight_max;
+    protected $weight;
 
     /**
      * The value for the price field.
@@ -400,14 +400,14 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     }
 
     /**
-     * Get the [weight_max] column value.
+     * Get the [weight] column value.
      *
      * @return   double
      */
-    public function getWeightMax()
+    public function getWeight()
     {
 
-        return $this->weight_max;
+        return $this->weight;
     }
 
     /**
@@ -508,25 +508,25 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     } // setAreaId()
 
     /**
-     * Set the value of [weight_max] column.
+     * Set the value of [weight] column.
      *
      * @param      double $v new value
      * @return   \DpdPickup\Model\DpdpickupPrice The current object (for fluent API support)
      */
-    public function setWeightMax($v)
+    public function setWeight($v)
     {
         if ($v !== null) {
             $v = (double) $v;
         }
 
-        if ($this->weight_max !== $v) {
-            $this->weight_max = $v;
-            $this->modifiedColumns[DpdpickupPriceTableMap::WEIGHT_MAX] = true;
+        if ($this->weight !== $v) {
+            $this->weight = $v;
+            $this->modifiedColumns[DpdpickupPriceTableMap::WEIGHT] = true;
         }
 
 
         return $this;
-    } // setWeightMax()
+    } // setWeight()
 
     /**
      * Set the value of [price] column.
@@ -638,8 +638,8 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DpdpickupPriceTableMap::translateFieldName('AreaId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->area_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DpdpickupPriceTableMap::translateFieldName('WeightMax', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->weight_max = (null !== $col) ? (double) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DpdpickupPriceTableMap::translateFieldName('Weight', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->weight = (null !== $col) ? (double) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DpdpickupPriceTableMap::translateFieldName('Price', TableMap::TYPE_PHPNAME, $indexType)];
             $this->price = (null !== $col) ? (string) $col : null;
@@ -905,8 +905,8 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
         if ($this->isColumnModified(DpdpickupPriceTableMap::AREA_ID)) {
             $modifiedColumns[':p' . $index++]  = 'AREA_ID';
         }
-        if ($this->isColumnModified(DpdpickupPriceTableMap::WEIGHT_MAX)) {
-            $modifiedColumns[':p' . $index++]  = 'WEIGHT_MAX';
+        if ($this->isColumnModified(DpdpickupPriceTableMap::WEIGHT)) {
+            $modifiedColumns[':p' . $index++]  = 'WEIGHT';
         }
         if ($this->isColumnModified(DpdpickupPriceTableMap::PRICE)) {
             $modifiedColumns[':p' . $index++]  = 'PRICE';
@@ -934,8 +934,8 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
                     case 'AREA_ID':
                         $stmt->bindValue($identifier, $this->area_id, PDO::PARAM_INT);
                         break;
-                    case 'WEIGHT_MAX':
-                        $stmt->bindValue($identifier, $this->weight_max, PDO::PARAM_STR);
+                    case 'WEIGHT':
+                        $stmt->bindValue($identifier, $this->weight, PDO::PARAM_STR);
                         break;
                     case 'PRICE':
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
@@ -1015,7 +1015,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
                 return $this->getAreaId();
                 break;
             case 2:
-                return $this->getWeightMax();
+                return $this->getWeight();
                 break;
             case 3:
                 return $this->getPrice();
@@ -1057,7 +1057,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getAreaId(),
-            $keys[2] => $this->getWeightMax(),
+            $keys[2] => $this->getWeight(),
             $keys[3] => $this->getPrice(),
             $keys[4] => $this->getCreatedAt(),
             $keys[5] => $this->getUpdatedAt(),
@@ -1112,7 +1112,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
                 $this->setAreaId($value);
                 break;
             case 2:
-                $this->setWeightMax($value);
+                $this->setWeight($value);
                 break;
             case 3:
                 $this->setPrice($value);
@@ -1149,7 +1149,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setAreaId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setWeightMax($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setWeight($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setPrice($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
@@ -1166,7 +1166,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
 
         if ($this->isColumnModified(DpdpickupPriceTableMap::ID)) $criteria->add(DpdpickupPriceTableMap::ID, $this->id);
         if ($this->isColumnModified(DpdpickupPriceTableMap::AREA_ID)) $criteria->add(DpdpickupPriceTableMap::AREA_ID, $this->area_id);
-        if ($this->isColumnModified(DpdpickupPriceTableMap::WEIGHT_MAX)) $criteria->add(DpdpickupPriceTableMap::WEIGHT_MAX, $this->weight_max);
+        if ($this->isColumnModified(DpdpickupPriceTableMap::WEIGHT)) $criteria->add(DpdpickupPriceTableMap::WEIGHT, $this->weight);
         if ($this->isColumnModified(DpdpickupPriceTableMap::PRICE)) $criteria->add(DpdpickupPriceTableMap::PRICE, $this->price);
         if ($this->isColumnModified(DpdpickupPriceTableMap::CREATED_AT)) $criteria->add(DpdpickupPriceTableMap::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(DpdpickupPriceTableMap::UPDATED_AT)) $criteria->add(DpdpickupPriceTableMap::UPDATED_AT, $this->updated_at);
@@ -1234,7 +1234,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setAreaId($this->getAreaId());
-        $copyObj->setWeightMax($this->getWeightMax());
+        $copyObj->setWeight($this->getWeight());
         $copyObj->setPrice($this->getPrice());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1324,7 +1324,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     {
         $this->id = null;
         $this->area_id = null;
-        $this->weight_max = null;
+        $this->weight = null;
         $this->price = null;
         $this->created_at = null;
         $this->updated_at = null;

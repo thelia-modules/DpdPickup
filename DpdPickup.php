@@ -43,9 +43,6 @@ class DpdPickup extends AbstractDeliveryModule
     const DOMAIN = 'dpdpickup';
     const DOMAIN_ADMIN = "dpdpickup.ai";
 
-    /** @var string */
-    const UPDATE_PATH = __DIR__ . DS . 'Config' . DS . 'update';
-
     const DELIVERY_REF_COLUMN = 17;
     const ORDER_REF_COLUMN = 18;
 
@@ -87,11 +84,13 @@ class DpdPickup extends AbstractDeliveryModule
 
     public function postActivation(ConnectionInterface $con = null)
     {
-        $database = new Database($con->getWrappedConnection());
-
-        $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
+        try {
+            DpdpickupPriceQuery::create()->findOne();
+        } catch (\Exception $e) {
+            $database = new Database($con);
+            $database->insertSql(null, [__DIR__ . '/Config/thelia.sql']);
+        }
     }
-
     /**
      * @inheritdoc
      *
@@ -101,18 +100,18 @@ class DpdPickup extends AbstractDeliveryModule
      */
     public function update($currentVersion, $newVersion, ConnectionInterface $con = null)
     {
-        $finder = (new Finder())->files()->name('#.*?\.sql#')->sortByName()->in(self::UPDATE_PATH);
-
-        if ($finder->count() === 0) {
-            return;
-        }
+        $finder = Finder::create()
+            ->name('*.sql')
+            ->depth(0)
+            ->sortByName()
+            ->in(__DIR__ . DS . 'Config' . DS . 'update');
 
         $database = new Database($con);
 
-        /** @var \Symfony\Component\Finder\SplFileInfo $updateSQLFile */
-        foreach ($finder as $updateSQLFile) {
-            if (version_compare($currentVersion, str_replace('.sql', '', $updateSQLFile->getFilename()), '<')) {
-                $database->insertSql(null, [$updateSQLFile->getPathname()]);
+        /** @var \SplFileInfo $file */
+        foreach ($finder as $file) {
+            if (version_compare($currentVersion, $file->getBasename('.sql'), '<')) {
+                $database->insertSql(null, [$file->getPathname()]);
             }
         }
     }
