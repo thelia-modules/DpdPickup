@@ -153,8 +153,8 @@ class DpdpickupPriceTableMap extends TableMap
         // columns
         $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('AREA_ID', 'AreaId', 'INTEGER', 'area', 'ID', true, null, null);
-        $this->addColumn('WEIGHT', 'Weight', 'FLOAT', true, null, null);
-        $this->addColumn('PRICE', 'Price', 'DECIMAL', false, 16, 0);
+        $this->addColumn('WEIGHT', 'Weight', 'DECIMAL', false, 16, null);
+        $this->addColumn('PRICE', 'Price', 'DECIMAL', true, 16, null);
         $this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -164,7 +164,7 @@ class DpdpickupPriceTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Area', '\\Thelia\\Model\\Area', RelationMap::MANY_TO_ONE, array('area_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('Area', '\\DpdPickup\\Model\\Thelia\\Model\\Area', RelationMap::MANY_TO_ONE, array('area_id' => 'id', ), 'CASCADE', 'RESTRICT');
     } // buildRelations()
 
     /**

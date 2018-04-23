@@ -52,9 +52,9 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Initializes internal state of \DpdPickup\Model\Base\IcirelaisFreeshippingQuery object.
      *
-     * @param string $dbName     The database name
-     * @param string $modelName  The phpName of a model, e.g. 'Book'
-     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param     string $dbName The database name
+     * @param     string $modelName The phpName of a model, e.g. 'Book'
+     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'thelia', $modelName = '\\DpdPickup\\Model\\IcirelaisFreeshipping', $modelAlias = null)
     {
@@ -64,8 +64,8 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Returns a new ChildIcirelaisFreeshippingQuery object.
      *
-     * @param string   $modelAlias The alias of a model in the query
-     * @param Criteria $criteria   Optional Criteria to build the query from
+     * @param     string $modelAlias The alias of a model in the query
+     * @param     Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildIcirelaisFreeshippingQuery
      */
@@ -94,7 +94,7 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed               $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildIcirelaisFreeshipping|array|mixed the result, formatted by the current formatter
@@ -125,10 +125,10 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param mixed               $key Primary key to use for the query
-     * @param ConnectionInterface $con A connection object
+     * @param     mixed $key Primary key to use for the query
+     * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildIcirelaisFreeshipping A model object, or null if the key is not found
+     * @return   ChildIcirelaisFreeshipping A model object, or null if the key is not found
      */
     protected function findPkSimple($key, $con)
     {
@@ -155,8 +155,8 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param mixed               $key Primary key to use for the query
-     * @param ConnectionInterface $con A connection object
+     * @param     mixed $key Primary key to use for the query
+     * @param     ConnectionInterface $con A connection object
      *
      * @return ChildIcirelaisFreeshipping|array|mixed the result, formatted by the current formatter
      */
@@ -176,8 +176,8 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param array               $keys Primary keys to use for the query
-     * @param ConnectionInterface $con  an optional connection object
+     * @param     array $keys Primary keys to use for the query
+     * @param     ConnectionInterface $con an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -198,24 +198,26 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param mixed $key Primary key to use for the query
+     * @param     mixed $key Primary key to use for the query
      *
      * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
+
         return $this->addUsingAlias(IcirelaisFreeshippingTableMap::ID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param array $keys The list of primary key to use for the query
+     * @param     array $keys The list of primary key to use for the query
      *
      * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
+
         return $this->addUsingAlias(IcirelaisFreeshippingTableMap::ID, $keys, Criteria::IN);
     }
 
@@ -229,11 +231,11 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE id > 12
      * </code>
      *
-     * @param mixed  $id         The value to use as filter.
-     *                           Use scalar values for equality.
-     *                           Use array values for in_array() equivalent.
-     *                           Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param     mixed $id The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
@@ -269,12 +271,12 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
      * $query->filterByActive('yes'); // WHERE active = true
      * </code>
      *
-     * @param boolean|string $active     The value to use as filter.
-     *                                   Non-boolean arguments are converted using the following rules:
-     *                                   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                                   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *                                   Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param string         $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param     boolean|string $active The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
@@ -297,13 +299,13 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
      * </code>
      *
-     * @param mixed  $createdAt  The value to use as filter.
-     *                           Values can be integers (unix timestamps), DateTime objects, or strings.
-     *                           Empty strings are treated as NULL.
-     *                           Use scalar values for equality.
-     *                           Use array values for in_array() equivalent.
-     *                           Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param     mixed $createdAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
@@ -340,13 +342,13 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
      * </code>
      *
-     * @param mixed  $updatedAt  The value to use as filter.
-     *                           Values can be integers (unix timestamps), DateTime objects, or strings.
-     *                           Empty strings are treated as NULL.
-     *                           Use scalar values for equality.
-     *                           Use array values for in_array() equivalent.
-     *                           Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param     mixed $updatedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
@@ -376,7 +378,7 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param ChildIcirelaisFreeshipping $icirelaisFreeshipping Object to remove from the list of results
+     * @param   ChildIcirelaisFreeshipping $icirelaisFreeshipping Object to remove from the list of results
      *
      * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
@@ -392,8 +394,8 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Deletes all rows from the icirelais_freeshipping table.
      *
-     * @param  ConnectionInterface $con the connection to use
-     * @return int                 The number of affected rows (if supported by underlying database driver).
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
     {
@@ -424,13 +426,13 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Performs a DELETE on the database, given a ChildIcirelaisFreeshipping or Criteria object OR a primary key value.
      *
-     * @param  mixed               $values Criteria or ChildIcirelaisFreeshipping object or primary key or array of primary keys
-     *                                     which is used to create the DELETE statement
-     * @param  ConnectionInterface $con    the connection to use
-     * @return int                 The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
-     *                                    if supported by native driver or if emulated using Propel.
-     * @throws PropelException     Any exceptions caught during processing will be
-     *                                    rethrown wrapped into a PropelException.
+     * @param mixed               $values Criteria or ChildIcirelaisFreeshipping object or primary key or array of primary keys
+     *              which is used to create the DELETE statement
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     *                if supported by native driver or if emulated using Propel.
+     * @throws PropelException Any exceptions caught during processing will be
+     *         rethrown wrapped into a PropelException.
      */
      public function delete(ConnectionInterface $con = null)
      {
@@ -450,6 +452,7 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+
         IcirelaisFreeshippingTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
@@ -468,9 +471,9 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param int $nbDays Maximum age of the latest update in days
+     * @param      int $nbDays Maximum age of the latest update in days
      *
-     * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
+     * @return     ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
@@ -480,9 +483,9 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Filter by the latest created
      *
-     * @param int $nbDays Maximum age of in days
+     * @param      int $nbDays Maximum age of in days
      *
-     * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
+     * @return     ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
@@ -492,7 +495,7 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Order by update date desc
      *
-     * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
+     * @return     ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
@@ -502,7 +505,7 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Order by update date asc
      *
-     * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
+     * @return     ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
@@ -512,7 +515,7 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Order by create date desc
      *
-     * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
+     * @return     ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
@@ -522,7 +525,7 @@ abstract class IcirelaisFreeshippingQuery extends ModelCriteria
     /**
      * Order by create date asc
      *
-     * @return ChildIcirelaisFreeshippingQuery The current query, for fluid interface
+     * @return     ChildIcirelaisFreeshippingQuery The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {

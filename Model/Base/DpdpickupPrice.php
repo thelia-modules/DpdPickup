@@ -8,6 +8,8 @@ use \PDO;
 use DpdPickup\Model\DpdpickupPrice as ChildDpdpickupPrice;
 use DpdPickup\Model\DpdpickupPriceQuery as ChildDpdpickupPriceQuery;
 use DpdPickup\Model\Map\DpdpickupPriceTableMap;
+use DpdPickup\Model\Thelia\Model\AreaQuery;
+use DpdPickup\Model\Thelia\Model\Area as ChildArea;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -19,8 +21,6 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
-use Thelia\Model\AreaQuery;
-use Thelia\Model\Area as ChildArea;
 
 abstract class DpdpickupPrice implements ActiveRecordInterface
 {
@@ -70,13 +70,12 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
 
     /**
      * The value for the weight field.
-     * @var        double
+     * @var        string
      */
     protected $weight;
 
     /**
      * The value for the price field.
-     * Note: this column has a database default value of: '0.000000'
      * @var        string
      */
     protected $price;
@@ -107,23 +106,10 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->price = '0.000000';
-    }
-
-    /**
      * Initializes internal state of DpdPickup\Model\Base\DpdpickupPrice object.
-     * @see applyDefaults()
      */
     public function __construct()
     {
-        $this->applyDefaultValues();
     }
 
     /**
@@ -402,7 +388,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     /**
      * Get the [weight] column value.
      *
-     * @return   double
+     * @return   string
      */
     public function getWeight()
     {
@@ -510,13 +496,13 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
     /**
      * Set the value of [weight] column.
      *
-     * @param      double $v new value
+     * @param      string $v new value
      * @return   \DpdPickup\Model\DpdpickupPrice The current object (for fluent API support)
      */
     public function setWeight($v)
     {
         if ($v !== null) {
-            $v = (double) $v;
+            $v = (string) $v;
         }
 
         if ($this->weight !== $v) {
@@ -601,10 +587,6 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->price !== '0.000000') {
-                return false;
-            }
-
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -639,7 +621,7 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
             $this->area_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DpdpickupPriceTableMap::translateFieldName('Weight', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->weight = (null !== $col) ? (double) $col : null;
+            $this->weight = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : DpdpickupPriceTableMap::translateFieldName('Price', TableMap::TYPE_PHPNAME, $indexType)];
             $this->price = (null !== $col) ? (string) $col : null;
@@ -1330,7 +1312,6 @@ abstract class DpdpickupPrice implements ActiveRecordInterface
         $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

@@ -17,4 +17,5 @@ use DpdPickup\Model\Base\AddressIcirelaisQuery as BaseAddressIcirelaisQuery;
 class AddressIcirelaisQuery extends BaseAddressIcirelaisQuery
 {
 
-} // AddressIcirelaisQuery
+}
+// AddressIcirelaisQuery

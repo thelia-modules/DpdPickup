@@ -4,24 +4,6 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
--- order_address_icirelais
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `order_address_icirelais`;
-
-CREATE TABLE `order_address_icirelais`
-(
-    `id` INTEGER NOT NULL,
-    `code` VARCHAR(10) NOT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `fk_order_address_icirelais_order_address_id`
-        FOREIGN KEY (`id`)
-        REFERENCES `order_address` (`id`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
 -- address_icirelais
 -- ---------------------------------------------------------------------
 
@@ -43,17 +25,35 @@ CREATE TABLE `address_icirelais`
     `code` VARCHAR(10) NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `FI_address_icirelais_customer_title_id` (`title_id`),
-    INDEX `FI_address_country_id` (`country_id`),
+    INDEX `FI_address_icirelais_country_id` (`country_id`),
     CONSTRAINT `fk_address_icirelais_customer_title_id`
         FOREIGN KEY (`title_id`)
         REFERENCES `customer_title` (`id`)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT,
-    CONSTRAINT `fk_address_country_id`
+    CONSTRAINT `fk_address_icirelais_country_id`
         FOREIGN KEY (`country_id`)
         REFERENCES `country` (`id`)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- order_address_icirelais
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `order_address_icirelais`;
+
+CREATE TABLE `order_address_icirelais`
+(
+    `id` INTEGER NOT NULL,
+    `code` VARCHAR(10) NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_order_address_icirelais_order_address_id`
+        FOREIGN KEY (`id`)
+        REFERENCES `order_address` (`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -85,7 +85,13 @@ CREATE TABLE `dpdpickup_price`
     `price` DECIMAL(16,2) NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    INDEX `FI_dpdpickup_price_area_id` (`area_id`),
+    CONSTRAINT `fk_dpdpickup_price_area_id`
+        FOREIGN KEY (`area_id`)
+        REFERENCES `area` (`id`)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

@@ -7,6 +7,7 @@ use \PDO;
 use DpdPickup\Model\DpdpickupPrice as ChildDpdpickupPrice;
 use DpdPickup\Model\DpdpickupPriceQuery as ChildDpdpickupPriceQuery;
 use DpdPickup\Model\Map\DpdpickupPriceTableMap;
+use DpdPickup\Model\Thelia\Model\Area;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -15,7 +16,6 @@ use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
-use Thelia\Model\Area;
 
 /**
  * Base class that represents a query for the 'dpdpickup_price' table.
@@ -49,14 +49,14 @@ use Thelia\Model\Area;
  *
  * @method     ChildDpdpickupPrice findOneById(int $id) Return the first ChildDpdpickupPrice filtered by the id column
  * @method     ChildDpdpickupPrice findOneByAreaId(int $area_id) Return the first ChildDpdpickupPrice filtered by the area_id column
- * @method     ChildDpdpickupPrice findOneByWeight(double $weight) Return the first ChildDpdpickupPrice filtered by the weight column
+ * @method     ChildDpdpickupPrice findOneByWeight(string $weight) Return the first ChildDpdpickupPrice filtered by the weight column
  * @method     ChildDpdpickupPrice findOneByPrice(string $price) Return the first ChildDpdpickupPrice filtered by the price column
  * @method     ChildDpdpickupPrice findOneByCreatedAt(string $created_at) Return the first ChildDpdpickupPrice filtered by the created_at column
  * @method     ChildDpdpickupPrice findOneByUpdatedAt(string $updated_at) Return the first ChildDpdpickupPrice filtered by the updated_at column
  *
  * @method     array findById(int $id) Return ChildDpdpickupPrice objects filtered by the id column
  * @method     array findByAreaId(int $area_id) Return ChildDpdpickupPrice objects filtered by the area_id column
- * @method     array findByWeight(double $weight) Return ChildDpdpickupPrice objects filtered by the weight column
+ * @method     array findByWeight(string $weight) Return ChildDpdpickupPrice objects filtered by the weight column
  * @method     array findByPrice(string $price) Return ChildDpdpickupPrice objects filtered by the price column
  * @method     array findByCreatedAt(string $created_at) Return ChildDpdpickupPrice objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return ChildDpdpickupPrice objects filtered by the updated_at column
@@ -326,12 +326,12 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByWeight(1234); // WHERE weight= 1234
+     * $query->filterByWeight(1234); // WHERE weight = 1234
      * $query->filterByWeight(array(12, 34)); // WHERE weight IN (12, 34)
      * $query->filterByWeight(array('min' => 12)); // WHERE weight > 12
      * </code>
      *
-     * @param     mixed $weightMax The value to use as filter.
+     * @param     mixed $weight The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -490,16 +490,16 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Thelia\Model\Area object
+     * Filter the query by a related \DpdPickup\Model\Thelia\Model\Area object
      *
-     * @param \Thelia\Model\Area|ObjectCollection $area The related object(s) to use as filter
+     * @param \DpdPickup\Model\Thelia\Model\Area|ObjectCollection $area The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildDpdpickupPriceQuery The current query, for fluid interface
      */
     public function filterByArea($area, $comparison = null)
     {
-        if ($area instanceof \Thelia\Model\Area) {
+        if ($area instanceof \DpdPickup\Model\Thelia\Model\Area) {
             return $this
                 ->addUsingAlias(DpdpickupPriceTableMap::AREA_ID, $area->getId(), $comparison);
         } elseif ($area instanceof ObjectCollection) {
@@ -510,7 +510,7 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
             return $this
                 ->addUsingAlias(DpdpickupPriceTableMap::AREA_ID, $area->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByArea() only accepts arguments of type \Thelia\Model\Area or Collection');
+            throw new PropelException('filterByArea() only accepts arguments of type \DpdPickup\Model\Thelia\Model\Area or Collection');
         }
     }
 
@@ -555,13 +555,13 @@ abstract class DpdpickupPriceQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \Thelia\Model\AreaQuery A secondary query class using the current class as primary query
+     * @return   \DpdPickup\Model\Thelia\Model\AreaQuery A secondary query class using the current class as primary query
      */
     public function useAreaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinArea($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Area', '\Thelia\Model\AreaQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'Area', '\DpdPickup\Model\Thelia\Model\AreaQuery');
     }
 
     /**

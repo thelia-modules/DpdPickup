@@ -20,4 +20,5 @@ class IcirelaisFreeshippingQuery extends BaseIcirelaisFreeshippingQuery
     {
         return $this->orderById('desc')->findOne()->getActive();
     }
-} // IcirelaisFreeshippingQuery
+}
+// IcirelaisFreeshippingQuery
