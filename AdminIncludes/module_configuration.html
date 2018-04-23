@@ -1,32 +1,34 @@
+
 <div class="row">
-	<!-- Errors -->
-	{loop name="checkrights" type="dpdpickup.check.rights"}
-	<div class="alert alert-danger">
-    	<p>{$ERRMES} {$ERRFILE} | {intl d='dpdpickup.ai' l="Please change the access rights"}.</p>
+    <!-- Errors -->
+    {loop name="checkrights" type="dpdpickup.check.rights"}
+    <div class="alert alert-danger">
+        <p>{$ERRMES} {$ERRFILE} | {intl d='dpdpickup.ai' l="Please change the access rights"}.</p>
     </div>
-	{/loop}
+    {/loop}
 </div>
+
 {elseloop rel="checkrights"}
     {loop type="currency" name="curncy" default_only=1}
         {$currencySymbol = $SYMBOL}
     {/loop}
 
     {* Calc tab selection *}
-    {assign var="tab" value="0"}
-    {if isset($smarty.get.current_tab)}
-        {if $smarty.get.current_tab eq "import_exaprint"}
-            {assign var="tab" value="1"}
-        {/if}
-        {if $smarty.get.current_tab eq "configure_export_exaprint"}
-            {assign var="tab" value="2"}
-        {/if}
-        {if $smarty.get.current_tab eq "price_slices_tab"}
-            {assign var="tab" value="3"}
-        {/if}
-        {if $smarty.get.current_tab eq "config_tab"}
-            {assign var="tab" value="4"}
-        {/if}
-    {/if}
+        {assign var="tab" value="0"}
+            {if isset($smarty.get.current_tab)}
+                {if $smarty.get.current_tab eq "import_exaprint"}
+                    {assign var="tab" value="1"}
+                {/if}
+                {if $smarty.get.current_tab eq "configure_export_exaprint"}
+                    {assign var="tab" value="2"}
+                {/if}
+                {if $smarty.get.current_tab eq "price_slices_tab"}
+                    {assign var="tab" value="3"}
+                {/if}
+                {if $smarty.get.current_tab eq "config_tab"}
+                    {assign var="tab" value="4"}
+                {/if}
+            {/if}
 
     <div class="general-block-decorator">
         <div class="row">
@@ -43,241 +45,250 @@
 
                     <!-- Configuration tab -->
                     <div id="configuration_tab" class="tab-pane {if $tab eq "4"}active{/if} form-container">
-                        {form name='dpdpickup.config.form'}
-                            <form action="{url path='/admin/module/dpdpickup/config'}" method="post">
-                                {form_hidden_fields form=$form}
+                    {form name='dpdpickup.config.form'}
+                    <form action="{url path='/admin/module/dpdpickup/config'}" method="post">
+                        {form_hidden_fields form=$form}
 
-                                {if $form_error}
-                                    <div class="alert alert-danger">{$form_error_message}</div>
-                                {/if}
+                        {if $form_error}
+                            <div class="alert alert-danger">{$form_error_message}</div>
+                        {/if}
 
-                                {form_field form=$form field="default_status"}
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <label for="nochange">{intl l="Do not change" d='dpdpickup.ai'}</label>&nbsp;
-                                            </td>
-                                            <td>
-                                                <input type="radio" id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="processing">{intl l="Processing" d='dpdpickup.ai'}</label>&nbsp;
-                                            </td>
-                                            <td>
-                                                <input type="radio" id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="sent">{intl l="Sent" d='dpdpickup.ai'}</label>&nbsp;
-                                            </td>
-                                            <td>
-                                                <input type="radio" id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
-                                                <span>{intl l="If you choose this option, the exported orders would not be available on this page anymore" d='dpdpickup.ai'}</span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                {/form_field}
+                        {form_field form=$form field="default_status"}
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="nochange">{intl l="Do not change" d='dpdpickup.ai'}</label>&nbsp;
+                                </td>
+                                <td>
+                                    <input type="radio" id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
+                                </td>
+                            </tr>
 
-								<br/>
-								<br/>
-								  {render_form_field field="google_map_key"}
+                            <tr>
+                                <td>
+                                    <label for="processing">{intl l="Processing" d='dpdpickup.ai'}</label>&nbsp;
+                                </td>
+                                <td>
+                                    <input type="radio" id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
+                                </td>
+                            </tr>
 
-								  {render_form_field field="exclude_zip_code"}
+                            <tr>
+                                <td>
+                                    <label for="sent">{intl l="Sent" d='dpdpickup.ai'}</label>&nbsp;
+                                </td>
+                                <td>
+                                    <input type="radio" id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
+                                    <span>{intl l="If you choose this option, the exported orders would not be available on this page anymore" d='dpdpickup.ai'}</span>
+                                </td>
+                            </tr>
+                        </table>
+                        {/form_field}
 
-                                <br>
-                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success">{intl l='Save changes' d='dpdpickup.ai'} <span class="glyphicon glyphicon-ok"></span></button>
+                        <br/><br/>
+                        {render_form_field field="google_map_key"}
+                        {render_form_field field="exclude_zip_code"}
 
-                            </form>
-                        {/form}
-                    </div><!-- /config tab -->
+                        <br>
+                        <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-default btn-success">{intl l='Save changes' d='dpdpickup.ai'} <span class="glyphicon glyphicon-ok"></span></button>
 
-                    <div id="export_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
-                        {ifloop rel="list.dpdpickup.orders"}
-                            {form name="dpdpickup.selection"}
+                    </form>
+                    {/form}
+                </div><!-- /config tab -->
+
+                <div id="export_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
+                    {ifloop rel="list.dpdpickup.orders"}
+                        {form name="dpdpickup.selection"}
                             <form method="post" action="{url path="/admin/module/dpdpickup/exportgo"}">
                                 <div class="panel panel-default">
 
-                                    <div class="panel-heading clearfix">
-                                        {intl d='dpdpickup.ai' l="Change orders status after export"}
-                                    </div>
+                                        <div class="panel-heading clearfix">
+                                            {intl d='dpdpickup.ai' l="Change orders status after export"}
+                                        </div>
 
-                                    <div class="panel-body">
-                                        {form_field form=$form field="new_status_id"}
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <label for="nochange">{intl d='dpdpickup.ai' l="Do not change"}</label>&nbsp;
-                                                </td>
-                                                <td>
-                                                    <input type="radio"  id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <label for="processing">{intl d='dpdpickup.ai' l="Processing"}</label>&nbsp;
-                                                </td>
-                                                <td>
-                                                    <input type="radio"  id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <label for="sent">{intl d='dpdpickup.ai' l="Sent"}</label>&nbsp;
-                                                </td>
-                                                <td>
-                                                    <input type="radio"  id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
-                                                    <span>{intl d='dpdpickup.ai' l="If you choose this option, the exported orders would not be available on this page anymore"}</span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        {/form_field}
-                                    </div>
+                                        <div class="panel-body">
+                                            {form_field form=$form field="new_status_id"}
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <label for="nochange">{intl d='dpdpickup.ai' l="Do not change"}</label>&nbsp;
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio"  id="nochange" name="{$name}" value="nochange" {if $data eq "nochange"}checked{/if} />
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <label for="processing">{intl d='dpdpickup.ai' l="Processing"}</label>&nbsp;
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio"  id="processing" name="{$name}" value="processing" {if $data eq "processing"}checked{/if} />
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <label for="sent">{intl d='dpdpickup.ai' l="Sent"}</label>&nbsp;
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio"  id="sent" name="{$name}" value="sent" {if $data eq "sent"}checked{/if} />
+                                                        <span>{intl d='dpdpickup.ai' l="If you choose this option, the exported orders would not be available on this page anymore"}</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            {/form_field}
+                                        </div>
                                 </div>
-
                                 {form_hidden_fields form=$form}
 
-                                <table class="table table-striped table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                {intl d='dpdpickup.ai' l="REF"}
-                                            </th>
-                                            <th>
-                                                {intl d='dpdpickup.ai' l="Customer"}
-                                            </th>
-                                            <th>
-                                                {intl d='dpdpickup.ai' l="Date"}
-                                            </th>
-                                            <th class="text-right">
-                                                {intl d='dpdpickup.ai' l="Total taxed amount"}
-                                            </th>
-                                            <th class="text-center">
-                                                {intl d='dpdpickup.ai' l="Number of packages"}
-                                            </th>
-                                            <th class="text-center">
-                                                {intl d='dpdpickup.ai' l="Packages weight"}
-                                            </th>
-                                            <th class="text-center">
-                                                {intl d='dpdpickup.ai' l="Package warranty"}
-                                            </th>
-                                            <th class="text-center">
-                                                {intl d='dpdpickup.ai' l="Export"}
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="icirelais-orders-form-selection-container">
-                                        {loop name="list.dpdpickup.orders" type="dpdpickup.orders"}
+                                    <table class="table table-striped table-condensed">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <a href="{url path="/admin/order/update/%id" id=$ID}">{$REF}</a>
-                                                </td>
-                                                <td>
-                                                    {loop type='customer' name='pickup.customer' id=$CUSTOMER current='false'}
+                                                <th>
+                                                    {intl d='dpdpickup.ai' l="REF"}
+                                                </th>
+                                                <th>
+                                                    {intl d='dpdpickup.ai' l="Customer"}
+                                                </th>
+                                                <th>
+                                                    {intl d='dpdpickup.ai' l="Date"}
+                                                </th>
+                                                <th class="text-right">
+                                                    {intl d='dpdpickup.ai' l="Total taxed amount"}
+                                                </th>
+                                                <th class="text-center">
+                                                    {intl d='dpdpickup.ai' l="Number of packages"}
+                                                </th>
+                                                <th class="text-center">
+                                                    {intl d='dpdpickup.ai' l="Packages weight"}
+                                                </th>
+                                                <th class="text-center">
+                                                    {intl d='dpdpickup.ai' l="Package warranty"}
+                                                </th>
+                                                <th class="text-center">
+                                                    {intl d='dpdpickup.ai' l="Export"}
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="icirelais-orders-form-selection-container">
+                                            {loop name="list.dpdpickup.orders" type="dpdpickup.orders"}
+                                                <tr>
+                                                    <td>
+                                                        <a href="{url path="/admin/order/update/%id" id=$ID}">{$REF}</a>
+                                                    </td>
+
+                                                    <td>
+                                                        {loop type='customer' name='pickup.customer' id=$CUSTOMER current='false'}
                                                         <a href="{url path="/admin/customer/update" customer_id=$ID}">{$LASTNAME} {$FIRSTNAME}</a>
-                                                    {/loop}
-                                                </td>
-                                                <td>
-                                                    {format_date date=$CREATE_DATE output="datetime"}
-                                                </td>
-                                                <td class="text-right">
-                                                    {loop name="list.dpdpickup.getcurrency" type="currency" id=$CURRENCY}
+                                                        {/loop}
+                                                    </td>
+
+                                                    <td>
+                                                        {format_date date=$CREATE_DATE output="datetime"}
+                                                    </td>
+
+                                                    <td class="text-right">
+                                                        {loop name="list.dpdpickup.getcurrency" type="currency" id=$CURRENCY}
                                                         {format_money number=$TOTAL_TAXED_AMOUNT symbol=$SYMBOL}
-                                                    {/loop}
-                                                </td>
-                                                <td>
-                                                    {form_field form=$form field="pkgNumber" value_key="{$LOOP_COUNT}"}
+                                                        {/loop}
+                                                    </td>
+
+                                                    <td>
+                                                        {form_field form=$form field="pkgNumber" value_key="{$LOOP_COUNT}"}
                                                         <input class="form-control text-center" style="width:70px; margin:auto;" type="text" name="{$name}" value="1" />
-                                                    {/form_field}
-                                                </td>
-                                                <td>
-                                                    {form_field form=$form field="pkgWeight" value_key="{$LOOP_COUNT}"}
+                                                        {/form_field}
+                                                    </td>
+
+                                                    <td>
+                                                        {form_field form=$form field="pkgWeight" value_key="{$LOOP_COUNT}"}
                                                         <input class="form-control text-center" style="width:70px; margin:auto;" type="text" name="{$name}" value="0" />
+                                                        {/form_field}
+                                                    </td>
+
+                                                    {form_field form=$form field="assur" value_key="{$LOOP_COUNT}"}
+                                                    <td class="text-center">
+                                                        <input type="checkbox" name="{$name}" value="true" />
+                                                    </td>
                                                     {/form_field}
-                                                </td>
-                                                {form_field form=$form field="assur" value_key="{$LOOP_COUNT}"}
-                                                <td class="text-center">
-                                                    <input type="checkbox" name="{$name}" value="true" />
-                                                </td>
-                                                {/form_field}
-                                                {form_field form=$form field="order_ref_check" value_key="{$LOOP_COUNT}"}
-                                                <td class="text-center">
-                                                    <input type="checkbox" name="{$name}" value="true" class="export-checkbox"/>
-                                                </td>
-                                                {/form_field}
-                                                {form_field form=$form field="order_ref" value_key="{$LOOP_COUNT}"}
-                                                <td class="text-center">
-                                                    <input type="hidden" name="{$name}" value="{$REF|replace:'.':'-'}" />
-                                                </td>
-                                                {/form_field}
-                                            </tr>
-                                        {/loop}
-                                    </tbody>
-                                </table>
 
-                                <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-primary" title="{intl d='dpdpickup.ai' l='Export'}">{intl d='dpdpickup.ai' l='Export'} <span class="glyphicon glyphicon-ok"></span></button>
+                                                    {form_field form=$form field="order_ref_check" value_key="{$LOOP_COUNT}"}
+                                                    <td class="text-center">
+                                                        <input type="checkbox" name="{$name}" value="true" class="export-checkbox"/>
+                                                    </td>
+                                                    {/form_field}
 
-                                <div class="pull-right">
-                                    <button type="button" id="check-all-but" title="{intl d='dpdpickup.ai' l="Check all"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Check all"}</button>
-                                    <button type="button" id="uncheck-all-but" title="{intl d='dpdpickup.ai' l="Uncheck all"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Uncheck all"}</button>
-                                    <button type="button" id="reverse-all-but" title="{intl d='dpdpickup.ai' l="Reverse selection"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Reverse selection"}</button>
-                                </div>
-                            </form>
-                            {/form}
-                        {/ifloop}
+                                                    {form_field form=$form field="order_ref" value_key="{$LOOP_COUNT}"}
+                                                    <td class="text-center">
+                                                        <input type="hidden" name="{$name}" value="{$REF|replace:'.':'-'}" />
+                                                    </td>
+                                                    {/form_field}
+                                                </tr>
+                                            {/loop}
+                                        </tbody>
+                                    </table>
 
-                        {elseloop rel='list.dpdpickup.orders'}
-                            <div class="alert alert-warning">
-                                {intl l="There are currently no pending order to ship by DpdPickup." d='dpdpickup.ai'}
-                            </div>
-                        {/elseloop}
-                    </div>
+                                        <button type="submit" name="save_mode" value="stay" class="form-submit-button btn btn-sm btn-primary" title="{intl d='dpdpickup.ai' l='Export'}">{intl d='dpdpickup.ai' l='Export'} <span class="glyphicon glyphicon-ok"></span></button>
 
-                    <div id="import_exaprint" class="tab-pane {if $tab eq "1"}active{/if} form-container">
-
-                        {flash type='update-orders-result'}
-                            <div class="alert alert-success">
-                                {$MESSAGE}
-                            </div>
-                        {/flash}
-
-                        {form name='dpdpickup.import'}
-                            <form action="{url path='/admin/module/dpdpickup/import'}" method="post" {form_enctype form=$form}>
-                                {form_hidden_fields form=$form}
-                                {render_form_field form=$form field="success_url" value={url path="/admin/module/DpdPickup"} current_tab="import_exaprint"}
-
-                                {if $form_error}
-                                    <div class="alert alert-danger">{$form_error_message}</div>
-                                {/if}
-
-                                {form_field form=$form field="import_file"}
-                                    <div class="form-group {if $error}has-error{/if}">
-                                        <label for="{$label_attr.for}" class="control-label">
-                                            {$label} :
-                                        </label>
-
-                                        <input type="file" id="{$label_attr.for}" name="{$name}" value="{$value}" required/>
-                                    </div>
-                                {/form_field}
-
-                                <button type="submit" class="btn btn-primary">{intl d='dpdpickup.ai' l='Upload'}</button>
+                                        <div class="pull-right">
+                                            <button type="button" id="check-all-but" title="{intl d='dpdpickup.ai' l="Check all"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Check all"}</button>
+                                            <button type="button" id="uncheck-all-but" title="{intl d='dpdpickup.ai' l="Uncheck all"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Uncheck all"}</button>
+                                            <button type="button" id="reverse-all-but" title="{intl d='dpdpickup.ai' l="Reverse selection"}" class="btn btn-xs btn-default">{intl d='dpdpickup.ai' l="Reverse selection"}</button>
+                                        </div>
 
                             </form>
                         {/form}
-                    </div>
+                    {/ifloop}
 
-                    <div id="configure_export_exaprint" class="tab-pane {if $tab eq "2"}active{/if} form-container">
-                    {form name="dpdpickup.export"} 
+                    {elseloop rel='list.dpdpickup.orders'}
+                        <div class="alert alert-warning">
+                            {intl l="There are currently no pending order to ship by DpdPickup." d='dpdpickup.ai'}
+                        </div>
+                    {/elseloop}
+                </div>
+
+                <div id="import_exaprint" class="tab-pane {if $tab eq "1"}active{/if} form-container">
+
+                    {flash type='update-orders-result'}
+                        <div class="alert alert-success">
+                            {$MESSAGE}
+                        </div>
+                    {/flash}
+
+                    {form name='dpdpickup.import'}
+                        <form action="{url path='/admin/module/dpdpickup/import'}" method="post" {form_enctype form=$form}>
+                            {form_hidden_fields form=$form}
+                                {render_form_field form=$form field="success_url" value={url path="/admin/module/DpdPickup"} current_tab="import_exaprint"}
+
+                                    {if $form_error}
+                                        <div class="alert alert-danger">{$form_error_message}</div>
+                                    {/if}
+
+                            {form_field form=$form field="import_file"}
+                                <div class="form-group {if $error}has-error{/if}">
+                                    <label for="{$label_attr.for}" class="control-label">
+                                        {$label} :
+                                    </label>
+
+                                    <input type="file" id="{$label_attr.for}" name="{$name}" value="{$value}" required/>
+                                </div>
+                            {/form_field}
+
+                            <button type="submit" class="btn btn-primary">{intl d='dpdpickup.ai' l='Upload'}</button>
+                        </form>
+                    {/form}
+                </div>
+
+                <div id="configure_export_exaprint" class="tab-pane {if $tab eq "2"}active{/if} form-container">
+                    {form name="dpdpickup.export"}
                         <form action="{url path="/admin/module/dpdpickup/export"}" method="POST" {form_enctype form=$form}>
                             {form_hidden_fields form=$form}
 
                             {if $form_error}
                                 <div class="alert alert-danger">{$form_error_message}</div>
                             {/if}
-        
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="panel panel-default">
@@ -285,92 +296,92 @@
                                         <div class="panel-body">
 
                                             {form_field form=$form field="exp_name"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_name'}" class="form-control" required/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_name'}" class="form-control" required/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_addr"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_addr'}" class="form-control" required/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_addr'}" class="form-control" required/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_addr2"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_addr2'}" class="form-control"/>
-                                            </div>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_addr2'}" class="form-control"/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_zipcode"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_zipcode'}" class="form-control" {literal}pattern="((2[A-B])|(\d{2}))\d{3}"{/literal} required/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_zipcode'}" class="form-control" {literal}pattern="((2[A-B])|(\d{2}))\d{3}"{/literal} required/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_city"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_city'}" class="form-control" required/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_city'}" class="form-control" required/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_tel"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control" required/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control" required/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_mobile"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_mobile'}" {literal}pattern="0[6-7]{1}\d{8}"{/literal} class="form-control" required/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_mobile'}" {literal}pattern="0[6-7]{1}\d{8}"{/literal} class="form-control" required/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_mail"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="email" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_mail'}" class="form-control" required/>
-                                            </div>
+                                                    <input type="email" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_mail'}" class="form-control" required/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="exp_dpdcode"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_dpdcode'}" class="form-control" required/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='exp_dpdcode'}" class="form-control" required/>
+                                                </div>
                                             {/form_field}
                                         </div>
                                     </div>
@@ -381,50 +392,49 @@
                                         <div class="panel-body">
 
                                             {form_field form=$form field="return_type"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <select id="{$label_attr.for}" name="{$name}" class="form-control js_select_return_type">
-                                                    <option value="0" {if $value == 0}selected{/if}>{intl l='No return' d='dpdpickup.ai'}</option>
-                                                    <option value="3" {if $value == 3}selected{/if}>{intl l='Return on demand' d='dpdpickup.ai'}</option>
-                                                    <option value="4" {if $value == 4}selected{/if}>{intl l='Prepared return' d='dpdpickup.ai'}</option>
-                                                </select>
-                                            </div>
+                                                    <select id="{$label_attr.for}" name="{$name}" class="form-control js_select_return_type">
+                                                        <option value="0" {if $value == 0}selected{/if}>{intl l='No return' d='dpdpickup.ai'}</option>
+                                                        <option value="3" {if $value == 3}selected{/if}>{intl l='Return on demand' d='dpdpickup.ai'}</option>
+                                                        <option value="4" {if $value == 4}selected{/if}>{intl l='Prepared return' d='dpdpickup.ai'}</option>
+                                                    </select>
+                                                </div>
                                             {/form_field}
 
                                             <a id="js_btn_fill_return_field" href="#" class="btn btn-info  js_input_return_field">{intl l="Use the expeditor's address as return" d='dpdpickup.ai'}</a>
-
                                             <hr>
 
                                             {form_field form=$form field="return_name"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_name'}" class="form-control js_input_return_field"/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_name'}" class="form-control js_input_return_field"/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="return_addr"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_addr'}" class="form-control js_input_return_field"/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_addr'}" class="form-control js_input_return_field"/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="return_addr2"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_addr2'}" class="form-control js_input_return_field"/>
-                                            </div>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_addr2'}" class="form-control js_input_return_field"/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="return_zipcode"}
@@ -438,23 +448,23 @@
                                             {/form_field}
 
                                             {form_field form=$form field="return_city"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_city'}" class="form-control js_input_return_field"/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_city'}" class="form-control js_input_return_field"/>
+                                                </div>
                                             {/form_field}
 
                                             {form_field form=$form field="return_tel"}
-                                            <div class="form-group {if $error}has-error{/if}">
-                                                <label for="{$label_attr.for}" class="control-label">
-                                                    {$label} :
-                                                </label>
+                                                <div class="form-group {if $error}has-error{/if}">
+                                                    <label for="{$label_attr.for}" class="control-label">
+                                                        {$label} :
+                                                    </label>
 
-                                                <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control  js_input_return_field"/>
-                                            </div>
+                                                    <input type="text" id="{$label_attr.for}" name="{$name}" value="{$value}" placeholder="{intl d='dpdpickup.ai' l='return_tel'}" {literal}pattern="0([1-5]|[8-9]){1}\d{8}"{/literal} class="form-control  js_input_return_field"/>
+                                                </div>
                                             {/form_field}
                                         </div>
                                     </div>
@@ -466,71 +476,76 @@
                             </div>
                         </form>
                     {/form}
+                </div>
+
+                <div id="prices_slices_tab" class="tab-pane {if $tab eq "3"}active{/if} form-container">
+
+                    <div class="alert alert-info">
+                        <p>{intl d='dpdpickup.ai' l="Ici Relais Module allows you to send your products in France."}</p>
                     </div>
 
-                    <div id="prices_slices_tab" class="tab-pane {if $tab eq "3"}active{/if} form-container">
+                    <div class="general-block-decorator">
 
-                        <div class="alert alert-info">
-                            <p>{intl d='dpdpickup.ai' l="Ici Relais Module allows you to send your products in France."}</p>
-                        </div>
+                        {loop type="dpdpickup.delivery.mode" name="dpdpickup.delivery.mode"}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <!-- checkbox free shipping -->
+                                    {assign var="isIcirelaisFreeShipping" value=0}
+                                        {form  name="dpdpickup.freeshipping.form"}
+                                            <form action="{url path="/admin/module/dpdpickup/freeshipping"}" method="post" id="freeshippingform">
+                                                {form_hidden_fields form=$form}
 
-                        <div class="general-block-decorator">
+                                                    {form_field form=$form field="freeshipping"}
+                                                        <label>
+                                                            {$label}
+                                                        </label>
 
-						{loop type="dpdpickup.delivery.mode" name="dpdpickup.delivery.mode"}
-                        <div class="row">
-                            <div class="col-md-4">
-                            <!-- checkbox free shipping -->
-                            {assign var="isIcirelaisFreeShipping" value=0}
-                            {form  name="dpdpickup.freeshipping.form"}
-                                <form action="{url path="/admin/module/dpdpickup/freeshipping"}" method="post" id="freeshippingform">
-                                    {form_hidden_fields form=$form}
+                                                        <div class="switch-small freeshipping-activation-DpdPickup" data-id="0" data-on="success" data-off="danger" data-on-label="<i class='glyphicon glyphicon-ok-circle'></i>" data-off-label="<i class='glyphicon glyphicon-remove-circle'></i>">
+                                                            <input type="checkbox" name="{$name}" value="true" {if $data}checked{assign var="isIcirelaisFreeShipping" value=1}{/if} />
+                                                        </div>
+                                                    {/form_field}
+                                            </form>
+                                        {/form}
+                                </div>
 
-                                    {form_field form=$form field="freeshipping"}
-                                    <label>
-                                        {$label}
-                                    </label>
+                                <div class="col-md-6" id="freeshipping-from-{$deliveryModeId}" {if $isSoColissimoFreeShipping eq 1} style="display:none;" {/if}>
+                                    {form  name="dpdpickup.freeshipping.amount.form"}
+                                        <form action="{url path="/admin/module/dpdpickup/freeshipping_amount"}"  method="post">
+                                            {form_hidden_fields form=$form}
 
-                                    <div class="switch-small freeshipping-activation-DpdPickup" data-id="0" data-on="success" data-off="danger" data-on-label="<i class='glyphicon glyphicon-ok-circle'></i>" data-off-label="<i class='glyphicon glyphicon-remove-circle'></i>">
-                                        <input type="checkbox" name="{$name}" value="true" {if $data}checked{assign var="isIcirelaisFreeShipping" value=1}{/if} />
-                                    </div>
-                                    {/form_field}
-                                </form>
-                            {/form}
+                                                <div class="input-group">
+                                                    <span class="input-group-addon {if $FREESHIPPING_FROM}alert-success{/if}">
+                                                        {intl l="Or activate free shipping from (€) :" d="dpdpickup.ai"}
+                                                    </span>
+
+                                                    {form_field form=$form field="amount"}
+                                                        <input type="number" name="{$name}" class="form-control" value="{$FREESHIPPING_FROM}" />
+                                                    {/form_field}
+
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="submit">{intl l="Save"}</button>
+                                                    </span>
+                                                </div>
+                                        </form>
+                                    {/form}
+                                </div>
                             </div>
-								<div class="col-md-6" id="freeshipping-from-{$deliveryModeId}" {if $isSoColissimoFreeShipping eq 1} style="display:none;" {/if}>
-								{form  name="dpdpickup.freeshipping.amount.form"}
-                                <form action="{url path="/admin/module/dpdpickup/freeshipping_amount"}"  method="post">
-                                	{form_hidden_fields form=$form}
-
-                                    <div class="input-group">
-                                    <span class="input-group-addon {if $FREESHIPPING_FROM}alert-success{/if}">{intl l="Or activate free shipping from (€) :" d="dpdpickup.ai"}</span>
-
-                                    {form_field form=$form field="amount"}
-                                    <input type="number" name="{$name}" class="form-control" value="{$FREESHIPPING_FROM}" />
-                                    {/form_field}
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="submit">{intl l="Save"}</button>
-                                    </span>
-                                    </div>
-                                </form>
-                                {/form}
-                            </div>
-                        </div>
                         {/loop}
+                    </div>
 
-											<br/><br/>
-                            <div id="table-prices-icirelais" {if $isIcirelaisFreeShipping eq 1} style="display:none;" {/if}>
-                                <!-- Prices editing -->
-                                {* -- Add price slice confirmation dialog ----------------------------------- *}
-                                {loop type="area" name="list area" backend_context=true}
+                    <br/><br/>
+                    <div id="table-prices-icirelais" {if $isIcirelaisFreeShipping eq 1} style="display:none;" {/if}>
+                        <!-- Prices editing -->
+                        {* -- Add price slice confirmation dialog ----------------------------------- *}
+                            {loop type="area" name="list area" backend_context=true}
 
                                 {capture name="create_dialog"}
                                     <input type="hidden" name="operation" value="add"/>
-                                    <input type="hidden" name="area" value="{$ID}" />
-                                    <label for="weight_{$ID}">{intl d='dpdpickup.ai' l="Weight up to ... (kg)"}</label>
-                                    <input type="text" id="weight_{$ID}" name="weight" value="1" class="form-control" pattern="\d+\.?\d*" required/>
-                                    <label for="price_{$ID}">{intl d='dpdpickup.ai' l="Price (%sym)" sym=$currencySymbol}</label>
-                                    <input type="text" id="price_{$ID}" name="price" value="1" class="form-control" pattern="\d+\.?\d*" required/>
+                                        <input type="hidden" name="area" value="{$ID}" />
+                                            <label for="weight_{$ID}">{intl d='dpdpickup.ai' l="Weight up to ... (kg)"}</label>
+                                        <input type="text" id="weight_{$ID}" name="weight" value="1" class="form-control" pattern="\d+\.?\d*" required/>
+                                            <label for="price_{$ID}">{intl d='dpdpickup.ai' l="Price (%sym)" sym=$currencySymbol}</label>
+                                        <input type="text" id="price_{$ID}" name="price" value="1" class="form-control" pattern="\d+\.?\d*" required/>
                                 {/capture}
 
                                 {include
@@ -548,95 +563,93 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped table-condensed table-left-aligned">
                                         <caption class="clearfix">
-                                            {intl l="Area : "}{$NAME}
+                                            {intl d='dpdpickup.ai' l="Area : "}{$NAME}
                                             {loop type="auth" name="can_create" role="ADMIN" module="icirelais" access="CREATE"}
-                                            <a class="btn btn-default btn-primary pull-right" title="{intl d='dpdpickup.ai' l='Create a new price slice'}" href="#price_slice_create_dialog_{$ID}" data-toggle="modal">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </a>
+                                                <a class="btn btn-default btn-primary pull-right" title="{intl d='dpdpickup.ai' l='Create a new price slice'}" href="#price_slice_create_dialog_{$ID}" data-toggle="modal">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </a>
                                             {/loop}
                                         </caption>
                                         <thead>
-                                        <tr>
-                                            <th class="col-md-3">{intl  l="Weight up to ... (kg)"}</th>
-                                            <th class="col-md-5">{intl  l="Price (%sym)" sym=$currencySymbol}</th>
-                                            <th class="col-md-1">{intl  l="Actions"}</th>
-                                        </tr>
+                                            <tr>
+                                                <th class="col-md-3">{intl d='dpdpickup.ai' l="Weight up to ... (kg)"}</th>
+                                                <th class="col-md-5">{intl d='dpdpickup.ai' l="Price (%sym)" sym=$currencySymbol}</th>
+                                                <th class="col-md-1">{intl d='dpdpickup.ai' l="Actions"}</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
 
-                                        {loop type="dpdpickup" name="icirelais" area=$ID}
-                                        {* -- EDIT price slice confirmation dialog ----------------------------------- *}
+                                            {loop type="dpdpickup" name="icirelais" area=$ID}
+                                                {* -- EDIT price slice confirmation dialog ----------------------------------- *}
 
-                                        {capture name="edit_dialog"}
-                                            <input type="hidden" name="operation" value="add"/>
-                                            <input type="hidden" name="id" value="{$SLICE_ID}"/>
-                                            <input type="hidden" name="area" value="{$AREA_ID}"/>
-                                            <input type="hidden" name="weight" value="{$MAX_WEIGHT}"/>
-                                            <label for="price_edit_{$ID}_{$MAX_WEIGHT}">{intl d='dpdpickup.ai' l='Price (%sym)' sym=$currencySymbol}</label>
-                                            <input type="text" id="price_edit_{$ID}_{$MAX_WEIGHT}" class="form-control" name="price" value="{$PRICE}" pattern="\d+\.?\d*" required/>
-                                        {/capture}
+                                                {capture name="edit_dialog"}
+                                                    <input type="hidden" name="operation" value="add"/>
+                                                    <input type="hidden" name="id" value="{$SLICE_ID}"/>
+                                                    <input type="hidden" name="area" value="{$AREA_ID}"/>
+                                                    <input type="hidden" name="weight" value="{$MAX_WEIGHT}"/>
+                                                    <label for="price_edit_{$ID}_{$MAX_WEIGHT}">{intl d='dpdpickup.ai' l='Price (%sym)' sym=$currencySymbol}</label>
+                                                    <input type="text" id="price_edit_{$ID}_{$MAX_WEIGHT}" class="form-control" name="price" value="{$PRICE}" pattern="\d+\.?\d*" required/>
+                                                {/capture}
 
-                                        {$dialog_id = "{$ID}_{$MAX_WEIGHT|replace:'.':'-'}"}
+                                                {$dialog_id = "{$ID}_{$MAX_WEIGHT|replace:'.':'-'}"}
 
-                                        {include
-                                            file = "includes/generic-confirm-dialog.html"
-                                            dialog_id    = "price_slice_edit_dialog_{$dialog_id}"
-                                            dialog_title = {intl d='dpdpickup.ai' l='Edit a price slice'}
-                                            dialog_message = {$smarty.capture.edit_dialog nofilter}
+                                                {include
+                                                    file = "includes/generic-confirm-dialog.html"
+                                                    dialog_id    = "price_slice_edit_dialog_{$dialog_id}"
+                                                    dialog_title = {intl d='dpdpickup.ai' l='Edit a price slice'}
+                                                    dialog_message = {$smarty.capture.edit_dialog nofilter}
 
-                                            form_action= {url path="/admin/module/dpdpickup/saveslice"}
-                                            dialog_ok_label     = {intl d='dpdpickup.ai' l="Edit"}
-                                            dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
-                                        }
+                                                    form_action= {url path="/admin/module/dpdpickup/saveslice"}
+                                                    dialog_ok_label     = {intl d='dpdpickup.ai' l="Edit"}
+                                                    dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
+                                                }
 
-                                        {* -- Delete price slice confirmation dialog ----------------------------------- *}
+                                                {* -- Delete price slice confirmation dialog ----------------------------------- *}
 
-                                         {capture name="delete_dialog"}
-                                            <input type="hidden" name="operation" value="delete"/>
-                                            <input type="hidden" name="id" value="{$SLICE_ID}"/>
-                                            <input type="hidden" name="area" value="{$AREA_ID}"/>
-                                            <input type="hidden" name="weight" value="{$MAX_WEIGHT}"/>
-                                            {intl l="Do you really want to delete this slice ?"}
-                                        {/capture}
+                                                {capture name="delete_dialog"}
+                                                    <input type="hidden" name="operation" value="delete"/>
+                                                    <input type="hidden" name="id" value="{$SLICE_ID}"/>
+                                                    <input type="hidden" name="area" value="{$AREA_ID}"/>
+                                                    <input type="hidden" name="weight" value="{$MAX_WEIGHT}"/>
+                                                    {intl d='dpdpickup.ai' l="Do you really want to delete this slice ?"}
+                                                {/capture}
 
-                                        {include
-                                            file = "includes/generic-confirm-dialog.html"
+                                                {include
+                                                    file = "includes/generic-confirm-dialog.html"
 
-                                            dialog_id    = "price_slice_delete_dialog_{$dialog_id}"
-                                            dialog_title = {intl d='dpdpickup.ai' l="Delete a price slice"}
-                                            dialog_message  = {$smarty.capture.delete_dialog nofilter}
+                                                    dialog_id    = "price_slice_delete_dialog_{$dialog_id}"
+                                                    dialog_title = {intl d='dpdpickup.ai' l="Delete a price slice"}
+                                                    dialog_message  = {$smarty.capture.delete_dialog nofilter}
 
-                                            form_action= {url path="/admin/module/dpdpickup/deleteslice"}
-                                            dialog_ok_label     = {intl d='dpdpickup.ai' l="Delete"}
-                                            dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
-                                        }
+                                                    form_action= {url path="/admin/module/dpdpickup/deleteslice"}
+                                                    dialog_ok_label     = {intl d='dpdpickup.ai' l="Delete"}
+                                                    dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
+                                                }
 
-                                        <tr>
-                                            <td>{$MAX_WEIGHT}</td>
-                                            <td>{$PRICE}</td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    {loop type="auth" name="can_change" role="ADMIN" module="dpdpickup" access="UPDATE"}
-                                                    <a class="btn btn-default btn-xs" title="{intl d='dpdpickup.ai' l='Edit this price slice'}" href="#price_slice_edit_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
-                                                        <span class="glyphicon glyphicon-edit"></span>
-                                                    </a>
-                                                    {/loop}
-                                                    {loop type="auth" name="can_change" role="ADMIN" module="dpdpickup" access="DELETE"}
-                                                    <a class="btn btn-default btn-xs" title="{intl d='dpdpickup.ai' l='Delete this price slice'}" href="#price_slice_delete_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
-                                                        <span class="glyphicon glyphicon-trash"></span>
-                                                    </a>
-                                                    {/loop}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        {/loop}
+                                                <tr>
+                                                    <td>{$MAX_WEIGHT}</td>
+                                                    <td>{$PRICE}</td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            {loop type="auth" name="can_change" role="ADMIN" module="dpdpickup" access="UPDATE"}
+                                                                <a class="btn btn-default btn-xs" title="{intl d='dpdpickup.ai' l='Edit this price slice'}" href="#price_slice_edit_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
+                                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                                </a>
+                                                            {/loop}
+
+                                                            {loop type="auth" name="can_change" role="ADMIN" module="dpdpickup" access="DELETE"}
+                                                                <a class="btn btn-default btn-xs" title="{intl d='dpdpickup.ai' l='Delete this price slice'}" href="#price_slice_delete_dialog_{$ID}_{$MAX_WEIGHT|replace:'.':'-'}" data-toggle="modal">
+                                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                                </a>
+                                                            {/loop}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {/loop}
                                         </tbody>
                                     </table>
                                 </div>
-                                {/loop}
-
-                            </div>
-                        </div>
+                            {/loop}
                     </div>
                 </div>
             </div>

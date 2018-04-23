@@ -29,10 +29,6 @@
 		<default key="_controller">DpdPickup\Controller\ExportExaprint::export</default>
 	</route>
 
-	<route id="dpdpickup.edit.prices" path="/admin/module/dpdpickup/prices" methods="post">
-		<default key="_controller">DpdPickup\Controller\EditPrices::editprices</default>
-	</route>
-
     <route id="dpdpickup.edit.freeshipping" path="/admin/module/dpdpickup/freeshipping" methods="post">
         <default key="_controller">DpdPickup\Controller\FreeShipping::set</default>
     </route>
