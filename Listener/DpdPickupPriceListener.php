@@ -8,7 +8,6 @@
 
 namespace DpdPickup\Listener;
 
-
 use DpdPickup\Event\DpdPickupEvents;
 use DpdPickup\Event\DpdPickupPriceEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -1,7 +1,7 @@
 <?php
 /*************************************************************************************/
 /*                                                                                   */
-/*      Thelia	                                                                     */
+/*      Thelia                                                                       */
 /*                                                                                   */
 /*      Copyright (c) OpenStudio                                                     */
 /*      email : info@thelia.net                                                      */
@@ -17,7 +17,7 @@
 /*      GNU General Public License for more details.                                 */
 /*                                                                                   */
 /*      You should have received a copy of the GNU General Public License            */
-/*	    along with this program. If not, see <http://www.gnu.org/licenses/>.     */
+/*      along with this program. If not, see <http://www.gnu.org/licenses/>.         */
 /*                                                                                   */
 /*************************************************************************************/
 
@@ -25,9 +25,7 @@ namespace DpdPickup\Controller;
 
 use DpdPickup\Form\ExportExaprintForm;
 use DpdPickup\DpdPickup;
-use DpdPickup\Form\ExportExaprintFormReturn;
 use Thelia\Controller\Admin\BaseAdminController;
-use Thelia\Core\Translation\Translator;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Model\Exception\InvalidArgumentException;
@@ -41,11 +39,13 @@ class ExportExaprint extends BaseAdminController
 {
     public function export()
     {
-        if (null !== $response = $this->checkAuth(
-                array(AdminResources::MODULE),
-                array('DpdPickup'),
-                AccessManager::UPDATE
-            )) {
+        if (null !== $response =
+                $this->checkAuth(
+                    array(AdminResources::MODULE),
+                    array('DpdPickup'),
+                    AccessManager::UPDATE
+                )
+        ) {
             return $response;
         }
 
@@ -129,7 +129,13 @@ class ExportExaprint extends BaseAdminController
             $field = $vform->get($key);
             if (empty($field->getData())) {
                 $translatedFieldName = $this->getTranslator()->trans($field->getName(), [], DpdPickup::DOMAIN_ADMIN);
-                throw new InvalidArgumentException($this->getTranslator()->trans("Empty value not allowed", [], DpdPickup::DOMAIN)." : ".$translatedFieldName);
+                throw new InvalidArgumentException(
+                    $this->getTranslator()->trans(
+                        "Empty value not allowed",
+                        [],
+                        DpdPickup::DOMAIN
+                    )." : ".$translatedFieldName
+                );
             }
         }
     }

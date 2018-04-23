@@ -1,7 +1,7 @@
 <?php
 /*************************************************************************************/
 /*                                                                                   */
-/*      Thelia	                                                                     */
+/*      Thelia                                                                       */
 /*                                                                                   */
 /*      Copyright (c) OpenStudio                                                     */
 /*      email : info@thelia.net                                                      */
@@ -17,23 +17,22 @@
 /*      GNU General Public License for more details.                                 */
 /*                                                                                   */
 /*      You should have received a copy of the GNU General Public License            */
-/*	    along with this program. If not, see <http://www.gnu.org/licenses/>.         */
+/*      along with this program. If not, see <http://www.gnu.org/licenses/>.         */
 /*                                                                                   */
 /*************************************************************************************/
 
 namespace DpdPickup\Loop;
 
 use DpdPickup\DpdPickup;
-use Thelia\Core\Translation\Translator;
-use Thelia\Log\Tlog;
-use Thelia\Model\AddressQuery;
-use Thelia\Core\Template\Loop\Address;
-use Thelia\Core\Template\Element\PropelSearchLoopInterface;
 use Thelia\Core\Template\Element\BaseLoop;
 use Thelia\Core\Template\Element\LoopResult;
 use Thelia\Core\Template\Element\LoopResultRow;
-use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
+use Thelia\Core\Template\Element\PropelSearchLoopInterface;
 use Thelia\Core\Template\Loop\Argument\Argument;
+use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
+use Thelia\Core\Translation\Translator;
+use Thelia\Log\Tlog;
+use Thelia\Model\AddressQuery;
 
 /**
  * Class DpdPickupAround
@@ -150,9 +149,13 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
             }
 
             $hours = [];
-            foreach ($item->OPENING_HOURS_ITEMS->OPENING_HOURS_ITEM as $openingHoursItem) {
 
-                $day = Translator::getInstance()->trans('day_' . (string)$openingHoursItem->DAY_ID, [], DpdPickup::DOMAIN);
+            foreach ($item->OPENING_HOURS_ITEMS->OPENING_HOURS_ITEM as $openingHoursItem) {
+                $day = Translator::getInstance()->trans(
+                    'day_' . (string)$openingHoursItem->DAY_ID,
+                    [],
+                    DpdPickup::DOMAIN
+                );
                 if (!isset($hours[$day])) {
                     $hours[$day] = [];
                 }

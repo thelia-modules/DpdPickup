@@ -1,6 +1,7 @@
 <?php
 
 namespace DpdPickup\Event;
+
 use DpdPickup\Model\DpdpickupPrice;
 use Thelia\Core\Event\ActionEvent;
 
