@@ -12,6 +12,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\PropelException;
@@ -25,6 +26,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * TableMap class name
      */
     const TABLE_MAP = '\\DpdPickup\\Model\\Map\\IcirelaisFreeshippingTableMap';
+
 
     /**
      * attribute to determine if this object has previously been saved.
@@ -293,9 +295,9 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * $book->importFrom('JSON', '{"Id":9012,"Title":"Don Juan","ISBN":"0140422161","Price":12.99,"PublisherId":1234,"AuthorId":5678}');
      * </code>
      *
-     * @param mixed  $parser A AbstractParser instance,
+     * @param mixed $parser A AbstractParser instance,
      *                       or a format name ('XML', 'YAML', 'JSON', 'CSV')
-     * @param string $data   The source data to import from
+     * @param string $data The source data to import from
      *
      * @return IcirelaisFreeshipping The current object, for fluid interface
      */
@@ -345,20 +347,22 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Get the [id] column value.
      *
-     * @return int
+     * @return   int
      */
     public function getId()
     {
+
         return $this->id;
     }
 
     /**
      * Get the [active] column value.
      *
-     * @return boolean
+     * @return   boolean
      */
     public function getActive()
     {
+
         return $this->active;
     }
 
@@ -366,8 +370,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
-     * @param string $format The date/time format string (either date()-style or strftime()-style).
-     *                       If format is NULL, then the raw \DateTime object will be returned.
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw \DateTime object will be returned.
      *
      * @return mixed Formatted date/time value as string or \DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
@@ -386,8 +390,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [updated_at] column value.
      *
      *
-     * @param string $format The date/time format string (either date()-style or strftime()-style).
-     *                       If format is NULL, then the raw \DateTime object will be returned.
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw \DateTime object will be returned.
      *
      * @return mixed Formatted date/time value as string or \DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
@@ -405,8 +409,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Set the value of [id] column.
      *
-     * @param  int                                    $v new value
-     * @return \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
+     * @param      int $v new value
+     * @return   \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -419,6 +423,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
             $this->modifiedColumns[IcirelaisFreeshippingTableMap::ID] = true;
         }
 
+
         return $this;
     } // setId()
 
@@ -429,8 +434,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
-     * @param  boolean|integer|string                 $v The new value
-     * @return \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
+     * @param      boolean|integer|string $v The new value
+     * @return   \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
      */
     public function setActive($v)
     {
@@ -447,15 +452,16 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
             $this->modifiedColumns[IcirelaisFreeshippingTableMap::ACTIVE] = true;
         }
 
+
         return $this;
     } // setActive()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed                                  $v string, integer (timestamp), or \DateTime value.
-     *                                                   Empty strings are treated as NULL.
-     * @return \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
+     * @param      mixed $v string, integer (timestamp), or \DateTime value.
+     *               Empty strings are treated as NULL.
+     * @return   \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -467,15 +473,16 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
             }
         } // if either are not null
 
+
         return $this;
     } // setCreatedAt()
 
     /**
      * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed                                  $v string, integer (timestamp), or \DateTime value.
-     *                                                   Empty strings are treated as NULL.
-     * @return \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
+     * @param      mixed $v string, integer (timestamp), or \DateTime value.
+     *               Empty strings are treated as NULL.
+     * @return   \DpdPickup\Model\IcirelaisFreeshipping The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -486,6 +493,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
                 $this->modifiedColumns[IcirelaisFreeshippingTableMap::UPDATED_AT] = true;
             }
         } // if either are not null
+
 
         return $this;
     } // setUpdatedAt()
@@ -581,10 +589,10 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      *
      * This will only work if the object has been saved and has a valid primary key set.
      *
-     * @param  boolean             $deep (optional) Whether to also de-associated any related objects.
-     * @param  ConnectionInterface $con  (optional) The ConnectionInterface connection to use.
+     * @param      boolean $deep (optional) Whether to also de-associated any related objects.
+     * @param      ConnectionInterface $con (optional) The ConnectionInterface connection to use.
      * @return void
-     * @throws PropelException     - if this object is deleted, unsaved or doesn't have pk match in db
+     * @throws PropelException - if this object is deleted, unsaved or doesn't have pk match in db
      */
     public function reload($deep = false, ConnectionInterface $con = null)
     {
@@ -619,7 +627,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Removes this object from datastore and sets delete attribute.
      *
-     * @param  ConnectionInterface $con
+     * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
      * @see IcirelaisFreeshipping::setDeleted()
@@ -662,8 +670,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * method.  This method wraps all precipitate database operations in a
      * single transaction.
      *
-     * @param  ConnectionInterface $con
-     * @return int                 The number of rows affected by this insert/update and any referring fk objects' save() operations.
+     * @param      ConnectionInterface $con
+     * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
      * @see doSave()
      */
@@ -724,8 +732,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * If the object is new, it inserts it; otherwise an update is performed.
      * All related objects are also updated in this method.
      *
-     * @param  ConnectionInterface $con
-     * @return int                 The number of rows affected by this insert/update and any referring fk objects' save() operations.
+     * @param      ConnectionInterface $con
+     * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
      * @see save()
      */
@@ -756,7 +764,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Insert the row in the database.
      *
-     * @param ConnectionInterface $con
+     * @param      ConnectionInterface $con
      *
      * @throws PropelException
      * @see doSave()
@@ -828,7 +836,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Update the row in the database.
      *
-     * @param ConnectionInterface $con
+     * @param      ConnectionInterface $con
      *
      * @return Integer Number of updated rows
      * @see doSave()
@@ -844,12 +852,12 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Retrieves a field from the object by name passed in as a string.
      *
-     * @param  string $name name
-     * @param  string $type The type of fieldname the $name is of:
-     *                      one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
-     *                      TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                      Defaults to TableMap::TYPE_PHPNAME.
-     * @return mixed  Value of field.
+     * @param      string $name name
+     * @param      string $type The type of fieldname the $name is of:
+     *                     one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
+     *                     TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
+     *                     Defaults to TableMap::TYPE_PHPNAME.
+     * @return mixed Value of field.
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
@@ -863,7 +871,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * Retrieves a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param  int   $pos position in xml schema
+     * @param      int $pos position in xml schema
      * @return mixed Value of field at $pos
      */
     public function getByPosition($pos)
@@ -893,11 +901,11 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * You can specify the key type of the array by passing one of the class
      * type constants.
      *
-     * @param string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME,
-     *                                        TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                                        Defaults to TableMap::TYPE_PHPNAME.
-     * @param boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
-     * @param array   $alreadyDumpedObjects   List of objects to skip to avoid recursion
+     * @param     string  $keyType (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME,
+     *                    TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
+     *                    Defaults to TableMap::TYPE_PHPNAME.
+     * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+     * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
@@ -919,18 +927,19 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+
         return $result;
     }
 
     /**
      * Sets a field from the object by name passed in as a string.
      *
-     * @param  string $name
-     * @param  mixed  $value field value
-     * @param  string $type  The type of fieldname the $name is of:
-     *                       one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
-     *                       TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                       Defaults to TableMap::TYPE_PHPNAME.
+     * @param      string $name
+     * @param      mixed  $value field value
+     * @param      string $type The type of fieldname the $name is of:
+     *                     one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
+     *                     TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
+     *                     Defaults to TableMap::TYPE_PHPNAME.
      * @return void
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
@@ -944,8 +953,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * Sets a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param  int   $pos   position in xml schema
-     * @param  mixed $value field value
+     * @param      int $pos position in xml schema
+     * @param      mixed $value field value
      * @return void
      */
     public function setByPosition($pos, $value)
@@ -979,8 +988,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param  array  $arr     An array to populate the object from.
-     * @param  string $keyType The type of keys the array uses.
+     * @param      array  $arr     An array to populate the object from.
+     * @param      string $keyType The type of keys the array uses.
      * @return void
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
@@ -1006,6 +1015,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
         if ($this->isColumnModified(IcirelaisFreeshippingTableMap::ACTIVE)) $criteria->add(IcirelaisFreeshippingTableMap::ACTIVE, $this->active);
         if ($this->isColumnModified(IcirelaisFreeshippingTableMap::CREATED_AT)) $criteria->add(IcirelaisFreeshippingTableMap::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(IcirelaisFreeshippingTableMap::UPDATED_AT)) $criteria->add(IcirelaisFreeshippingTableMap::UPDATED_AT, $this->updated_at);
+
         return $criteria;
     }
 
@@ -1027,7 +1037,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
 
     /**
      * Returns the primary key for this object (row).
-     * @return int
+     * @return   int
      */
     public function getPrimaryKey()
     {
@@ -1037,7 +1047,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Generic method to set the primary key (id column).
      *
-     * @param  int  $key Primary key.
+     * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
@@ -1051,6 +1061,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
+
         return null === $this->getId();
     }
 
@@ -1060,9 +1071,9 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param  object          $copyObj  An object of \DpdPickup\Model\IcirelaisFreeshipping (or compatible) type.
-     * @param  boolean         $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @param  boolean         $makeNew  Whether to reset autoincrement PKs and make the object new.
+     * @param      object $copyObj An object of \DpdPickup\Model\IcirelaisFreeshipping (or compatible) type.
+     * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+     * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
@@ -1084,8 +1095,8 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param  boolean                                $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \DpdPickup\Model\IcirelaisFreeshipping Clone of current object.
+     * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+     * @return                 \DpdPickup\Model\IcirelaisFreeshipping Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1121,7 +1132,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
      * objects with circular references (even in PHP 5.3). This is currently necessary
      * when using Propel in certain daemon or large-volume/high-memory operations.
      *
-     * @param boolean $deep Whether to also clear the references on all referrer objects.
+     * @param      boolean $deep Whether to also clear the references on all referrer objects.
      */
     public function clearAllReferences($deep = false)
     {
@@ -1145,7 +1156,7 @@ abstract class IcirelaisFreeshipping implements ActiveRecordInterface
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return ChildIcirelaisFreeshipping The current object (for fluent API support)
+     * @return     ChildIcirelaisFreeshipping The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {

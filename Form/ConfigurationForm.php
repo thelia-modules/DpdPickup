@@ -23,7 +23,7 @@ class ConfigurationForm extends BaseForm
      */
     protected function buildForm()
     {
-        if (null === $data = DpdPickup::getConfigValue('default_status')){
+        if (null === $data = DpdPickup::getConfigValue('default_status')) {
             $data = DpdPickup::NO_CHANGE;
         }
 
@@ -35,7 +35,11 @@ class ConfigurationForm extends BaseForm
                     'label' => $this->translator->trans('Change order status to', [], DpdPickup::DOMAIN),
                     'choices' => [
                         DpdPickup::NO_CHANGE => $this->translator->trans("Do not change", [], DpdPickup::DOMAIN),
-                        DpdPickup::PROCESS => $this->translator->trans("Set orders status as processing", [], DpdPickup::DOMAIN),
+                        DpdPickup::PROCESS => $this->translator->trans(
+                            "Set orders status as processing",
+                            [],
+                            DpdPickup::DOMAIN
+                        ),
                         DpdPickup::SEND => $this->translator->trans("Set orders status as sent", [], DpdPickup::DOMAIN)
                     ],
                     'required' => true,
@@ -63,7 +67,15 @@ class ConfigurationForm extends BaseForm
                     'constraints' => [],
                     'data'        => DpdPickup::getConfigExcludeZipCode(),
                     'label'       => $this->translator->trans("Exclude ZipCode", [], DpdPickup::DOMAIN),
-                    'label_attr'  => ['for' => 'exclude_zip_code', 'help' => $this->translator->trans('List of zip code separated by commas.', [], DpdPickup::DOMAIN)]
+                    'label_attr'  => [
+                        'for' => 'exclude_zip_code',
+                        'help' => $this->translator
+                            ->trans(
+                                'List of zip code separated by commas.',
+                                [],
+                                DpdPickup::DOMAIN
+                            )
+                    ]
                 ]
             );
 

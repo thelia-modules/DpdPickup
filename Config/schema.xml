@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database defaultIdMethod="native" name="thelia" namespace="DpdPickup\Model">
+
+	<table name="address_icirelais">
+		<column name="id" primaryKey="true" required="true" type="INTEGER" />
+		<column name="title_id" required="true" type="INTEGER" />
+		<column name="company" size="255" type="VARCHAR" />
+		<column name="firstname" required="true" size="255" type="VARCHAR" />
+		<column name="lastname" required="true" size="255" type="VARCHAR" />
+		<column name="address1" required="true" size="255" type="VARCHAR" />
+		<column name="address2" required="true" size="255" type="VARCHAR" />
+		<column name="address3" required="true" size="255" type="VARCHAR" />
+		<column name="zipcode" required="true" size="10" type="VARCHAR" />
+		<column name="city" required="true" size="255" type="VARCHAR" />
+		<column name="country_id" required="true" type="INTEGER" />
+		<column name="code" required="true" size="10" type="VARCHAR" />
+		<foreign-key foreignTable="customer_title" name="fk_address_icirelais_customer_title_id" onDelete="RESTRICT" onUpdate="RESTRICT">
+			<reference foreign="id" local="title_id" />
+		</foreign-key>
+		<foreign-key foreignTable="country" name="fk_address_icirelais_country_id" onDelete="RESTRICT" onUpdate="RESTRICT">
+			<reference foreign="id" local="country_id" />
+		</foreign-key>
+	</table>
+
 	<table name="order_address_icirelais">
         <column name="id" primaryKey="true" required="true" type="INTEGER" />
         <column name="code" size="10" type="VARCHAR" required="true" />
@@ -7,31 +29,23 @@
             <reference foreign="id" local="id" />
         </foreign-key>
     </table>
-    <table name="address_icirelais">
-    	<column name="id" primaryKey="true" required="true" type="INTEGER" />
-    	<column name="title_id" required="true" type="INTEGER" />
-	    <column name="company" size="255" type="VARCHAR" />
-	    <column name="firstname" required="true" size="255" type="VARCHAR" />
-	    <column name="lastname" required="true" size="255" type="VARCHAR" />
-	    <column name="address1" required="true" size="255" type="VARCHAR" />
-	    <column name="address2" required="true" size="255" type="VARCHAR" />
-	    <column name="address3" required="true" size="255" type="VARCHAR" />
-	    <column name="zipcode" required="true" size="10" type="VARCHAR" />
-	    <column name="city" required="true" size="255" type="VARCHAR" />
-    	<column name="country_id" required="true" type="INTEGER" />
-    	<column name="code" required="true" size="10" type="VARCHAR" />
-	    <foreign-key foreignTable="customer_title" name="fk_address_icirelais_customer_title_id" onDelete="RESTRICT" onUpdate="RESTRICT">
-	      <reference foreign="id" local="title_id" />
-	    </foreign-key>
-	    <foreign-key foreignTable="country" name="fk_address_country_id" onDelete="RESTRICT" onUpdate="RESTRICT">
-	      <reference foreign="id" local="country_id" />
-	    </foreign-key>
-    </table>
 
     <table name="icirelais_freeshipping">
         <column name="id" primaryKey="true" autoIncrement="true" required="true" type="INTEGER" />
         <column name="active" required="true" type="BOOLEAN" />
         <behavior name="timestampable" />
     </table>
-	<external-schema filename="/home/benjamin/dev/thelia2/local/config/schema.xml" referenceOnly="true" />
+
+	<table name="dpdpickup_price">
+		<column name="id" primaryKey="true" autoIncrement="true" required="true" type="INTEGER" />
+		<column name="area_id" required="true" type="INTEGER" />
+		<column name="weight" type="DECIMAL" scale="2" size="16"  />
+		<column name="price" required="true" type="DECIMAL" scale="2" size="16"  />
+		<behavior name="timestampable" />
+		<foreign-key foreignTable="area" name="fk_dpdpickup_price_area_id" onDelete="CASCADE" onUpdate="RESTRICT">
+			<reference foreign="id" local="area_id" />
+		</foreign-key>
+	</table>
+
+	<external-schema filename="local/config/schema.xml" referenceOnly="true" />
 </database>

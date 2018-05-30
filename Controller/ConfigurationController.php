@@ -18,7 +18,14 @@ class ConfigurationController extends BaseAdminController
 {
     public function configureAction()
     {
-        if (null !== $response = $this->checkAuth([AdminResources::MODULE], ['DpdPickup'], [AccessManager::CREATE, AccessManager::UPDATE])) {
+        if (null !== $response = $this
+                ->checkAuth(
+                    [AdminResources::MODULE],
+                    ['DpdPickup'],
+                    [AccessManager::CREATE,
+                        AccessManager::UPDATE]
+                )
+        ) {
             return $response;
         }
 
@@ -34,11 +41,14 @@ class ConfigurationController extends BaseAdminController
             DpdPickup::setConfigValue('default_status', $data["default_status"]);
             DpdPickup::setConfigGoogleMapKey($data["google_map_key"]);
             DpdPickup::setConfigExcludeZipCode($data["exclude_zip_code"]);
-
         } catch (FormValidationException $ex) {
             $errorMessage = $this->createStandardFormValidationErrorMessage($ex);
         } catch (\Exception $ex) {
-            $errorMessage = $this->getTranslator()->trans('Sorry, an error occurred: %err', ['%err' => $ex->getMessage()], DpdPickup::DOMAIN);
+            $errorMessage = $this->getTranslator()->trans(
+                'Sorry, an error occurred: %err',
+                ['%err' => $ex->getMessage()],
+                DpdPickup::DOMAIN
+            );
         }
 
         if ($errorMessage !== null) {

@@ -1,7 +1,7 @@
 <?php
 /*************************************************************************************/
 /*                                                                                   */
-/*      Thelia	                                                                     */
+/*      Thelia                                                                       */
 /*                                                                                   */
 /*      Copyright (c) OpenStudio                                                     */
 /*      email : info@thelia.net                                                      */
@@ -17,10 +17,9 @@
 /*      GNU General Public License for more details.                                 */
 /*                                                                                   */
 /*      You should have received a copy of the GNU General Public License            */
-/*	    along with this program. If not, see <http://www.gnu.org/licenses/>.         */
+/*      along with this program. If not, see <http://www.gnu.org/licenses/>.         */
 /*                                                                                   */
 /*************************************************************************************/
-
 namespace DpdPickup;
 
 use DpdPickup\DataTransformer\ZipCodeListTransformer;
@@ -37,6 +36,7 @@ use Thelia\Model\Country;
 use Thelia\Model\Map\AreaTableMap;
 use Thelia\Module\AbstractDeliveryModule;
 use Thelia\Module\Exception\DeliveryException;
+use Thelia\Model\MessageQuery;
 
 class DpdPickup extends AbstractDeliveryModule
 {
@@ -45,18 +45,14 @@ class DpdPickup extends AbstractDeliveryModule
 
     /** @var string */
     const UPDATE_PATH = __DIR__ . DS . 'Config' . DS . 'update';
-
     const DELIVERY_REF_COLUMN = 17;
     const ORDER_REF_COLUMN = 18;
-
     const STATUS_PAID = 2;
     const STATUS_PROCESSING = 3;
     const STATUS_SENT = 4;
-
     const NO_CHANGE = 'nochange';
     const PROCESS = 'processing';
     const SEND = 'sent';
-
     const KEY_EXPEDITOR_NAME = 'conf_exa_name';
     const KEY_EXPEDITOR_ADDR = 'conf_exa_addr';
     const KEY_EXPEDITOR_ADDR2 = 'conf_exa_addr2';
@@ -66,30 +62,46 @@ class DpdPickup extends AbstractDeliveryModule
     const KEY_EXPEDITOR_MOBILE = 'conf_exa_mobile';
     const KEY_EXPEDITOR_MAIL = 'conf_exa_mail';
     const KEY_EXPEDITOR_DPDCODE = 'conf_exa_expcode';
-
     const KEY_RETURN_NAME = 'return_name';
     const KEY_RETURN_ADDR = 'return_addr';
     const KEY_RETURN_ADDR2 = 'return_addr2';
     const KEY_RETURN_ZIPCODE = 'return_zipcode';
     const KEY_RETURN_CITY = 'return_city';
     const KEY_RETURN_TEL = 'return_tel';
-
     const KEY_RETURN_TYPE = 'return_type';
-
     const RETURN_NONE = 0;
     const RETURN_ON_DEMAND = 3;
     const RETURN_PREPARED = 4;
 
     protected $request;
     protected $dispatcher;
-
     private static $prices = null;
 
     public function postActivation(ConnectionInterface $con = null)
     {
-        $database = new Database($con->getWrappedConnection());
+        try {
+            DpdpickupPriceQuery::create()->findOne();
+        } catch (\Exception $e) {
+            $database = new Database($con->getWrappedConnection());
+            $database->insertSql(null, [__DIR__ . '/Config/thelia.sql']);
+            $database->insertSql(null, [__DIR__ . '/Config/insert_prices.sql']);
+        }
 
-        $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
+       try {
+           IcirelaisFreeshippingQuery::create()->findOne();
+        } catch (\Exception $e) {
+           if (null === IcirelaisFreeshippingQuery::create()->findOne()) {
+               $database = new Database($con->getWrappedConnection());
+               $database->insertSql(null, [__DIR__ . '/Config/insert_freeshipping.sql']);
+           }
+       }
+
+        try {
+            MessageQuery::create()->findOneByName('order_confirmation_icirelais');
+        } catch (\Exception $e) {
+            $database = new Database($con->getWrappedConnection());
+            $database->insertSql(null, [__DIR__ . '/Config/insert_message.sql']);
+        }
     }
 
     /**
@@ -106,9 +118,7 @@ class DpdPickup extends AbstractDeliveryModule
         if ($finder->count() === 0) {
             return;
         }
-
         $database = new Database($con);
-
         /** @var \Symfony\Component\Finder\SplFileInfo $updateSQLFile */
         foreach ($finder as $updateSQLFile) {
             if (version_compare($currentVersion, str_replace('.sql', '', $updateSQLFile->getFilename()), '<')) {
@@ -122,7 +132,6 @@ class DpdPickup extends AbstractDeliveryModule
         if (!null !== $amount = self::getConfigValue('free_shipping_amount')) {
             return (float) $amount;
         }
-
         return 0;
     }
 
@@ -135,30 +144,28 @@ class DpdPickup extends AbstractDeliveryModule
     {
         if (null === self::$prices) {
             self::$prices = [];
-
             $areaJoin = new Join(DpdpickupPriceTableMap::AREA_ID, AreaTableMap::ID, Criteria::INNER_JOIN);
             $dpdPickupPrices = DpdpickupPriceQuery::create()
                 ->addJoinObject($areaJoin)
                 ->withColumn(AreaTableMap::NAME, 'NAME')
                 ->orderByAreaId()
-                ->orderByWeightMax()
-                ->find()
-            ;
+                ->orderByWeight()
+                ->find();
 
             /** @var \DpdPickup\Model\DpdpickupPrice $dpdPickupPrice */
             foreach ($dpdPickupPrices as $dpdPickupPrice) {
-
                 if (!array_key_exists($dpdPickupPrice->getAreaId(), self::$prices)) {
                     self::$prices[$dpdPickupPrice->getAreaId()] = [
-                        '_info' => 'area ' . $dpdPickupPrice->getAreaId() . ' : ' . $dpdPickupPrice->getVirtualColumn('NAME'),
-                        'slices' => []
+                        '_info' => 'area ' .
+                            $dpdPickupPrice->getAreaId() . ' : ' .
+                            $dpdPickupPrice->getVirtualColumn('NAME'), 'slices' => []
                     ];
                 }
-
-                self::$prices[$dpdPickupPrice->getAreaId()]['slices'][(string)$dpdPickupPrice->getWeightMax()] = $dpdPickupPrice->getPrice();
+                self::$prices[
+                    $dpdPickupPrice->getAreaId()]['slices'][(string)
+                $dpdPickupPrice->getWeight()] = $dpdPickupPrice->getPrice();
             }
         }
-
         return self::$prices;
     }
 
@@ -179,22 +186,17 @@ class DpdPickup extends AbstractDeliveryModule
 
         $areaId = $country->getAreaId();
 
-        $prices = self::getPrices();
+        $prices = DpdpickupPriceQuery::create()
+            ->filterByAreaId($areaId)
+            ->findOne();
 
-        /* check if Ici Relais delivers the asked area */
-        if (isset($prices[$areaId]) && isset($prices[$areaId]["slices"])) {
-            $areaPrices = $prices[$areaId]["slices"];
-            ksort($areaPrices);
+        $freeShipping = IcirelaisFreeshippingQuery::create()
+            ->findByActive(1);
 
-            /* check this weight is not too much */
-            end($areaPrices);
-
-            $maxWeight = key($areaPrices);
-            if ($cartWeight <= $maxWeight) {
-                return true;
-            }
+        /* check if Dpd Pickup delivers the asked area*/
+        if (null !== $prices || null !== $freeShipping) {
+            return true;
         }
-
         return false;
     }
 
@@ -202,6 +204,7 @@ class DpdPickup extends AbstractDeliveryModule
     {
         $freeshipping = IcirelaisFreeshippingQuery::create()->getLast();
         $postage=0;
+
         if (!$freeshipping) {
             $freeShippingAmount = (float) self::getFreeShippingAmount();
 
@@ -212,7 +215,6 @@ class DpdPickup extends AbstractDeliveryModule
             }
 
             $prices = self::getPrices();
-
             /* check if DpdPickup delivers the asked area */
             if (!isset($prices[$areaId]) || !isset($prices[$areaId]["slices"])) {
                 throw new DeliveryException(
@@ -223,10 +225,11 @@ class DpdPickup extends AbstractDeliveryModule
 
             $areaPrices = $prices[$areaId]["slices"];
             ksort($areaPrices);
-
             /* check this weight is not too much */
             end($areaPrices);
+
             $maxWeight = key($areaPrices);
+
             if ($weight > $maxWeight) {
                 throw new DeliveryException(
                     sprintf("Ici Relais delivery unavailable for this cart weight (%s kg)", $weight),
@@ -235,32 +238,26 @@ class DpdPickup extends AbstractDeliveryModule
             }
 
             $postage = current($areaPrices);
-
             while (prev($areaPrices)) {
                 if ($weight > key($areaPrices)) {
                     break;
                 }
-
                 $postage = current($areaPrices);
             }
         }
-
         return $postage;
     }
 
     public function getPostage(Country $country)
     {
         $request = $this->getRequest();
-
         $cartWeight = $this->getRequest()->getSession()->getSessionCart($this->getDispatcher())->getWeight();
         $cartAmount = $request->getSession()->getSessionCart($this->getDispatcher())->getTaxedAmount($country);
-
         $postage = self::getPostageAmount(
             $country->getAreaId(),
             $cartWeight,
             $cartAmount
         );
-
         return $postage;
     }
 

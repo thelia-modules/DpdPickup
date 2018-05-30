@@ -41,9 +41,12 @@ class ImportController extends BaseAdminController
             // Check extension
             if (!in_array(strtolower($importedFile->getClientOriginalExtension()), ['csv', 'txt'])) {
                 throw new FormValidationException(
-                    Translator::getInstance()->trans('Bad file format. Plain text or CSV expected.',
-                    [],
-                    DpdPickup::DOMAIN)
+                    Translator::getInstance()
+                        ->trans(
+                            'Bad file format. Plain text or CSV expected.',
+                            [],
+                            DpdPickup::DOMAIN
+                        )
                 );
             }
 
@@ -56,7 +59,6 @@ class ImportController extends BaseAdminController
 
                 // Check if there are enough columns to include order ref
                 if (count($parsedLine) > DpdPickup::ORDER_REF_COLUMN) {
-
                     // Get delivery and order ref
                     $deliveryRef = $parsedLine[DpdPickup::DELIVERY_REF_COLUMN];
                     $orderRef = $parsedLine[DpdPickup::ORDER_REF_COLUMN];
@@ -67,9 +69,7 @@ class ImportController extends BaseAdminController
                     }
                 }
             }
-
             $con->commit();
-
             // Get number of affected rows to display
             $this->getSession()->getFlashBag()->add(
                 'update-orders-result',
@@ -79,9 +79,9 @@ class ImportController extends BaseAdminController
                     DpdPickup::DOMAIN
                 )
             );
-
             // Redirect
-            return $this->generateRedirect(URL::getInstance()->absoluteUrl($form->getSuccessUrl(), ['current_tab' => 'import_exaprint']));
+            return $this->generateRedirect(URL::getInstance()->absoluteUrl($form->getSuccessUrl(), [
+                'current_tab' => 'import_exaprint']));
         } catch (FormValidationException $e) {
             $con->rollback();
 

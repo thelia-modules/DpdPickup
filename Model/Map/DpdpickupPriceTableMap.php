@@ -81,9 +81,9 @@ class DpdpickupPriceTableMap extends TableMap
     const AREA_ID = 'dpdpickup_price.AREA_ID';
 
     /**
-     * the column name for the WEIGHT_MAX field
+     * the column name for the WEIGHT field
      */
-    const WEIGHT_MAX = 'dpdpickup_price.WEIGHT_MAX';
+    const WEIGHT = 'dpdpickup_price.WEIGHT';
 
     /**
      * the column name for the PRICE field
@@ -112,11 +112,11 @@ class DpdpickupPriceTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'AreaId', 'WeightMax', 'Price', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_STUDLYPHPNAME => array('id', 'areaId', 'weightMax', 'price', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(DpdpickupPriceTableMap::ID, DpdpickupPriceTableMap::AREA_ID, DpdpickupPriceTableMap::WEIGHT_MAX, DpdpickupPriceTableMap::PRICE, DpdpickupPriceTableMap::CREATED_AT, DpdpickupPriceTableMap::UPDATED_AT, ),
-        self::TYPE_RAW_COLNAME   => array('ID', 'AREA_ID', 'WEIGHT_MAX', 'PRICE', 'CREATED_AT', 'UPDATED_AT', ),
-        self::TYPE_FIELDNAME     => array('id', 'area_id', 'weight_max', 'price', 'created_at', 'updated_at', ),
+        self::TYPE_PHPNAME       => array('Id', 'AreaId', 'Weight', 'Price', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_STUDLYPHPNAME => array('id', 'areaId', 'weight', 'price', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(DpdpickupPriceTableMap::ID, DpdpickupPriceTableMap::AREA_ID, DpdpickupPriceTableMap::WEIGHT, DpdpickupPriceTableMap::PRICE, DpdpickupPriceTableMap::CREATED_AT, DpdpickupPriceTableMap::UPDATED_AT, ),
+        self::TYPE_RAW_COLNAME   => array('ID', 'AREA_ID', 'WEIGHT', 'PRICE', 'CREATED_AT', 'UPDATED_AT', ),
+        self::TYPE_FIELDNAME     => array('id', 'area_id', 'weight', 'price', 'created_at', 'updated_at', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -127,11 +127,11 @@ class DpdpickupPriceTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'AreaId' => 1, 'WeightMax' => 2, 'Price' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'areaId' => 1, 'weightMax' => 2, 'price' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        self::TYPE_COLNAME       => array(DpdpickupPriceTableMap::ID => 0, DpdpickupPriceTableMap::AREA_ID => 1, DpdpickupPriceTableMap::WEIGHT_MAX => 2, DpdpickupPriceTableMap::PRICE => 3, DpdpickupPriceTableMap::CREATED_AT => 4, DpdpickupPriceTableMap::UPDATED_AT => 5, ),
-        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'AREA_ID' => 1, 'WEIGHT_MAX' => 2, 'PRICE' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'area_id' => 1, 'weight_max' => 2, 'price' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'AreaId' => 1, 'Weight' => 2, 'Price' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'areaId' => 1, 'weight' => 2, 'price' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        self::TYPE_COLNAME       => array(DpdpickupPriceTableMap::ID => 0, DpdpickupPriceTableMap::AREA_ID => 1, DpdpickupPriceTableMap::WEIGHT => 2, DpdpickupPriceTableMap::PRICE => 3, DpdpickupPriceTableMap::CREATED_AT => 4, DpdpickupPriceTableMap::UPDATED_AT => 5, ),
+        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'AREA_ID' => 1, 'WEIGHT' => 2, 'PRICE' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'area_id' => 1, 'weight' => 2, 'price' => 3, 'created_at' => 4, 'updated_at' => 5, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -153,8 +153,8 @@ class DpdpickupPriceTableMap extends TableMap
         // columns
         $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('AREA_ID', 'AreaId', 'INTEGER', 'area', 'ID', true, null, null);
-        $this->addColumn('WEIGHT_MAX', 'WeightMax', 'FLOAT', true, null, null);
-        $this->addColumn('PRICE', 'Price', 'DECIMAL', false, 16, 0);
+        $this->addColumn('WEIGHT', 'Weight', 'DECIMAL', false, 16, null);
+        $this->addColumn('PRICE', 'Price', 'DECIMAL', true, 16, null);
         $this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -164,7 +164,7 @@ class DpdpickupPriceTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Area', '\\Thelia\\Model\\Area', RelationMap::MANY_TO_ONE, array('area_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('Area', '\\DpdPickup\\Model\\Thelia\\Model\\Area', RelationMap::MANY_TO_ONE, array('area_id' => 'id', ), 'CASCADE', 'RESTRICT');
     } // buildRelations()
 
     /**
@@ -320,14 +320,14 @@ class DpdpickupPriceTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(DpdpickupPriceTableMap::ID);
             $criteria->addSelectColumn(DpdpickupPriceTableMap::AREA_ID);
-            $criteria->addSelectColumn(DpdpickupPriceTableMap::WEIGHT_MAX);
+            $criteria->addSelectColumn(DpdpickupPriceTableMap::WEIGHT);
             $criteria->addSelectColumn(DpdpickupPriceTableMap::PRICE);
             $criteria->addSelectColumn(DpdpickupPriceTableMap::CREATED_AT);
             $criteria->addSelectColumn(DpdpickupPriceTableMap::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.ID');
             $criteria->addSelectColumn($alias . '.AREA_ID');
-            $criteria->addSelectColumn($alias . '.WEIGHT_MAX');
+            $criteria->addSelectColumn($alias . '.WEIGHT');
             $criteria->addSelectColumn($alias . '.PRICE');
             $criteria->addSelectColumn($alias . '.CREATED_AT');
             $criteria->addSelectColumn($alias . '.UPDATED_AT');

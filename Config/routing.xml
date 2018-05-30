@@ -3,6 +3,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="dpdpickup.saveslice" path="/admin/module/dpdpickup/saveslice" methods="post">
+        <default key="_controller">DpdPickup:Slice:saveSlice</default>
+    </route>
+
+    <route id="dpdpickup.deleteslice" path="/admin/module/dpdpickup/deleteslice" methods="post">
+        <default key="_controller">DpdPickup:Slice:deleteSlice</default>
+    </route>
+
     <route id="dpdpickup.searchroute" path="/module/dpdpickup/{zipcode}/{city}" methods="get">
         <default key="_controller">DpdPickup\Controller\SearchCityController::searchAction</default>
         <requirement key="zipcode">\d{5}</requirement>
@@ -19,10 +27,6 @@
 
 	<route id="dpdpickup.export.exaprint" path="/admin/module/dpdpickup/export" methods="post">
 		<default key="_controller">DpdPickup\Controller\ExportExaprint::export</default>
-	</route>
-
-	<route id="dpdpickup.edit.prices" path="/admin/module/dpdpickup/prices" methods="post">
-		<default key="_controller">DpdPickup\Controller\EditPrices::editprices</default>
 	</route>
 
     <route id="dpdpickup.edit.freeshipping" path="/admin/module/dpdpickup/freeshipping" methods="post">

@@ -1,7 +1,7 @@
 <?php
 /*************************************************************************************/
 /*                                                                                   */
-/*      Thelia	                                                                     */
+/*      Thelia                                                                       */
 /*                                                                                   */
 /*      Copyright (c) OpenStudio                                                     */
 /*      email : info@thelia.net                                                      */
@@ -17,16 +17,15 @@
 /*      GNU General Public License for more details.                                 */
 /*                                                                                   */
 /*      You should have received a copy of the GNU General Public License            */
-/*	    along with this program. If not, see <http://www.gnu.org/licenses/>.         */
+/*      along with this program. If not, see <http://www.gnu.org/licenses/>.         */
 /*                                                                                   */
 /*************************************************************************************/
 
 namespace DpdPickup\Form;
 
 use DpdPickup\DpdPickup;
-use Thelia\Form\BaseForm;
 use Thelia\Core\Translation\Translator;
-use Thelia\Model\OrderQuery;
+use Thelia\Form\BaseForm;
 
 /**
  * Class ExportExaprintSelection
@@ -42,7 +41,7 @@ class ExportExaprintSelection extends BaseForm
 
     protected function buildForm()
     {
-        if (null === $data = DpdPickup::getConfigValue('default_status')){
+        if (null === $data = DpdPickup::getConfigValue('default_status')) {
             $data = DpdPickup::NO_CHANGE;
         }
 
@@ -53,9 +52,12 @@ class ExportExaprintSelection extends BaseForm
                 array(
                     'label' => Translator::getInstance()->trans('Change order status to', [], DpdPickup::DOMAIN),
                     'choices' => array(
-                        DpdPickup::NO_CHANGE => Translator::getInstance()->trans("Do not change", [], DpdPickup::DOMAIN),
-                        DpdPickup::PROCESS => Translator::getInstance()->trans("Set orders status as processing", [], DpdPickup::DOMAIN),
-                        DpdPickup::SEND => Translator::getInstance()->trans("Set orders status as sent", [], DpdPickup::DOMAIN)
+                        DpdPickup::NO_CHANGE => Translator::getInstance()
+                            ->trans("Do not change", [], DpdPickup::DOMAIN),
+                        DpdPickup::PROCESS => Translator::getInstance()
+                            ->trans("Set orders status as processing", [], DpdPickup::DOMAIN),
+                        DpdPickup::SEND => Translator::getInstance()
+                            ->trans("Set orders status as sent", [], DpdPickup::DOMAIN)
                     ),
                     'required' => true,
                     'expanded' => true,
