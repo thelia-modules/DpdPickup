@@ -30,7 +30,6 @@ class APIListener implements EventSubscriberInterface
         $city = $pickupLocationEvent->getCity();
         $date = date('d/m/Y');
 
-
         try {
             $getPudoSoap = new \SoapClient(__DIR__ . "/../Config/exapaq.wsdl", array('soap_version' => SOAP_1_2));
 
@@ -142,7 +141,7 @@ class APIListener implements EventSubscriberInterface
      * @param PickupLocationEvent $pickupLocationEvent
      * @throws \Exception
      */
-    public function get(PickupLocationEvent $pickupLocationEvent)
+    public function getPickupLocations(PickupLocationEvent $pickupLocationEvent)
     {
         if (null !== $moduleIds = $pickupLocationEvent->getModuleIds()) {
             if (!in_array(DpdPickup::getModuleId(), $moduleIds)) {
@@ -167,7 +166,7 @@ class APIListener implements EventSubscriberInterface
 
         /** Check for old versions of Thelia where the events used by the API didn't exists */
         if (class_exists(PickupLocation::class)) {
-            $listenedEvents[TheliaEvents::MODULE_DELIVERY_GET_PICKUP_LOCATIONS] = array("get", 131);
+            $listenedEvents[TheliaEvents::MODULE_DELIVERY_GET_PICKUP_LOCATIONS] = array("getPickupLocations", 131);
         }
 
         return $listenedEvents;
