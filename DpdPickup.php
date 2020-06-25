@@ -283,4 +283,9 @@ class DpdPickup extends AbstractDeliveryModule
     {
         self::setConfigValue('google_map_key', $value);
     }
+
+    public function getDeliveryMode()
+    {
+        return "pickup";
+    }
 }
