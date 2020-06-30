@@ -120,8 +120,8 @@ class APIListener implements EventSubscriberInterface
             ->setId((string)$response->PUDO_ID)
             ->setTitle((string)$response->NAME)
             ->setAddress($this->createPickupLocationAddressFromResponse($response))
-            ->setLatitude((string)$response->LONGITUDE)
-            ->setLongitude((string)$response->LATITUDE)
+            ->setLatitude(str_replace(',', '.', (string)$response->LATITUDE))
+            ->setLongitude(str_replace(',', '.', (string)$response->LONGITUDE))
             ->setModuleId(DpdPickup::getModuleId())
         ;
 
