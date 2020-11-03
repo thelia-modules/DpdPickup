@@ -1,0 +1,42 @@
+{assign "err" $smarty.get.err}
+<br>
+<div class="title title-without-tabs clearfix">
+    {intl l='DpdPickup label' d="dpdpickup.bo.default"}
+</div>
+{if $err}
+    <div class="alert alert-danger">{$err}</div>
+{/if}
+<table class="table table-striped">
+    <tr>
+        <th>{intl l='Label Number' d="dpdpickup.bo.default"}</th>
+        <th>{intl l='Date' d="dpdpickup.bo.default"}</th>
+        <th>{intl l='Destination' d="dpdpickup.bo.default"}</th>
+        <th></th>
+    </tr>
+    <tr>
+        {loop type="order" name="get-order-date" id=$order_id customer="*" backend_context="true"}
+            {DpdPickupLabelNumber order_id=$ID}
+            <td>{$labelNbr}</td>
+            <td>{format_date date=$CREATE_DATE}</td>
+            {loop type="order_address" name="destination_loop" id=$DELIVERY_ADDRESS}
+                <td>{$ADDRESS1} {$CITY} {$ZIPCODE}</td>
+            {/loop}
+            <td>
+                <a class="btn btn-primary pull-right {if !$labelNbr} disabled {/if}" href="{url path='/admin/module/DpdPickup/saveLabel' labelNbr=$labelNbr orderId=$order_id}">
+                    {intl l='Download' d="dpdpickup.bo.default"}
+                </a>
+                <a class="btn btn-info pull-right {if !$labelNbr} disabled {/if}" href={url path="/admin/module/DpdPickup/getLabel/{$REF}"}>
+                    {intl l='View' d="dpdpickup.bo.default"}
+                </a>
+                <a class="btn btn-danger pull-right {if !$labelNbr} disabled {/if}" href="{url path='/admin/module/DpdPickup/deleteLabel' orderId=$order_id redirect_url="/admin/order/update/$order_id"} ">
+                    {intl l='Delete' d="dpdpickup.bo.default"}
+                </a>
+                {if !$labelNbr}
+                    <a class="btn btn-primary pull-right" href={url path="/admin/module/DpdPickup/generateLabel" orderId=$order_id}>
+                        {intl l='Generate' d="dpdpickup.bo.default"}
+                    </a>
+                {/if}
+            </td>
+        {/loop}
+    </tr>
+</table>

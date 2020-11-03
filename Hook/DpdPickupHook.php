@@ -14,6 +14,7 @@ namespace DpdPickup\Hook;
 
 use Thelia\Core\Event\Hook\HookRenderEvent;
 use Thelia\Core\Hook\BaseHook;
+use Thelia\Model\OrderQuery;
 
 /**
  * Class DpdPickupHook
@@ -35,5 +36,36 @@ class DpdPickupHook extends BaseHook
     {
         $content = $this->addCSS('assets/css/style.css');
         $event->add($content);
+    }
+    public function onModuleConfig(HookRenderEvent $event)
+    {
+        $event->add($this->render('module_configuration.html'));
+    }
+
+    public function onModuleConfigJs(HookRenderEvent $event)
+    {
+        $event->add($this->render('module-config-js.html'));
+    }
+
+    public function onOrderModuleTab(HookRenderEvent $event)
+    {
+        $event->add($this->render('order-edit.html'));
+    }
+    public function onMenuItems(HookRenderEvent $event)
+    {
+        $event->add($this->render('hook/dpdpickup-menu-item.html'));
+    }
+
+    /**
+     * @param HookRenderEvent $event
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function onOrderBillTop(HookRenderEvent $event)
+    {
+        $moduleCode = OrderQuery::create()->findOneById($event->getArgument("order_id"))->getModuleRelatedByDeliveryModuleId()->getCode();
+
+        if("DpdPickup" === $moduleCode){
+            $event->add($this->render('hook/dpdpickup-order-edit-label.html'));
+        }
     }
 }

@@ -36,4 +36,32 @@
     <route id="dpdpickup.config" path="/admin/module/dpdpickup/config" methods="post">
         <default key="_controller">DpdPickup\Controller\ConfigurationController::configureAction</default>
     </route>
+
+    <route id="dpdpickup.api.config" path="/admin/module/dpdpickup/api-config" methods="post">
+        <default key="_controller">DpdPickup\Controller\ConfigurationController::configureApiAction</default>
+    </route>
+
+    <route id="dpdpickup.labels" path="/admin/module/DpdPickup/labels">
+        <default key="_controller">DpdPickup\Controller\LabelController::showAction</default>
+    </route>
+
+    <route id="dpdpickup.save.label" path="/admin/module/DpdPickup/saveLabel">
+        <default key="_controller">DpdPickup\Controller\LabelController::saveAction</default>
+    </route>
+
+    <route id="dpdpickup.download.label" path="/admin/module/DpdPickup/labels-file/{base64EncodedFilename}">
+        <default key="_controller">DpdPickup\Controller\LabelController::downloadAction</default>
+    </route>
+
+    <route id="dpdpickup.show.label" path="/admin/module/DpdPickup/getLabel/{orderRef}">
+        <default key="_controller">DpdPickup\Controller\LabelController::getLabelAction</default>
+    </route>
+
+    <route id="dpdpickup.delete.label" path="/admin/module/DpdPickup/deleteLabel">
+        <default key="_controller">DpdPickup\Controller\LabelController::deleteLabelAction</default>
+    </route>
+
+    <route id="dpdpickup.generate.label" path="/admin/module/DpdPickup/generateLabel">
+        <default key="_controller">DpdPickup\Controller\LabelController::generateLabelAction</default>
+    </route>
 </routes>

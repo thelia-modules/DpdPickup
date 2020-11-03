@@ -1,0 +1,84 @@
+{extends file="admin-layout.tpl"}
+
+{block name="check-access"}view{/block}
+{block name="page-title"}{intl l="DpdPickup Labels" d="dpdpickup.bo.default"}{/block}
+
+
+{block name="main-content"}
+    {loop type="currency" name="default_currency_dpdclassic" default_only="1"}
+    {assign "currencySymbol" $SYMBOL}
+    {/loop}
+
+    {assign "err" $smarty.get.err}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="general-block-decorator">
+                {if $err}
+                    <div class="alert alert-danger">{$err}</div>
+                {/if}
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="text-center">{intl l='Reference' d='dpdpickup.bo.default'}</th>
+                                <th class="text-center">{intl l='Status' d='dpdpickup.bo.default'}</th>
+                                <th class="text-center">{intl l="Date" d='dpdpickup.bo.default'}</th>
+                                <th class="text-center">{intl l="Total Amount" d='dpdpickup.bo.default'}</th>
+                                <th class="text-center">{intl l='Destination' d='dpdpickup.bo.default'}</th>
+                                <th class="text-center">{intl l='Label Number' d='dpdpickup.bo.default'}</th>
+                                <th class="actions text-center">{intl l='Action' d='dpdpickup.bo.default'}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loop type="dpdpickup.orders" name="get-dpdpickup-orders"}
+                                {DpdPickupLabelNumber order_id=$ID}
+                                <tr>
+                                    <td class="text-center"><a href="{url path="admin/order/update/%orderId" orderId=$ID}">{$REF}</a></td>
+                                    {loop type="order-status" name="order_status_loop" id={$STATUS}}
+                                        <td class="text-center">
+                                            <span class="label" style="background-color: {$COLOR}">{$TITLE}</span>
+                                        </td>
+                                    {/loop}
+                                    <td class="text-center">{format_date date=$CREATE_DATE}</td>
+                                    <td class="text-center">{$TOTAL_AMOUNT + $TOTAL_TAX} {$currencySymbol}</td>
+                                    {loop type="order_address" name="destination_loop" id=$DELIVERY_ADDRESS}
+                                    {loop type="country" name="destination_country_loop" id="$COUNTRY"}
+                                    {assign "country" $TITLE}
+                                    {/loop}
+                                        <td class="text-center">{$country}, {$ADDRESS1}, {$CITY} {$ZIPCODE}</td>
+                                    {/loop}
+                                    <td class="text-center">
+                                        <a href={url path='/admin/module/DpdPickup/getLabel/%orderRef' orderRef=$REF}>
+                                            {$labelNbr}
+                                        </a>
+                                    </td>
+                                    <td class="actions text-center">
+                                        <a class="btn btn-default btn-xs js-export-download"
+                                           title="{intl l='Download this label' d='dpdpickup.bo.default'}"
+                                           href="{url path="/admin/module/DpdPickup/saveLabel" orderId=$ID}">
+                                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                                        </a>
+                                        <a class="btn btn-danger btn-xs"
+                                           title="{intl l='Delete this label' d='dpdpickup.bo.default'}"
+                                           href="{url path='/admin/module/DpdPickup/deleteLabel' orderId=$ID redirect_url="/admin/module/DpdPickup/labels"}"
+                                           {if !$labelNbr}disabled="true"{/if}>
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {/loop}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {if $smarty.get.file}
+        <iframe style="width:100%;height:20px;border:none" src="{url path="/admin/module/DpdClassic/labels-file/%hash" hash={$smarty.get.file}}"></iframe>
+    {/if}
+{/block}
+
+

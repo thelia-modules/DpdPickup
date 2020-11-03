@@ -80,6 +80,29 @@ class DpdPickup extends AbstractDeliveryModule
     const RETURN_ON_DEMAND = 3;
     const RETURN_PREPARED = 4;
 
+    const API_USER_ID = "dpdpickup_userid";
+    const API_PASSWORD = "dpdpickup_password";
+    const API_CENTER_NUMBER = "dpdpickup_center_number";
+    const API_CUSTOMER_NUMBER = "dpdpickup_customer_number";
+    const API_IS_TEST = "dpdpickup_is_test";
+
+    const API_SHIPPER_NAME = "dpdpickup_shipper_name";
+    const API_SHIPPER_ADDRESS1 = "dpdpickup_shipper_address1";
+    const API_SHIPPER_ADDRESS2 = "dpdpickup_shipper_address2";
+    const API_SHIPPER_COUNTRY = "dpdpickup_shipper_country";
+    const API_SHIPPER_CITY = "dpdpickup_shipper_city";
+    const API_SHIPPER_ZIP = "dpdpickup_shipper_zip_code";
+    const API_SHIPPER_CIV = "dpdpickup_shipper_civ";
+    const API_SHIPPER_CONTACT = "dpdpickup_shipper_contact";
+    const API_SHIPPER_PHONE = "dpdpickup_shipper_phone";
+    const API_SHIPPER_FAX = "dpdpickup_shipper_fax";
+    const API_SHIPPER_MAIL = "dpdpickup_shipper_mail";
+
+    const DPD_WSDL_TEST = "http://92.103.148.116/exa-eprintwebservice/eprintwebservice.asmx?WSDL";
+    const DPD_WSDL = "https://e-station.cargonet.software/dpd-eprintwebservice/eprintwebservice.asmx?WSDL";
+
+    const DPD_LABEL_DIR = THELIA_LOCAL_DIR . "DpdPickupLabel";
+
     protected $request;
     protected $dispatcher;
 
@@ -89,7 +112,11 @@ class DpdPickup extends AbstractDeliveryModule
     {
         $database = new Database($con->getWrappedConnection());
 
-        $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
+        if ("1" !== self::getConfigValue("is_initialized")){
+            $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
+
+            self::setConfigValue("is_initialized", 1);
+        }
     }
 
     /**
@@ -287,5 +314,24 @@ class DpdPickup extends AbstractDeliveryModule
     public function getDeliveryMode()
     {
         return "pickup";
+    }
+
+    public static function getApiConfig()
+    {
+        $data = [];
+        $data['userId'] = self::getConfigValue(self::API_USER_ID);
+        $data['password'] = self::getConfigValue(self::API_PASSWORD);
+        $data['center_number'] = self::getConfigValue(self::API_CENTER_NUMBER);
+        $data['customer_number'] = self::getConfigValue(self::API_CUSTOMER_NUMBER);
+        $data['isTest'] = (int)self::getConfigValue(self::API_IS_TEST);
+        $data['shipperName'] = self::getConfigValue(self::API_SHIPPER_NAME);
+        $data['shipperAddress1'] = self::getConfigValue(self::API_SHIPPER_ADDRESS1);
+        $data['shipperCountry'] = self::getConfigValue(self::API_SHIPPER_COUNTRY);
+        $data['shipperCity'] = self::getConfigValue(self::API_SHIPPER_CITY);
+        $data['shipperZipCode'] = self::getConfigValue(self::API_SHIPPER_ZIP);
+        $data['shipperPhone'] = self::getConfigValue(self::API_SHIPPER_PHONE);
+        $data['shipperFax'] = self::getConfigValue(self::API_SHIPPER_FAX);
+
+        return $data;
     }
 }

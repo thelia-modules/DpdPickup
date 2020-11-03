@@ -18,6 +18,8 @@ class IcirelaisFreeshippingQuery extends BaseIcirelaisFreeshippingQuery
 {
     public function getLast()
     {
-        return $this->orderById('desc')->findOne()->getActive();
+        $last = $this->orderById('desc')->findOne();
+
+        return $last? $last->getActive() : null;
     }
 } // IcirelaisFreeshippingQuery

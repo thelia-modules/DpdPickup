@@ -22,6 +22,7 @@
         <form name="dpdpickup.freeshipping.form" class="DpdPickup\Form\FreeShipping" />
         <form name="dpdpickup.freeshipping.amount.form" class="DpdPickup\Form\FreeShippingAmount" />
         <form name="dpdpickup.config.form" class="DpdPickup\Form\ConfigurationForm" />
+        <form name="dpdpickup.api.configuration.form" class="DpdPickup\Form\ApiConfigurationForm" />
     </forms>
 
     <services>
@@ -40,12 +41,20 @@
         <service id="api.dpdpickup.pickup.point" class="DpdPickup\Listener\APIListener" scope="request">
             <tag name="kernel.event_subscriber"/>
         </service>
+        <service id="dpdpickup.labels.smarty.plugin" class="DpdPickup\Smarty\Plugins\DpdPickupLabelNumber" scope="request">
+            <tag name="thelia.parser.register_plugin" />
+        </service>
     </services>
 
     <hooks>
         <hook id="dpdpickup.delivery.show" class="DpdPickup\Hook\DpdPickupHook" scope="request">
             <tag name="hook.event_listener" event="order-delivery.extra" method="renderDpdPickupChoice"/>
             <tag name="hook.event_listener" event="order-invoice.delivery-address" method="renderDeliveryAddress"/>
+            <tag name="hook.event_listener" event="module.configuration" type="back" method="onModuleConfig" />
+            <tag name="hook.event_listener" event="module.config-js" type="back" method="onModuleConfigJs" />
+            <tag name="hook.event_listener" event="order.tab-content" type="back" method="onOrderModuleTab" />
+            <tag name="hook.event_listener" event="main.in-top-menu-items" type="back" method="onMenuItems" />
+            <tag name="hook.event_listener" event="order-edit.bill-top" type="back" method="onOrderBillTop" />
         </hook>
     </hooks>
 
