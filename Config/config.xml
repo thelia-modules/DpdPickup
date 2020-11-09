@@ -23,6 +23,7 @@
         <form name="dpdpickup.freeshipping.amount.form" class="DpdPickup\Form\FreeShippingAmount" />
         <form name="dpdpickup.config.form" class="DpdPickup\Form\ConfigurationForm" />
         <form name="dpdpickup.api.configuration.form" class="DpdPickup\Form\ApiConfigurationForm" />
+        <form name="dpdpickup.label.generation.form" class="DpdPickup\Form\LabelGenerationForm" />
     </forms>
 
     <services>

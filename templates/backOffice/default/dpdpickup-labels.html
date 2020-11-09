@@ -54,7 +54,12 @@
                                         </a>
                                     </td>
                                     <td class="actions text-center">
-                                        <a class="btn btn-default btn-xs js-export-download"
+                                        <a class="btn btn-default btn-xs js-export-download {if $labelNbr}hidden{/if} dpdpickup-label-dialog-button"
+                                           title="{intl l='Download this label' d='dpdpickup.bo.default'}"
+                                           href="#dpdpickup-label-dialog" data-toggle="modal" data-order={$ID}>
+                                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                                        </a>
+                                        <a class="btn btn-default btn-xs js-export-download {if !$labelNbr}hidden{/if}"
                                            title="{intl l='Download this label' d='dpdpickup.bo.default'}"
                                            href="{url path="/admin/module/DpdPickup/saveLabel" orderId=$ID}">
                                             <span class="glyphicon glyphicon-floppy-disk"></span>
@@ -77,8 +82,43 @@
 
 
     {if $smarty.get.file}
-        <iframe style="width:100%;height:20px;border:none" src="{url path="/admin/module/DpdClassic/labels-file/%hash" hash={$smarty.get.file}}"></iframe>
+        <iframe style="width:100%;height:20px;border:none" src="{url path="/admin/module/DpdPickup/labels-file/%hash" hash={$smarty.get.file}}"></iframe>
     {/if}
+
+    {form name="dpdpickup.label.generation.form"}
+
+    {capture "dpdpickup_label_creation"}
+        {form_hidden_fields}
+
+        {render_form_field field='weight'}
+    {/capture}
+
+
+    {include
+        file = "includes/generic-create-dialog.html"
+
+        dialog_id    = "dpdpickup-label-dialog"
+        dialog_title = {intl l="Create label" d='dpdpickup.bo.default'}
+        dialog_body  = {$smarty.capture.dpdpickup_label_creation nofilter}
+
+        dialog_ok_label     = {intl l="Create" d='dpdpickup.bo.default'}
+        dialog_cancel_label = {intl l="Cancel" d='dpdpickup.bo.default'}
+
+        form_action        = {url path='admin/module/DpdPickup/saveLabel'}
+        form_enctype       = {form_enctype}
+        form_attributes     = 'id="dpdpickup-label-dialog-form"'
+        form_error_message = $form_error_message
+    }
+
+    {/form}
+{/block}
+
+{block name="javascript-last-call"}
+<script type="text/javascript">
+    $(".dpdpickup-label-dialog-button").on("click", function () {
+        $("#dpdpickup-label-dialog-form").attr("action", "{url path='admin/module/DpdPickup/saveLabel'}" + "?orderId=" + $(this).attr("data-order"));
+    })
+</script>
 {/block}
 
 

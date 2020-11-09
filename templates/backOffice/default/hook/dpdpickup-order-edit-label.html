@@ -32,7 +32,7 @@
                     {intl l='Delete' d="dpdpickup.bo.default"}
                 </a>
                 {if !$labelNbr}
-                    <a class="btn btn-primary pull-right" href={url path="/admin/module/DpdPickup/generateLabel" orderId=$order_id}>
+                    <a class="btn btn-primary pull-right" href=#dpdpickup-label-dialog data-toggle="modal">
                         {intl l='Generate' d="dpdpickup.bo.default"}
                     </a>
                 {/if}
@@ -40,3 +40,29 @@
         {/loop}
     </tr>
 </table>
+
+{form name="dpdpickup.label.generation.form"}
+
+{capture "dpdpickup_label_creation"}
+    {form_hidden_fields}
+
+    {render_form_field field='weight'}
+{/capture}
+
+
+    {include
+    file = "includes/generic-create-dialog.html"
+
+    dialog_id    = "dpdpickup-label-dialog"
+    dialog_title = {intl l="Create label" d='dpdpickup.bo.default'}
+    dialog_body  = {$smarty.capture.dpdpickup_label_creation nofilter}
+
+    dialog_ok_label     = {intl l="Create" d='dpdpickup.bo.default'}
+    dialog_cancel_label = {intl l="Cancel" d='dpdpickup.bo.default'}
+
+    form_action        = {url path="/admin/module/DpdPickup/generateLabel" orderId=$order_id}
+    form_enctype       = {form_enctype}
+    form_error_message = $form_error_message
+    }
+
+{/form}

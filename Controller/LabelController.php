@@ -56,8 +56,17 @@ class LabelController extends BaseAdminController
         $err = null;
 
         if (!$label = DpdpickupLabelsQuery::create()->filterByOrderId($order->getId())->findOne()) {
-            $err = $this->createLabel($order, $labelName);
+            $baseForm = $this->createForm("dpdpickup.label.generation.form");
+            try {
+                $form = $this->validateForm($baseForm);
+                $data = $form->getData();
+            }catch (\Exception $e){
+                return $this->generateRedirect(URL::getInstance()->absoluteUrl("admin/module/DpdPickup/labels", [
+                    "err" => $e->getMessage()
+                ]));
+            }
 
+            $err = $this->createLabel($order, $labelName, $data['weight']);
 
             if ($err) {
                 return $this->generateRedirect(URL::getInstance()->absoluteUrl("admin/module/DpdPickup/labels", [
@@ -86,7 +95,17 @@ class LabelController extends BaseAdminController
 
         $labelName = DpdPickup::DPD_LABEL_DIR . DS . $order->getRef() . ".pdf";
 
-        $err = $this->createLabel($order, $labelName);
+        $baseForm = $this->createForm("dpdpickup.label.generation.form");
+        try {
+            $form = $this->validateForm($baseForm);
+            $data = $form->getData();
+        }catch (\Exception $e){
+            return $this->generateRedirect(URL::getInstance()->absoluteUrl("admin/module/DpdPickup/labels", [
+                "err" => $e->getMessage()
+            ]));
+        }
+
+        $err = $this->createLabel($order, $labelName, $data['weight']);
 
         if($err){
             return $this->generateRedirect(URL::getInstance()->absoluteUrl('/admin/order/update/'.$orderId, [
@@ -162,12 +181,13 @@ class LabelController extends BaseAdminController
     /**
      * @param Order $order
      * @param $labelName
+     * @param $weight
      * @return null|string
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    protected function createLabel(Order $order, $labelName)
+    protected function createLabel(Order $order, $labelName, $weight)
     {
-        $data = $this->writeData($order);
+        $data = $this->writeData($order, $weight);
 
         $DpdWSD = DpdPickup::DPD_WSDL;
 
@@ -203,10 +223,11 @@ class LabelController extends BaseAdminController
 
     /**
      * @param Order $order
+     * @param $weight
      * @return mixed
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    protected function writeData(Order $order)
+    protected function writeData(Order $order, $weight)
     {
 
         $data = DpdPickup::getApiConfig();
@@ -254,7 +275,7 @@ class LabelController extends BaseAdminController
             "customer_number" => (int)$data['customer_number'],
             "receiveraddress" => $receiveraddress,
             "shipperaddress" => $shipperaddress,
-            "weight" => $order->getWeight(),
+            "weight" => $weight,
             "referencenumber" => $order->getRef(),
             "labelType" => $label
         ];
