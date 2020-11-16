@@ -179,6 +179,35 @@ class LabelController extends BaseAdminController
     }
 
     /**
+     * @return \Thelia\Core\HttpFoundation\Response
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+     public function createLabelAction()
+     {
+         $orderId = $this->getRequest()->get("order_id");
+         $weight = $this->getRequest()->get("weight");
+
+         if (!$orderId){
+             return $this->jsonResponse(json_encode(["error" =>"order_id argument not found"]), 400);
+         }
+
+         if (!$weight){
+             return $this->jsonResponse(json_encode(["error" => "weight argument not found"]), 400);
+         }
+
+         $order = OrderQuery::create()->filterById($orderId)->findOne();
+         $labelName = DpdPickup::DPD_LABEL_DIR . DS . $order->getRef() . ".pdf";
+
+         $err = $this->createLabel($order, $labelName, $weight);
+
+         if ($err){
+             return $this->jsonResponse(json_encode(["error" => $err]));
+         }
+
+         return $this->jsonResponse(json_encode(["file_path" => $labelName]));
+     }
+
+    /**
      * @param Order $order
      * @param $labelName
      * @param $weight

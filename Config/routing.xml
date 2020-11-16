@@ -64,4 +64,8 @@
     <route id="dpdpickup.generate.label" path="/admin/module/DpdPickup/generateLabel">
         <default key="_controller">DpdPickup\Controller\LabelController::generateLabelAction</default>
     </route>
+
+    <route id="dpdpickup.create.label" path="/admin/picking/DpdPickup/createLabel">
+        <default key="_controller">DpdPickup\Controller\LabelController::createLabelAction</default>
+    </route>
 </routes>
