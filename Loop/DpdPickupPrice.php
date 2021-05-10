@@ -35,7 +35,6 @@ use Thelia\Core\Template\Loop\Argument\Argument;
  * Class DpdPickupPrice
  * @package DpdPickup\Loop
  * @author Thelia <info@thelia.net>
- * @original_author Etienne Roudeix <eroudeix@openstudio.fr>
  */
 class DpdPickupPrice extends BaseLoop implements ArraySearchLoopInterface
 {
