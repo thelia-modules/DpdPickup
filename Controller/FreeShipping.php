@@ -31,16 +31,23 @@ use Thelia\Core\HttpFoundation\Response;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Tools\URL;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/admin/module/dpdpickup", name="dpdpickup")
+ */
 class FreeShipping extends BaseAdminController
 {
+    /**
+     * @Route("/freeshipping", name="_freeshipping", methods="POST")
+     */
     public function set()
     {
         if (null !== $response = $this->checkAuth(array(AdminResources::MODULE), array('DpdPickup'), AccessManager::UPDATE)) {
             return $response;
         }
 
-        $form = new \DpdPickup\Form\FreeShipping($this->getRequest());
+        $form = $this->createForm(\DpdPickup\Form\FreeShipping::getName());
         $response=null;
 
         try {
@@ -57,9 +64,12 @@ class FreeShipping extends BaseAdminController
         return $response;
     }
 
+    /**
+     * @Route("/freeshipping_amount", name="_freeshipping_amount", methods="POST")
+     */
     public function amountAction()
     {
-        $form = new \DpdPickup\Form\FreeShippingAmount($this->getRequest());
+        $form = $this->createForm(\DpdPickup\Form\FreeShippingAmount::getName());
 
         try {
             $vform = $this->validateForm($form);

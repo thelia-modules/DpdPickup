@@ -27,25 +27,32 @@ use DpdPickup\Event\DpdPickupEvents;
 use DpdPickup\Event\DpdPickupPriceEvent;
 use DpdPickup\Model\DpdpickupPrice;
 use DpdPickup\Model\DpdpickupPriceQuery;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Model\AreaQuery;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * @Route("/admin/module/dpdpickup/prices", name="dpdpickup_prices")
  * Class EditPrices
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
  */
 class EditPrices extends BaseAdminController
 {
-    public function editprices()
+    /**
+     * @Route("", name="_save", methods="POST")
+     */
+    public function editprices(RequestStack $requestStack, EventDispatcherInterface $eventDispatcher)
     {
         if (null !== $response = $this->checkAuth(array(AdminResources::MODULE), array('DpdPickup'), AccessManager::UPDATE)) {
             return $response;
         }
         // Get data & treat
-        $post = $this->getRequest();
+        $post = $requestStack->getCurrentRequest();
         $operation = $post->get('operation');
         $area = $post->get('area');
         $weight = $post->get('weight');
@@ -74,9 +81,9 @@ class EditPrices extends BaseAdminController
                 $dpdPickupPriceEvent = new DpdPickupPriceEvent($dpdPickupPrice);
 
                 if ($operation === 'delete') {
-                    $this->getDispatcher()->dispatch(DpdPickupEvents::DPDPICKUP_PRICE_DELETE, $dpdPickupPriceEvent);
+                    $eventDispatcher->dispatch($dpdPickupPriceEvent, DpdPickupEvents::DPDPICKUP_PRICE_DELETE);
                 } else {
-                    $this->getDispatcher()->dispatch(DpdPickupEvents::DPDPICKUP_PRICE_UPDATE, $dpdPickupPriceEvent);
+                    $eventDispatcher->dispatch($dpdPickupPriceEvent, DpdPickupEvents::DPDPICKUP_PRICE_UPDATE);
                 }
             } else {
                 throw new \Exception("Area not found");

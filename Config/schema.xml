@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database defaultIdMethod="native" name="thelia" namespace="DpdPickup\Model">
+<database defaultIdMethod="native" name="TheliaMain" namespace="DpdPickup\Model">
 	<table name="order_address_icirelais">
         <column name="id" primaryKey="true" required="true" type="INTEGER" />
         <column name="code" size="10" type="VARCHAR" required="true" />
@@ -32,6 +32,17 @@
         <column name="id" primaryKey="true" autoIncrement="true" required="true" type="INTEGER" />
         <column name="active" required="true" type="BOOLEAN" />
         <behavior name="timestampable" />
+    </table>
+
+    <table name="dpdpickup_price">
+        <column name="id" primaryKey="true" autoIncrement="true" required="true" type="INTEGER" />
+        <column name="area_id" required="true" type="INTEGER" />
+        <column name="weight_max" required="true" type="FLOAT" />
+        <column name="price" type="DECIMAL"/>
+        <behavior name="timestampable" />
+        <foreign-key foreignTable="area" name="fk_dpdpickup_price_area_id" onDelete="RESTRICT" onUpdate="RESTRICT">
+            <reference foreign="id" local="area_id" />
+        </foreign-key>
     </table>
 	<external-schema filename="local/config/schema.xml" referenceOnly="true" />
 </database>

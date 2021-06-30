@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="dpdpickup.searchroute" path="/module/dpdpickup/{zipcode}/{city}" methods="get">
+    <!--<route id="dpdpickup.searchroute" path="/module/dpdpickup/{zipcode}/{city}" methods="get">
         <default key="_controller">DpdPickup\Controller\SearchCityController::searchAction</default>
         <requirement key="zipcode">\d{5}</requirement>
         <requirement key="city">.+</requirement>
@@ -35,5 +35,5 @@
 
     <route id="dpdpickup.config" path="/admin/module/dpdpickup/config" methods="post">
         <default key="_controller">DpdPickup\Controller\ConfigurationController::configureAction</default>
-    </route>
+    </route>-->
 </routes>

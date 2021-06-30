@@ -3,26 +3,37 @@
 namespace DpdPickup\Controller;
 
 use DpdPickup\DpdPickup;
+use DpdPickup\Form\ConfigurationForm;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\Exception\FormValidationException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ConfigurationController
  * @package DpdPickup\Controller
  * @author Etienne Perriere <eperriere@openstudio.fr>
  */
+
+
+/**
+ * @Route("/admin/module/dpdpickup/config", name="dpdpickup_config")
+ */
 class ConfigurationController extends BaseAdminController
 {
+
+    /**
+     * @Route("", name="_save", methods="POST")
+     */
     public function configureAction()
     {
         if (null !== $response = $this->checkAuth([AdminResources::MODULE], ['DpdPickup'], [AccessManager::CREATE, AccessManager::UPDATE])) {
             return $response;
         }
 
-        $baseForm = $this->createForm("dpdpickup.config.form");
+        $baseForm = $this->createForm(ConfigurationForm::getName());
 
         $errorMessage = null;
 

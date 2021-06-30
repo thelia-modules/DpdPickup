@@ -4,6 +4,9 @@ namespace DpdPickup\Form;
 
 use DpdPickup\DataTransformer\ZipCodeListTransformer;
 use DpdPickup\DpdPickup;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Form\BaseForm;
 
 /**
@@ -13,9 +16,9 @@ use Thelia\Form\BaseForm;
  */
 class ConfigurationForm extends BaseForm
 {
-    public function getName()
+    public static function getName()
     {
-        return "dpdpickup-config-form";
+        return "dpdpickup_config_form";
     }
 
     /**
@@ -30,13 +33,13 @@ class ConfigurationForm extends BaseForm
         $this->formBuilder
             ->add(
                 'default_status',
-                'choice',
+                ChoiceType::class,
                 [
                     'label' => $this->translator->trans('Change order status to', [], DpdPickup::DOMAIN),
                     'choices' => [
-                        DpdPickup::NO_CHANGE => $this->translator->trans("Do not change", [], DpdPickup::DOMAIN),
-                        DpdPickup::PROCESS => $this->translator->trans("Set orders status as processing", [], DpdPickup::DOMAIN),
-                        DpdPickup::SEND => $this->translator->trans("Set orders status as sent", [], DpdPickup::DOMAIN)
+                        $this->translator->trans("Do not change", [], DpdPickup::DOMAIN) => DpdPickup::NO_CHANGE,
+                        $this->translator->trans("Set orders status as processing", [], DpdPickup::DOMAIN) => DpdPickup::PROCESS,
+                        $this->translator->trans("Set orders status as sent", [], DpdPickup::DOMAIN) => DpdPickup::SEND
                     ],
                     'required' => true,
                     'expanded' => true,
@@ -46,7 +49,7 @@ class ConfigurationForm extends BaseForm
             )
             ->add(
                 'google_map_key',
-                'text',
+                TextType::class,
                 [
                     'required' => false,
                     'constraints' => [],
@@ -57,7 +60,7 @@ class ConfigurationForm extends BaseForm
             )
             ->add(
                 'exclude_zip_code',
-                'textarea',
+                TextareaType::class,
                 [
                     'required' => false,
                     'constraints' => [],

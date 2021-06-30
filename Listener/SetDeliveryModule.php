@@ -25,6 +25,7 @@ namespace DpdPickup\Listener;
 
 use DpdPickup\DpdPickup;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
 use DpdPickup\Model\OrderAddressIcirelais;
@@ -43,18 +44,18 @@ use Thelia\Model\AddressQuery;
 
 class SetDeliveryModule implements EventSubscriberInterface
 {
-    protected $request;
-    public function __construct(Request $request)
+    protected $requestStack;
+    public function __construct(RequestStack $requestStack)
     {
-        $this->request = $request;
+        $this->requestStack = $requestStack;
     }
 
     /**
-     * @return \Thelia\Core\HttpFoundation\Request
+     * @return \Symfony\Component\HttpFoundation\Request|null
      */
     public function getRequest()
     {
-        return $this->request;
+        return $this->requestStack->getCurrentRequest();
     }
 
     protected function check_module($id)

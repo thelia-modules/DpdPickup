@@ -3,6 +3,7 @@
 namespace DpdPickup\Form;
 
 use DpdPickup\DpdPickup;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
@@ -14,16 +15,16 @@ use Thelia\Form\BaseForm;
  */
 class ImportExaprintForm extends BaseForm
 {
-    public function getName()
+    public static function getName()
     {
-        return 'import_exaprint_form';
+        return 'dpdpickup_import';
     }
 
     protected function buildForm()
     {
         $this->formBuilder
             ->add(
-                'import_file', 'file',
+                'import_file', FileType::class,
                 [
                     'label' => Translator::getInstance()->trans('Select file to import', [], DpdPickup::DOMAIN),
                     'constraints' => [

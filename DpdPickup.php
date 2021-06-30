@@ -30,6 +30,7 @@ use DpdPickup\Model\Map\DpdpickupPriceTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\Join;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symfony\Component\Finder\Finder;
 use Thelia\Exception\OrderException;
 use Thelia\Install\Database;
@@ -85,7 +86,7 @@ class DpdPickup extends AbstractDeliveryModule
 
     private static $prices = null;
 
-    public function postActivation(ConnectionInterface $con = null)
+    public function postActivation(ConnectionInterface $con = null): void
     {
         $database = new Database($con->getWrappedConnection());
 
@@ -99,7 +100,7 @@ class DpdPickup extends AbstractDeliveryModule
      * @param string $newVersion
      * @param ConnectionInterface|null $con
      */
-    public function update($currentVersion, $newVersion, ConnectionInterface $con = null)
+    public function update($currentVersion, $newVersion, ConnectionInterface $con = null): void
     {
         $finder = (new Finder())->files()->name('#.*?\.sql#')->sortByName()->in(self::UPDATE_PATH);
 
@@ -136,7 +137,7 @@ class DpdPickup extends AbstractDeliveryModule
         if (null === self::$prices) {
             self::$prices = [];
 
-            $areaJoin = new Join(DpdpickupPriceTableMap::AREA_ID, AreaTableMap::ID, Criteria::INNER_JOIN);
+            $areaJoin = new Join(DpdpickupPriceTableMap::COL_AREA_ID, AreaTableMap::COL_ID, Criteria::INNER_JOIN);
             $dpdPickupPrices = DpdpickupPriceQuery::create()
                 ->addJoinObject($areaJoin)
                 ->withColumn(AreaTableMap::NAME, 'NAME')
@@ -287,5 +288,13 @@ class DpdPickup extends AbstractDeliveryModule
     public function getDeliveryMode()
     {
         return "pickup";
+    }
+
+    public static function configureServices(ServicesConfigurator $servicesConfigurator): void
+    {
+        $servicesConfigurator->load(self::getModuleCode().'\\', __DIR__)
+            ->exclude([THELIA_MODULE_DIR . ucfirst(self::getModuleCode()). "/I18n/*"])
+            ->autowire(true)
+            ->autoconfigure(true);
     }
 }

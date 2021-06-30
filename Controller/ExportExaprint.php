@@ -31,14 +31,19 @@ use Thelia\Core\Translation\Translator;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Model\Exception\InvalidArgumentException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * @Route("/admin/module/dpdpickup/export", name="dpdpickup_export")
  * Class ExportExaprint
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
  */
 class ExportExaprint extends BaseAdminController
 {
+    /**
+     * @Route("", name="_export", methods="POST")
+     */
     public function export()
     {
         if (null !== $response = $this->checkAuth(
@@ -49,7 +54,7 @@ class ExportExaprint extends BaseAdminController
             return $response;
         }
 
-        $form = new ExportExaprintForm($this->getRequest());
+        $form = $this->createForm(ExportExaprintForm::getName());
         $error_message = null;
         try {
             $vform = $this->validateForm($form);

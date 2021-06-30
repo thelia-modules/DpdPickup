@@ -43,7 +43,7 @@
 
                     <!-- Configuration tab -->
                     <div id="configuration_tab" class="tab-pane {if $tab eq "4"}active{/if} form-container">
-                        {form name='dpdpickup.config.form'}
+                        {form name='dpdpickup_config_form'}
                             <form action="{url path='/admin/module/dpdpickup/config'}" method="post">
                                 {form_hidden_fields form=$form}
 
@@ -96,7 +96,7 @@
 
                     <div id="export_exaprint" class="tab-pane {if $tab eq "0"}active{/if} form-container">
                         {ifloop rel="list.dpdpickup.orders"}
-                            {form name="dpdpickup.selection"}
+                            {form name="dpdpickup_selection"}
                             <form method="post" action="{url path="/admin/module/dpdpickup/exportgo"}">
                                 <div class="panel panel-default">
 
@@ -244,7 +244,7 @@
                             </div>
                         {/flash}
 
-                        {form name='dpdpickup.import'}
+                        {form name='dpdpickup_import'}
                             <form action="{url path='/admin/module/dpdpickup/import'}" method="post" {form_enctype form=$form}>
                                 {form_hidden_fields form=$form}
                                 {render_form_field form=$form field="success_url" value={url path="/admin/module/DpdPickup"} current_tab="import_exaprint"}
@@ -270,7 +270,7 @@
                     </div>
 
                     <div id="configure_export_exaprint" class="tab-pane {if $tab eq "2"}active{/if} form-container">
-                    {form name="dpdpickup.export"} 
+                    {form name="dpdpickup_export"} 
                         <form action="{url path="/admin/module/dpdpickup/export"}" method="POST" {form_enctype form=$form}>
                             {form_hidden_fields form=$form}
 
@@ -481,7 +481,7 @@
                             <div class="col-md-4">
                             <!-- checkbox free shipping -->
                             {assign var="isIcirelaisFreeShipping" value=0}
-                            {form  name="dpdpickup.freeshipping.form"}
+                            {form  name="dpdpickup_freeshipping_form"}
                                 <form action="{url path="/admin/module/dpdpickup/freeshipping"}" method="post" id="freeshippingform">
                                     {form_hidden_fields form=$form}
 
@@ -497,8 +497,8 @@
                                 </form>
                             {/form}
                             </div>
-								<div class="col-md-6" id="freeshipping-from-{$deliveryModeId}" {if $isSoColissimoFreeShipping eq 1} style="display:none;" {/if}>
-								{form  name="dpdpickup.freeshipping.amount.form"}
+								<div class="col-md-6" id="freeshipping-from-{$deliveryModeId|default:null}" {if $isSoColissimoFreeShipping|default:null eq 1} style="display:none;" {/if}>
+								{form  name="dpdpickup_freeshipping_amount_form"}
                                 <form action="{url path="/admin/module/dpdpickup/freeshipping_amount"}"  method="post">
                                 	{form_hidden_fields form=$form}
 
@@ -544,6 +544,8 @@
 
                                     dialog_ok_label     = {intl d='dpdpickup.ai' l="Create"}
                                     dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
+                                    form_enctype = null
+                                    form_content = null
                                 }
                                 <div class="table-responsive">
                                     <table class="table table-striped table-condensed table-left-aligned">
@@ -586,6 +588,8 @@
                                             form_action= {url path="/admin/module/dpdpickup/prices"}
                                             dialog_ok_label     = {intl d='dpdpickup.ai' l="Edit"}
                                             dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
+                                            form_enctype = null
+                                            form_content = null
                                         }
 
                                         {* -- Delete price slice confirmation dialog ----------------------------------- *}
@@ -607,6 +611,8 @@
                                             form_action= {url path="/admin/module/dpdpickup/prices"}
                                             dialog_ok_label     = {intl d='dpdpickup.ai' l="Delete"}
                                             dialog_cancel_label = {intl d='dpdpickup.ai' l="Cancel"}
+                                            form_enctype = null
+                                            form_content = null
                                         }
 
                                         <tr>

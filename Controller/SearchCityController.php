@@ -24,14 +24,19 @@
 namespace DpdPickup\Controller;
 
 use Thelia\Controller\Front\BaseFrontController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * @Route("/module/dpdpickup", name="module_dpdpickup")
  * Class SearchCityController
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
  */
 class SearchCityController extends BaseFrontController
 {
+    /**
+     * @Route("/{zipcode}/{city}", name="_search", methods="GET")
+     */
     public function searchAction($zipcode, $city)
     {
         return $this->render("getSpecificLocation", array("_zipcode_"=>$zipcode, "_city_"=>$city));
