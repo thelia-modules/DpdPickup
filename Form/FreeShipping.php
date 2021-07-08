@@ -25,6 +25,7 @@ namespace DpdPickup\Form;
 
 use DpdPickup\DpdPickup;
 use DpdPickup\Model\IcirelaisFreeshippingQuery;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
 
@@ -37,7 +38,7 @@ class FreeShipping extends BaseForm
         $this->formBuilder
             ->add(
                 "freeshipping",
-                "checkbox",
+                CheckboxType::class,
                 array(
                     'data' => $freeshipping,
                     'label' => Translator::getInstance()->trans("Activate free shipping: ", [], DpdPickup::DOMAIN)
@@ -48,8 +49,8 @@ class FreeShipping extends BaseForm
     /**
      * @return string the name of you form. This name must be unique
      */
-    public function getName()
+    public static function getName()
     {
-        return "icirelaisfreeshipping";
+        return "dpdpickup_freeshipping_form";
     }
 }

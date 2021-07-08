@@ -24,6 +24,9 @@
 namespace DpdPickup\Form;
 
 use DpdPickup\DpdPickup;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 use Thelia\Form\BaseForm;
@@ -37,9 +40,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class ExportExaprintForm extends BaseForm
 {
-    public function getName()
+    public static function getName()
     {
-        return "exportexaprintform";
+        return "dpdpickup_export";
     }
 
     protected function buildForm()
@@ -47,7 +50,7 @@ class ExportExaprintForm extends BaseForm
         $this->formBuilder
             ->add(
                 'exp_name',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s name', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_NAME),
@@ -59,7 +62,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_addr',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s address1', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_ADDR),
@@ -71,7 +74,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_addr2',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s address2', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_ADDR2),
@@ -82,7 +85,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_zipcode',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s zipcode', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_ZIPCODE),
@@ -94,7 +97,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_city',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s city', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_CITY),
@@ -106,7 +109,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_tel',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s phone', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_TEL),
@@ -118,7 +121,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_mobile',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s mobile phone', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_MOBILE),
@@ -130,7 +133,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_mail',
-                'email',
+                EmailType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Sender\'s email', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_EXPEDITOR_MAIL),
@@ -142,7 +145,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'exp_dpdcode',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('DpdPickup Sender\'s code', [], DpdPickup::DOMAIN),
                     'constraints' => array(new NotBlank(), new Length(['min' => 8, 'max' => 8])),
@@ -153,7 +156,7 @@ class ExportExaprintForm extends BaseForm
                 )
             )->add(
                 'return_type',
-                'integer',
+                IntegerType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Choose a return service', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_TYPE, DpdPickup::RETURN_NONE),
@@ -164,7 +167,7 @@ class ExportExaprintForm extends BaseForm
                 )
             )->add(
                 'return_name',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Return name', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_NAME),
@@ -175,7 +178,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'return_addr',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Return address1', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_ADDR),
@@ -186,7 +189,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'return_addr2',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Return address2', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_ADDR2),
@@ -197,7 +200,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'return_zipcode',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Return zipcode', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_ZIPCODE),
@@ -208,7 +211,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'return_city',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Return city', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_CITY),
@@ -219,7 +222,7 @@ class ExportExaprintForm extends BaseForm
             )
             ->add(
                 'return_tel',
-                'text',
+                TextType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Return phone', [], DpdPickup::DOMAIN),
                     'data' => DpdPickup::getConfigValue(DpdPickup::KEY_RETURN_TEL),

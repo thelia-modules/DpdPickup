@@ -16,15 +16,15 @@
     </loops>
 
     <forms>
-        <form name="dpdpickup.import" class="DpdPickup\Form\ImportExaprintForm"/>
-        <form name="dpdpickup.export" class="DpdPickup\Form\ExportExaprintForm"/>
-        <form name="dpdpickup.selection" class="DpdPickup\Form\ExportExaprintSelection" />
-        <form name="dpdpickup.freeshipping.form" class="DpdPickup\Form\FreeShipping" />
-        <form name="dpdpickup.freeshipping.amount.form" class="DpdPickup\Form\FreeShippingAmount" />
-        <form name="dpdpickup.config.form" class="DpdPickup\Form\ConfigurationForm" />
+        <form name="dpdpickup_import" class="DpdPickup\Form\ImportExaprintForm"/>
+        <form name="dpdpickup_export" class="DpdPickup\Form\ExportExaprintForm"/>
+        <form name="dpdpickup_selection" class="DpdPickup\Form\ExportExaprintSelection" />
+        <form name="dpdpickup_freeshipping_form" class="DpdPickup\Form\FreeShipping" />
+        <form name="dpdpickup_freeshipping_amount_form" class="DpdPickup\Form\FreeShippingAmount" />
+        <form name="dpdpickup_config_form" class="DpdPickup\Form\ConfigurationForm" />
     </forms>
 
-    <services>
+    <!--<services>
         <service id="dpd.pickup.price.action" class="DpdPickup\Listener\DpdPickupPriceListener">
             <tag name="kernel.event_subscriber"/>
         </service>
@@ -40,7 +40,7 @@
         <service id="api.dpdpickup.pickup.point" class="DpdPickup\Listener\APIListener" scope="request">
             <tag name="kernel.event_subscriber"/>
         </service>
-    </services>
+    </services>-->
 
     <hooks>
         <hook id="dpdpickup.delivery.show" class="DpdPickup\Hook\DpdPickupHook" scope="request">

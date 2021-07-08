@@ -24,6 +24,11 @@
 namespace DpdPickup\Form;
 
 use DpdPickup\DpdPickup;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Form\BaseForm;
 use Thelia\Core\Translation\Translator;
 use Thelia\Model\OrderQuery;
@@ -35,9 +40,9 @@ use Thelia\Model\OrderQuery;
  */
 class ExportExaprintSelection extends BaseForm
 {
-    public function getName()
+    public static function getName()
     {
-        return "exportexaprintselection";
+        return "dpdpickup_selection";
     }
 
     protected function buildForm()
@@ -49,13 +54,13 @@ class ExportExaprintSelection extends BaseForm
         $this->formBuilder
             ->add(
                 'new_status_id',
-                'choice',
+                ChoiceType::class,
                 array(
                     'label' => Translator::getInstance()->trans('Change order status to', [], DpdPickup::DOMAIN),
                     'choices' => array(
-                        DpdPickup::NO_CHANGE => Translator::getInstance()->trans("Do not change", [], DpdPickup::DOMAIN),
-                        DpdPickup::PROCESS => Translator::getInstance()->trans("Set orders status as processing", [], DpdPickup::DOMAIN),
-                        DpdPickup::SEND => Translator::getInstance()->trans("Set orders status as sent", [], DpdPickup::DOMAIN)
+                        Translator::getInstance()->trans("Do not change", [], DpdPickup::DOMAIN) => DpdPickup::NO_CHANGE,
+                        Translator::getInstance()->trans("Set orders status as processing", [], DpdPickup::DOMAIN) => DpdPickup::PROCESS,
+                        Translator::getInstance()->trans("Set orders status as sent", [], DpdPickup::DOMAIN) => DpdPickup::SEND
                     ),
                     'required' => true,
                     'expanded' => true,
@@ -68,45 +73,45 @@ class ExportExaprintSelection extends BaseForm
 
             ->add(
                 'order_ref_check',
-                'collection',
+                CollectionType::class,
                 array(
-                    'type'         => 'checkbox',
+                    'entry_type'   => CheckboxType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 )
             )
             ->add(
                 'order_ref',
-                'collection',
+                CollectionType::class,
                 array(
-                    'type'         => 'text',
+                    'entry_type'   => TextType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 )
             )
             ->add(
                 'assur',
-                'collection',
+                CollectionType::class,
                 array(
-                    'type'         => 'checkbox',
+                    'entry_type'   => CheckboxType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 )
             )
             ->add(
                 'pkgNumber',
-                'collection',
+                CollectionType::class,
                 array(
-                    'type'         => 'number',
+                    'entry_type'   => NumberType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 )
             )
             ->add(
                 'pkgWeight',
-                'collection',
+                CollectionType::class,
                 array(
-                    'type'         => 'number',
+                    'entry_type'   => NumberType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 )

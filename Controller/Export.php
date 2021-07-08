@@ -25,6 +25,8 @@ namespace DpdPickup\Controller;
 
 use DpdPickup\Form\ExportExaprintSelection;
 use DpdPickup\DpdPickup;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
@@ -40,8 +42,10 @@ use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Model\OrderStatus;
 use Thelia\Model\OrderStatusQuery;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * @Route("/admin/module/dpdpickup/exportgo", name="dpdpickup_exportgo")
  * Class Export
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
@@ -88,7 +92,10 @@ class Export extends BaseAdminController
         return $value;
     }
 
-    public function exportfile()
+    /**
+     * @Route("", name="_export", methods="POST")
+     */
+    public function exportfile(EventDispatcherInterface $eventDispatcher)
     {
         if (null !== $response = $this->checkAuth(
                 array(AdminResources::MODULE),
@@ -169,7 +176,7 @@ class Export extends BaseAdminController
             ->find();
 
         // FORM VALIDATION
-        $form = new ExportExaprintSelection($this->getRequest());
+        $form = $this->createForm(ExportExaprintSelection::getName());
         $status_id = null;
         try {
             $vform = $this->validateForm($form);
@@ -211,13 +218,13 @@ class Export extends BaseAdminController
                     $status = OrderStatusQuery::create()
                         ->findOneByCode(OrderStatus::CODE_PROCESSING);
                     $event->setStatus($status->getId());
-                    $this->getDispatcher()->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
+                    $eventDispatcher->dispatch($event, TheliaEvents::ORDER_UPDATE_STATUS);
                 } elseif ($status_id == "sent") {
                     $event = new OrderEvent($order);
                     $status = OrderStatusQuery::create()
                         ->findOneByCode(OrderStatus::CODE_SENT);
                     $event->setStatus($status->getId());
-                    $this->getDispatcher()->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
+                    $eventDispatcher->dispatch($event, TheliaEvents::ORDER_UPDATE_STATUS);
                 }
 
                 //Get invoice address

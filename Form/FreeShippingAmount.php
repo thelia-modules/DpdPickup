@@ -23,6 +23,7 @@
 
 namespace DpdPickup\Form;
 
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Thelia\Form\BaseForm;
 
 class FreeShippingAmount extends BaseForm
@@ -50,15 +51,15 @@ class FreeShippingAmount extends BaseForm
     protected function buildForm()
     {
         $this->formBuilder
-            ->add("amount", "number")
+            ->add("amount", NumberType::class)
         ;
     }
 
     /**
      * @return string the name of you form. This name must be unique
      */
-    public function getName()
+    public static function getName()
     {
-        return "dpdpickupfreeshippingamount";
+        return "dpdpickup_freeshipping_amount_form";
     }
 }
