@@ -45,8 +45,6 @@ use Thelia\Model\OrderStatusQuery;
  * Class Export
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
- * @original_author etienne roudeix <eroudeix@openstudio.fr>
- * @contributor Etienne Perriere <eperriere@openstudio.fr>
  */
 class Export extends BaseAdminController
 {
