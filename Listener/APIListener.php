@@ -5,15 +5,35 @@ namespace DpdPickup\Listener;
 
 
 use DpdPickup\DpdPickup;
+use OpenApi\Model\Api\DeliveryModuleOption;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Core\Event\Delivery\PickupLocationEvent;
 use Thelia\Core\Event\TheliaEvents;
+use OpenApi\Events\DeliveryModuleOptionEvent;
+use OpenApi\Events\OpenApiEvents;
+use Thelia\Core\Translation\Translator;
 use Thelia\Log\Tlog;
+use Thelia\Model\CountryArea;
+use Thelia\Model\ModuleQuery;
 use Thelia\Model\PickupLocation;
 use Thelia\Model\PickupLocationAddress;
 
 class APIListener implements EventSubscriberInterface
 {
+    /** @var ContainerInterface  */
+    protected $container;
+
+    /**
+     * APIListener constructor.
+     * @param ContainerInterface $container We need the container because we use a service from another module
+     * which is not mandatory, and using its service without it being installed will crash
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * Calls the Chronopost API and returns a response containing the informations of the relay points found
      *
@@ -160,6 +180,73 @@ class APIListener implements EventSubscriberInterface
         }
     }
 
+    public function getDeliveryModuleOptions(DeliveryModuleOptionEvent $deliveryModuleOptionEvent)
+    {
+        if ($deliveryModuleOptionEvent->getModule()->getId() !== DpdPickup::getModuleId()) {
+            return ;
+        }
+
+        $isValid = true;
+        $postage = null;
+        $postageTax = null;
+
+        try {
+            $module = new DpdPickup();
+            $country = $deliveryModuleOptionEvent->getCountry();
+
+            if (empty($module->getAreaForCountry($country))) {
+                throw new DeliveryException(Translator::getInstance()->trans("Your delivery country is not covered by DpdClassic"));
+            }
+
+            $countryAreas = $country->getCountryAreas();
+            $areasArray = [];
+
+            /** @var CountryArea $countryArea */
+            foreach ($countryAreas as $countryArea) {
+                $areasArray[] = $countryArea->getAreaId();
+            }
+
+            if (empty($countryAreas->getFirst())) {
+                throw new DeliveryException(Translator::getInstance()->trans("Your delivery country is not covered by DpdClassic"));
+            }
+
+            $postage = $module->getPostageAmount(
+                $countryAreas->getFirst()->getAreaId(),
+                $deliveryModuleOptionEvent->getCart()->getWeight(),
+                $deliveryModuleOptionEvent->getCart()->getTaxedAmount($country)
+            );
+
+            $postageTax = 0; //TODO
+        } catch (\Exception $exception) {
+            $isValid = false;
+            var_dump($exception->getMessage());
+            var_dump($postage); die;
+        }
+
+        $minimumDeliveryDate = ''; // TODO (calculate delivery date from day of order)
+        $maximumDeliveryDate = ''; // TODO (calculate delivery date from day of order
+
+        $propelModule = ModuleQuery::create()
+            ->filterById(DpdPickup::getModuleId())
+            ->findOne();
+
+        /** @var DeliveryModuleOption $deliveryModuleOption */
+        $deliveryModuleOption = ($this->container->get('open_api.model.factory'))->buildModel('DeliveryModuleOption');
+        $deliveryModuleOption
+            ->setCode(DpdPickup::getModuleCode())
+            ->setValid($isValid)
+            ->setTitle($propelModule->getTitle())
+            ->setImage('')
+            ->setMinimumDeliveryDate($minimumDeliveryDate)
+            ->setMaximumDeliveryDate($maximumDeliveryDate)
+            ->setPostage($postage)
+            ->setPostageTax($postageTax)
+            ->setPostageUntaxed($postage - $postageTax)
+        ;
+
+        $deliveryModuleOptionEvent->appendDeliveryModuleOptions($deliveryModuleOption);
+    }
+
     public static function getSubscribedEvents()
     {
         $listenedEvents = [];
@@ -167,6 +254,11 @@ class APIListener implements EventSubscriberInterface
         /** Check for old versions of Thelia where the events used by the API didn't exists */
         if (class_exists(PickupLocation::class)) {
             $listenedEvents[TheliaEvents::MODULE_DELIVERY_GET_PICKUP_LOCATIONS] = array("getPickupLocations", 131);
+        }
+
+        /** Check for old versions of Thelia where the events used by the API didn't exists */
+        if (class_exists(DeliveryModuleOptionEvent::class)) {
+            $listenedEvents[OpenApiEvents::MODULE_DELIVERY_GET_OPTIONS] = array("getDeliveryModuleOptions", 129);
         }
 
         return $listenedEvents;
