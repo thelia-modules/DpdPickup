@@ -18,6 +18,7 @@ use Thelia\Model\CountryArea;
 use Thelia\Model\ModuleQuery;
 use Thelia\Model\PickupLocation;
 use Thelia\Model\PickupLocationAddress;
+use Thelia\Module\Exception\DeliveryException;
 
 class APIListener implements EventSubscriberInterface
 {
