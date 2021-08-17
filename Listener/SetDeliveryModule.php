@@ -71,6 +71,9 @@ class SetDeliveryModule implements EventSubscriberInterface
             //tmp solution
             $request = $this->getRequest();
             $pr_code = $request->request->get('pr_code');
+            if (empty($pr_code)) {
+                $pr_code = $request->request->get('pickupAddress')['id'];
+            }
             if (!empty($pr_code)) {
                 // Get details w/ SOAP
                 $con = new \SoapClient(__DIR__."/../Config/exapaq.wsdl", array('soap_version'=>SOAP_1_2));
