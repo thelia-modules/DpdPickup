@@ -196,7 +196,7 @@ class APIListener implements EventSubscriberInterface
             $country = $deliveryModuleOptionEvent->getCountry();
 
             if (empty($module->getAreaForCountry($country))) {
-                throw new DeliveryException(Translator::getInstance()->trans("Your delivery country is not covered by DpdClassic"));
+                throw new DeliveryException(Translator::getInstance()->trans("Your delivery country is not covered by DpdPickup"));
             }
 
             $countryAreas = $country->getCountryAreas();
@@ -208,7 +208,7 @@ class APIListener implements EventSubscriberInterface
             }
 
             if (empty($countryAreas->getFirst())) {
-                throw new DeliveryException(Translator::getInstance()->trans("Your delivery country is not covered by DpdClassic"));
+                throw new DeliveryException(Translator::getInstance()->trans("Your delivery country is not covered by DpdPickup"));
             }
 
             $postage = $module->getPostageAmount(
@@ -220,8 +220,6 @@ class APIListener implements EventSubscriberInterface
             $postageTax = 0; //TODO
         } catch (\Exception $exception) {
             $isValid = false;
-            var_dump($exception->getMessage());
-            var_dump($postage); die;
         }
 
         $minimumDeliveryDate = ''; // TODO (calculate delivery date from day of order)
