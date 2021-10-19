@@ -36,10 +36,12 @@ use Thelia\Exception\OrderException;
 use Thelia\Install\Database;
 use Thelia\Model\Country;
 use Thelia\Model\Map\AreaTableMap;
+use Thelia\Model\State;
 use Thelia\Module\AbstractDeliveryModule;
+use Thelia\Module\AbstractDeliveryModuleWithState;
 use Thelia\Module\Exception\DeliveryException;
 
-class DpdPickup extends AbstractDeliveryModule
+class DpdPickup extends AbstractDeliveryModuleWithState
 {
     const DOMAIN = 'dpdpickup';
     const DOMAIN_ADMIN = "dpdpickup.ai";
@@ -171,10 +173,11 @@ class DpdPickup extends AbstractDeliveryModule
      * If you return false, the delivery method will not be displayed
      *
      * @param Country $country the country to deliver to.
+     * @param State $state the state to deliver to.
      *
      * @return boolean
      */
-    public function isValidDelivery(Country $country)
+    public function isValidDelivery(Country $country, State $state = null)
     {
         $cartWeight = $this->getRequest()->getSession()->getSessionCart($this->getDispatcher())->getWeight();
 
@@ -199,10 +202,12 @@ class DpdPickup extends AbstractDeliveryModule
         return false;
     }
 
-    public static function getPostageAmount($areaId, $weight, $cartAmount = 0)
+    public function getOrderPostage($country, $weight, $locale, $cartAmount = 0)
     {
         $freeshipping = IcirelaisFreeshippingQuery::create()->getLast();
         $postage=0;
+        $areaId = $country->getAreaId();
+
         if (!$freeshipping) {
             $freeShippingAmount = (float) self::getFreeShippingAmount();
 
@@ -246,19 +251,20 @@ class DpdPickup extends AbstractDeliveryModule
             }
         }
 
-        return $postage;
+        return $this->buildOrderPostage($postage, $country, $locale);
     }
 
-    public function getPostage(Country $country)
+    public function getPostage(Country $country, State $state = null)
     {
         $request = $this->getRequest();
 
         $cartWeight = $this->getRequest()->getSession()->getSessionCart($this->getDispatcher())->getWeight();
         $cartAmount = $request->getSession()->getSessionCart($this->getDispatcher())->getTaxedAmount($country);
 
-        $postage = self::getPostageAmount(
-            $country->getAreaId(),
+        $postage = $this->getOrderPostage(
+            $country,
             $cartWeight,
+            $request->getSession()->getLang()->getLocale(),
             $cartAmount
         );
 
