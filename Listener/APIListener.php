@@ -112,12 +112,12 @@ class APIListener implements EventSubscriberInterface
             ->setZipCode((string)$response->ZIPCODE)
             ->setPhoneNumber('')
             ->setCellphoneNumber('')
-            ->setCompany('')
+            ->setCompany((string)$response->NAME)
             ->setCountryCode('FR') /** DPD Pickup only delivers in France as of 23/06/2020 */
             ->setFirstName('')
             ->setLastName('')
             ->setIsDefault(0)
-            ->setLabel('')
+            ->setLabel((string)$response->NAME)
             ->setAdditionalData([])
         ;
 
