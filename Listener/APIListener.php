@@ -5,7 +5,13 @@ namespace DpdPickup\Listener;
 
 
 use DpdPickup\DpdPickup;
+use OpenApi\Events\DeliveryModuleOptionEvent;
+use OpenApi\Events\OpenApiEvents;
+use OpenApi\Model\Api\DeliveryModuleOption;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Core\Event\Delivery\PickupLocationEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Log\Tlog;
@@ -14,6 +20,18 @@ use Thelia\Model\PickupLocationAddress;
 
 class APIListener implements EventSubscriberInterface
 {
+    /** @var Container */
+    private $container;
+
+    /** @var RequestStack */
+    private $requestStack;
+
+    public function __construct(ContainerInterface $container, RequestStack $requestStack)
+    {
+        $this->container = $container;
+        $this->requestStack = $requestStack;
+    }
+
     /**
      * Calls the Chronopost API and returns a response containing the informations of the relay points found
      *
@@ -67,6 +85,48 @@ class APIListener implements EventSubscriberInterface
         }
 
         return $xml->PUDO_ITEMS;
+    }
+
+    public function getDeliveryModuleOptions(DeliveryModuleOptionEvent $deliveryModuleOptionEvent)
+    {
+        if ($deliveryModuleOptionEvent->getModule()->getId() !== DpdPickup::getModuleId()) {
+            return ;
+        }
+
+        $isValid = true;
+        $locale = $this->requestStack->getCurrentRequest()->getSession()->getLang()->getLocale();
+
+        try {
+            $module = new DpdPickup();
+            $country = $deliveryModuleOptionEvent->getCountry();
+
+            $orderPostage = $module->getOrderPostage(
+                $country,
+                $deliveryModuleOptionEvent->getCart()->getWeight(),
+                $deliveryModuleOptionEvent->getCart()->getTaxedAmount($country),
+                $locale
+            );
+
+        } catch (\Exception $exception) {
+            $isValid = false;
+        }
+
+
+        /** @var DeliveryModuleOption $deliveryModuleOption */
+        $deliveryModuleOption = ($this->container->get('open_api.model.factory'))->buildModel('DeliveryModuleOption');
+        $deliveryModuleOption
+            ->setCode('DpdPickup')
+            ->setValid($isValid)
+            ->setTitle($deliveryModuleOptionEvent->getModule()->setLocale($locale)->getTitle())
+            ->setImage('')
+            ->setMinimumDeliveryDate(null)
+            ->setMaximumDeliveryDate(null)
+            ->setPostage(($orderPostage) ? $orderPostage->getAmount() : 0)
+            ->setPostageTax(($orderPostage) ? $orderPostage->getAmountTax() : 0)
+            ->setPostageUntaxed(($orderPostage) ? $orderPostage->getAmount() - $orderPostage->getAmountTax() : 0)
+        ;
+
+        $deliveryModuleOptionEvent->appendDeliveryModuleOptions($deliveryModuleOption);
     }
 
     /**
@@ -167,6 +227,10 @@ class APIListener implements EventSubscriberInterface
         /** Check for old versions of Thelia where the events used by the API didn't exists */
         if (class_exists(PickupLocation::class)) {
             $listenedEvents[TheliaEvents::MODULE_DELIVERY_GET_PICKUP_LOCATIONS] = array("getPickupLocations", 131);
+        }
+
+        if (class_exists(DeliveryModuleOptionEvent::class)) {
+            $listenedEvents[OpenApiEvents::MODULE_DELIVERY_GET_OPTIONS] = array("getDeliveryModuleOptions", 128);
         }
 
         return $listenedEvents;
