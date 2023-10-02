@@ -83,6 +83,8 @@ class DpdPickup extends AbstractDeliveryModuleWithState
     const RETURN_ON_DEMAND = 3;
     const RETURN_PREPARED = 4;
 
+    const DPD_PICKUP_POINT_TAX_RULE_ID = 'dpd_pickup_point_tax_rule_id';
+
     protected $request;
     protected $dispatcher;
 
@@ -91,6 +93,10 @@ class DpdPickup extends AbstractDeliveryModuleWithState
     public function postActivation(ConnectionInterface $con = null): void
     {
         $database = new Database($con->getWrappedConnection());
+
+        if (!self::getConfigValue(self::DPD_PICKUP_POINT_TAX_RULE_ID)) {
+            self::setConfigValue(self::DPD_PICKUP_POINT_TAX_RULE_ID, null);
+        }
 
         $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
     }
@@ -211,8 +217,8 @@ class DpdPickup extends AbstractDeliveryModuleWithState
         if (!$freeshipping) {
             $freeShippingAmount = (float) self::getFreeShippingAmount();
 
-            //If a min price for freeShipping is define and the amount of cart reach this montant return 0
-            //Be carefull ! Thelia cartAmount is a decimal with 6 in precision ! That's why we must round cart amount
+            //If a min price for freeShipping is defined and the amount of cart reach this amount return 0
+            //Be careful ! Thelia cartAmount is a decimal with 6 in precision ! That's why we must round cart amount
             if ($freeShippingAmount > 0 && $freeShippingAmount <= round($cartAmount, 2)) {
                 return 0;
             }
@@ -251,7 +257,7 @@ class DpdPickup extends AbstractDeliveryModuleWithState
             }
         }
 
-        return $this->buildOrderPostage($postage, $country, $locale);
+        return $this->buildOrderPostage($postage, $country, $locale, self::getConfigValue(self::DPD_PICKUP_POINT_TAX_RULE_ID));
     }
 
     public function getPostage(Country $country, State $state = null)

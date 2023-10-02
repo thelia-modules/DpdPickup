@@ -26,6 +26,9 @@
         {if $smarty.get.current_tab eq "config_tab"}
             {assign var="tab" value="4"}
         {/if}
+        {if $smarty.get.current_tab eq "tax_rule"}
+        {assign var="tab" value="5"}
+        {/if}
     {/if}
 
     <div class="general-block-decorator">
@@ -37,6 +40,7 @@
                     <li class="{if $tab eq "2"}active{/if}"><a data-toggle="tab" href="#configure_export_exaprint">{intl d='dpdpickup.ai' l="Configure EXAPRINT file"}</a></li>
                     <li class="{if $tab eq "3"}active{/if}"><a data-toggle="tab" href="#prices_slices_tab">{intl d='dpdpickup.ai' l="Price slices"}</a></li>
                     <li class="{if $tab eq "4"}active{/if}"><a data-toggle="tab" href="#configuration_tab">{intl d='dpdpickup.ai' l="Configuration"}</a></li>
+                    <li class="{if $tab eq "5"}active{/if}"><a data-toggle="tab" href="#tax_rule">{intl d='dpdpickup.ai' l="Tax Rule"}</a></li>
                 </ul>
                 <br/>
                 <div class="tab-content">
@@ -642,6 +646,25 @@
 
                             </div>
                         </div>
+                    </div>
+
+                    <div id="tax_rule" class="tab-pane {if $tab eq "5"}active{/if} form-container">
+                        <br>
+                        <div class="title">
+                            {intl l="Dpd Pickup Tax Rule configuration" d='dpdpickup.ai'}
+                        </div>
+
+                        {form name="dpdpickup_form_tax_rule_form"}
+                        <form action="{url path="/admin/module/DpdPickup/tax_rule/save"}" method="post" >
+                            {form_hidden_fields}
+
+                            {render_form_field field='tax_rule_id'}
+
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">{intl l="Save"}</button>
+                            </span>
+                        </form>
+                        {/form}
                     </div>
                 </div>
             </div>
