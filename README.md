@@ -1,14 +1,24 @@
 # DPD Pickup
-author: Thelia <info@thelia.net>
 
-## fr_FR
+- Pickup Point delivery with DPD
+- Export / import orders
 
 ### Installation
 
-L'installation du module DpdPickup se fait de la même manière que les autres, vous pouvez soit importer directement le zip dans le back office,
-soit le décompresser dans <dossier de Thélia2>/local/modules.
+### Manually
 
-Il nous vous reste plus qu'à activer le module et à associer vos zones de livraison.
+* Copy the module into ```<thelia_root>/local/modules/``` directory and be sure that the name of the module is DpdPickup.
+* Activate it in your thelia administration panel
+
+### Composer
+
+Add it in your main thelia composer.json file:
+
+```
+composer require thelia/dpd-pickup-module:~2.0.0
+```
+
+## fr_FR
 
 ### Utilisation
 
@@ -50,13 +60,6 @@ Vous pouvez suivre votre colis <a href="{$URL}">ici</a>
 {/loop}
 
 ## en_US
-
-### Install notes
-
-The install process of DpdPickup module is the same than the other modules, you can import it directly from the back office,
-or unzip it in <path to thelia2>/local/modules.
-
-Then you can activate DPD Pickup module and configure you shipping zones.
 
 ### How to use
 

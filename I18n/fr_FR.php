@@ -16,6 +16,7 @@ return array(
     'day_5' => 'Vendredi',
     'day_6' => 'Samedi',
     'day_7' => 'Dimanche',
+    'Default Tax rule' => 'Règles de taxes par défaut',
     'Do not change' => 'Ne pas changer',
     'DpdPickup Sender\'s code' => 'Code DpdPickup de l\'expéditeur',
     'Empty value not allowed' => 'Le champ suivant ne peut être vide',
@@ -45,5 +46,6 @@ return array(
     'Set orders status as processing' => 'Traitement',
     'Set orders status as sent' => 'Envoyée',
     'Sorry, an error occurred: %err' => 'Désolé, une erreur s\'est produite : %err',
+    'Tax Rule' => 'Règles de taxes',
     'The EXAPRINT configuration is missing. Please correct it.' => 'La configuration du fichier EXAPRINT est manquante. Veuillez la corriger.',
 );
