@@ -95,6 +95,7 @@ class APIListener implements EventSubscriberInterface
 
         $isValid = true;
         $locale = $this->requestStack->getCurrentRequest()->getSession()->getLang()->getLocale();
+        $orderPostage = null;
 
         try {
             $module = new DpdPickup();
