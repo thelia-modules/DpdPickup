@@ -40,6 +40,8 @@ use Thelia\Model\State;
 use Thelia\Module\AbstractDeliveryModule;
 use Thelia\Module\AbstractDeliveryModuleWithState;
 use Thelia\Module\Exception\DeliveryException;
+use Propel\Runtime\Propel;
+use PDO;
 
 class DpdPickup extends AbstractDeliveryModuleWithState
 {
@@ -187,21 +189,23 @@ class DpdPickup extends AbstractDeliveryModuleWithState
     {
         $cartWeight = $this->getRequest()->getSession()->getSessionCart($this->getDispatcher())->getWeight();
 
-        $areaId = $country->getAreaId();
+        $areaIds = $this->getAllAreasForCountry($country);
 
         $prices = self::getPrices();
 
-        /* check if Ici Relais delivers the asked area */
-        if (isset($prices[$areaId]) && isset($prices[$areaId]["slices"])) {
-            $areaPrices = $prices[$areaId]["slices"];
-            ksort($areaPrices);
+        foreach ($areaIds as $areaId) {
+            /* check if Ici Relais delivers the asked area */
+            if (isset($prices[$areaId]) && isset($prices[$areaId]["slices"])) {
+                $areaPrices = $prices[$areaId]["slices"];
+                ksort($areaPrices);
 
-            /* check this weight is not too much */
-            end($areaPrices);
+                /* check this weight is not too much */
+                end($areaPrices);
 
-            $maxWeight = key($areaPrices);
-            if ($cartWeight <= $maxWeight) {
-                return true;
+                $maxWeight = key($areaPrices);
+                if ($cartWeight <= $maxWeight) {
+                    return true;
+                }
             }
         }
 
@@ -212,7 +216,8 @@ class DpdPickup extends AbstractDeliveryModuleWithState
     {
         $freeshipping = IcirelaisFreeshippingQuery::create()->getLast();
         $postage=0;
-        $areaId = $country->getAreaId();
+        $areasIds = $this->getAllAreasForCountry($country);
+        $foundArea = false;
 
         if (!$freeshipping) {
             $freeShippingAmount = (float) self::getFreeShippingAmount();
@@ -225,35 +230,44 @@ class DpdPickup extends AbstractDeliveryModuleWithState
 
             $prices = self::getPrices();
 
-            /* check if DpdPickup delivers the asked area */
-            if (!isset($prices[$areaId]) || !isset($prices[$areaId]["slices"])) {
+            foreach ($areasIds as $areaId) {
+                /* check if DpdPickup delivers the asked area */
+                if (!isset($prices[$areaId]) || !isset($prices[$areaId]["slices"])) {
+                    continue;
+                }
+
+                $foundArea = true;
+
+                $areaPrices = $prices[$areaId]["slices"];
+                ksort($areaPrices);
+
+                /* check this weight is not too much */
+                end($areaPrices);
+                $maxWeight = key($areaPrices);
+                if ($weight > $maxWeight) {
+                    throw new DeliveryException(
+                        sprintf("Ici Relais delivery unavailable for this cart weight (%s kg)", $weight),
+                        OrderException::DELIVERY_MODULE_UNAVAILABLE
+                    );
+                }
+
+                $postage = current($areaPrices);
+
+                while (prev($areaPrices)) {
+                    if ($weight > key($areaPrices)) {
+                        break;
+                    }
+
+                    $postage = current($areaPrices);
+                }
+                break;
+            }
+
+            if (!$foundArea) {
                 throw new DeliveryException(
                     "Ici Relais delivery unavailable for the chosen delivery country",
                     OrderException::DELIVERY_MODULE_UNAVAILABLE
                 );
-            }
-
-            $areaPrices = $prices[$areaId]["slices"];
-            ksort($areaPrices);
-
-            /* check this weight is not too much */
-            end($areaPrices);
-            $maxWeight = key($areaPrices);
-            if ($weight > $maxWeight) {
-                throw new DeliveryException(
-                    sprintf("Ici Relais delivery unavailable for this cart weight (%s kg)", $weight),
-                    OrderException::DELIVERY_MODULE_UNAVAILABLE
-                );
-            }
-
-            $postage = current($areaPrices);
-
-            while (prev($areaPrices)) {
-                if ($weight > key($areaPrices)) {
-                    break;
-                }
-
-                $postage = current($areaPrices);
             }
         }
 
@@ -275,6 +289,33 @@ class DpdPickup extends AbstractDeliveryModuleWithState
         );
 
         return $postage;
+    }
+
+    /**
+     * Returns ids of area containing this country and covered by this module
+     * @param Country $country
+     * @return array Area ids
+     */
+    public function getAllAreasForCountry(Country $country)
+    {
+        $areaArray = [];
+
+        $sql = 'SELECT ca.area_id as area_id FROM country_area ca
+               INNER JOIN area_delivery_module adm ON (ca.area_id = adm.area_id AND adm.delivery_module_id = :p0)
+               WHERE ca.country_id = :p1';
+
+        $con = Propel::getConnection();
+
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':p0', $this->getModuleModel()->getId(), PDO::PARAM_INT);
+        $stmt->bindValue(':p1', $country->getId(), PDO::PARAM_INT);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $areaArray[] = $row['area_id'];
+        }
+
+        return $areaArray;
     }
 
     public static function getConfigExcludeZipCode()

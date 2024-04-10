@@ -529,7 +529,8 @@
                             <div id="table-prices-icirelais" {if $isIcirelaisFreeShipping eq 1} style="display:none;" {/if}>
                                 <!-- Prices editing -->
                                 {* -- Add price slice confirmation dialog ----------------------------------- *}
-                                {loop type="area" name="list area" backend_context=true}
+                                {loop type="module" name="dpd_pickup_id" code="DpdPickup"}
+                                {loop type="area" name="list area" backend_context=true module_id=$ID}
                                     
                                 {capture name="create_dialog"}
                                     <input type="hidden" name="operation" value="add"/>
@@ -642,6 +643,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {/loop}
                                 {/loop}
 
                             </div>
