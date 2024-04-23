@@ -86,24 +86,17 @@ class SendEMail extends BaseAction implements EventSubscriberInterface
                     $order = $event->getOrder();
                     $customer = $order->getCustomer();
 
-                    $this->parser->assign('order_id', $order->getId());
-                    $this->parser->assign('order_ref', $order->getRef());
-                    $this->parser->assign('order_date', $order->getCreatedAt());
-                    $this->parser->assign('update_date', $order->getUpdatedAt());
-                    $this->parser->assign('package', $order->getDeliveryRef());
-
-                    $message
-                        ->setLocale($order->getLang()->getLocale());
-
-                    $instance = \Swift_Message::newInstance()
-                        ->addTo($customer->getEmail(), $customer->getFirstname()." ".$customer->getLastname())
-                        ->addFrom($contact_email, ConfigQuery::read('store_name'))
-                    ;
-
-                    // Build subject and body
-                    $message->buildMessage($this->parser, $instance);
-
-                    $this->getMailer()->send($instance);
+                    $this->mailer->sendEmailToCustomer(
+                        'order_confirmation_icirelais',
+                        $customer,
+                        [
+                            'order_id' => $order->getId(),
+                            'order_ref' => $order->getRef(),
+                            'order_date' => $order->getCreatedAt(),
+                            'update_date' => $order->getUpdatedAt(),
+                            'package' => $order->getDeliveryRef(),
+                        ]
+                    );
                 }
             }
         }
