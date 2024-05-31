@@ -104,8 +104,8 @@ class APIListener implements EventSubscriberInterface
             $orderPostage = $module->getOrderPostage(
                 $country,
                 $deliveryModuleOptionEvent->getCart()->getWeight(),
-                $deliveryModuleOptionEvent->getCart()->getTaxedAmount($country),
-                $locale
+                $locale,
+                $deliveryModuleOptionEvent->getCart()->getTaxedAmount($country)
             );
 
         } catch (\Exception $exception) {
