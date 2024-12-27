@@ -164,7 +164,7 @@ class SetDeliveryModule implements EventSubscriberInterface
     {
         return array(
             TheliaEvents::ORDER_SET_DELIVERY_MODULE => array('isModuleDpdPickup', 64),
-            TheliaEvents::ORDER_BEFORE_PAYMENT => array('updateDeliveryAddress', 256)
+            TheliaEvents::ORDER_BEFORE_PAYMENT => array('updateDeliveryAddress', 255)
         );
     }
 }
