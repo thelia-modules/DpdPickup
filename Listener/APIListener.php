@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Api\Bridge\Propel\Event\DeliveryModuleOptionEvent;
 use Thelia\Api\Resource\DeliveryModuleOption;
+use Thelia\Api\Resource\DeliveryPickupLocation;
 use Thelia\Core\Event\Delivery\PickupLocationEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\HttpFoundation\Session\Session;
@@ -163,10 +164,9 @@ class APIListener implements EventSubscriberInterface
      *
      * @throws \Exception
      */
-    protected function createPickupLocationFromResponse($response): PickupLocation
+    protected function createPickupLocationFromResponse($response): DeliveryPickupLocation
     {
-        /** We create the new location */
-        $pickupLocation = new PickupLocation();
+        $pickupLocation = new DeliveryPickupLocation();
 
         /* We set the differents properties of the location */
         $pickupLocation
