@@ -18,12 +18,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Api\Bridge\Propel\Event\DeliveryModuleOptionEvent;
 use Thelia\Api\Resource\DeliveryModuleOption;
 use Thelia\Api\Resource\DeliveryPickupLocation;
+use Thelia\Api\Resource\PickupLocationAddress;
 use Thelia\Core\Event\Delivery\PickupLocationEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\HttpFoundation\Session\Session;
 use Thelia\Log\Tlog;
 use Thelia\Model\PickupLocation;
-use Thelia\Model\PickupLocationAddress;
 
 class APIListener implements EventSubscriberInterface
 {
@@ -48,7 +48,7 @@ class APIListener implements EventSubscriberInterface
         $date = date('d/m/Y');
 
         try {
-            $getPudoSoap = new \SoapClient(__DIR__.'/../Config/exapaq.wsdl', ['soap_version' => SOAP_1_2]);
+            $getPudoSoap = new \SoapClient(__DIR__ . '/../Config/exapaq.wsdl', ['soap_version' => SOAP_1_2]);
 
             if (\in_array($zipCode, $excludeZipCodes)) {
                 return null;
@@ -69,8 +69,8 @@ class APIListener implements EventSubscriberInterface
                     '[%s %s - SOAP Error %d]: %s',
                     $date,
                     date('H:i:s'),
-                    (int) $e->getCode(),
-                    (string) $e->getMessage()
+                    (int)$e->getCode(),
+                    (string)$e->getMessage()
                 )
             );
 
@@ -79,7 +79,7 @@ class APIListener implements EventSubscriberInterface
 
         $xml = new \SimpleXMLElement($responses->GetPudoListResult->any);
         if (isset($xml->ERROR)) {
-            throw new \ErrorException('Error while choosing pick-up & go store: '.$xml->ERROR);
+            throw new \ErrorException('Error while choosing pick-up & go store: ' . $xml->ERROR);
         }
 
         return $xml->PUDO_ITEMS;
@@ -122,8 +122,7 @@ class APIListener implements EventSubscriberInterface
             ->setMaximumDeliveryDate(null)
             ->setPostage(($orderPostage) ? $orderPostage->getAmount() : 0)
             ->setPostageTax(($orderPostage) ? $orderPostage->getAmountTax() : 0)
-            ->setPostageUntaxed(($orderPostage) ? $orderPostage->getAmount() - $orderPostage->getAmountTax() : 0)
-        ;
+            ->setPostageUntaxed(($orderPostage) ? $orderPostage->getAmount() - $orderPostage->getAmountTax() : 0);
 
         $deliveryModuleOptionEvent->appendDeliveryModuleOptions($deliveryModuleOption);
     }
@@ -138,23 +137,22 @@ class APIListener implements EventSubscriberInterface
 
         /* We set the differents properties of the location address */
         $pickupLocationAddress
-            ->setId((string) $response->PUDO_ID)
-            ->setTitle((string) $response->NAME)
-            ->setAddress1((string) $response->ADDRESS1)
-            ->setAddress2((string) $response->ADDRESS2)
-            ->setAddress3((string) $response->ADDRESS3)
-            ->setCity((string) $response->CITY)
-            ->setZipCode((string) $response->ZIPCODE)
+            ->setId((string)$response->PUDO_ID)
+            ->setTitle((string)$response->NAME)
+            ->setAddress1((string)$response->ADDRESS1)
+            ->setAddress2((string)$response->ADDRESS2)
+            ->setAddress3((string)$response->ADDRESS3)
+            ->setCity((string)$response->CITY)
+            ->setZipCode((string)$response->ZIPCODE)
             ->setPhoneNumber('')
             ->setCellphoneNumber('')
             ->setCompany('')
-            ->setCountryCode('FR') /* DPD Pickup only delivers in France as of 23/06/2020 */
+            ->setCountryCode('FR')/* DPD Pickup only delivers in France as of 23/06/2020 */
             ->setFirstName('')
             ->setLastName('')
             ->setIsDefault(0)
             ->setLabel('')
-            ->setAdditionalData([])
-        ;
+            ->setAdditionalData([]);
 
         return $pickupLocationAddress;
     }
@@ -170,18 +168,17 @@ class APIListener implements EventSubscriberInterface
 
         /* We set the differents properties of the location */
         $pickupLocation
-            ->setId((string) $response->PUDO_ID)
-            ->setTitle((string) $response->NAME)
+            ->setId((string)$response->PUDO_ID)
+            ->setTitle((string)$response->NAME)
             ->setAddress($this->createPickupLocationAddressFromResponse($response))
-            ->setLatitude(str_replace(',', '.', (string) $response->LATITUDE))
-            ->setLongitude(str_replace(',', '.', (string) $response->LONGITUDE))
-            ->setModuleId(DpdPickup::getModuleId())
-        ;
+            ->setLatitude(str_replace(',', '.', (string)$response->LATITUDE))
+            ->setLongitude(str_replace(',', '.', (string)$response->LONGITUDE))
+            ->setModuleId(DpdPickup::getModuleId());
 
         /* We set the opening hours separately since we got them as an array */
         foreach ($response->OPENING_HOURS_ITEMS->OPENING_HOURS_ITEM as $horaire) {
             $openedHours = $pickupLocation->getOpeningHours()[$horaire->DAY_ID - 1];
-            $openedHours .= $openedHours === null ? $horaire->START_TM.'-'.$horaire->END_TM : ' '.$horaire->START_TM.'-'.$horaire->END_TM;
+            $openedHours .= $openedHours === null ? $horaire->START_TM . '-' . $horaire->END_TM : ' ' . $horaire->START_TM . '-' . $horaire->END_TM;
             $pickupLocation->setOpeningHours($horaire->DAY_ID - 1, $openedHours);
         }
 
@@ -195,7 +192,8 @@ class APIListener implements EventSubscriberInterface
      */
     public function getPickupLocations(PickupLocationEvent $pickupLocationEvent): void
     {
-        if ((null !== $moduleIds = $pickupLocationEvent->getModuleIds()) && !\in_array(DpdPickup::getModuleId(), $moduleIds, true)) {
+        if ((null !== $moduleIds = $pickupLocationEvent->getModuleIds()) && !\in_array(DpdPickup::getModuleId(),
+                $moduleIds, true)) {
             return;
         }
 
