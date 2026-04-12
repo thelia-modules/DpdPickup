@@ -4,7 +4,7 @@ namespace DpdPickup\Controller;
 
 use DpdPickup\DpdPickup;
 use DpdPickup\Form\TaxRuleForm;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;

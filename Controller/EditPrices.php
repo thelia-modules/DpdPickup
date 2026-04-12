@@ -33,10 +33,9 @@ use Thelia\Model\AreaQuery;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @Route("/admin/module/dpdpickup/prices", name="dpdpickup_prices")
  * Class EditPrices
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
@@ -46,6 +45,7 @@ class EditPrices extends BaseAdminController
     /**
      * @Route("", name="_save", methods="POST")
      */
+    #[Route('/admin/module/dpdpickup/prices', name: 'dpdpickup_prices')]
     public function editprices(RequestStack $requestStack, EventDispatcherInterface $eventDispatcher)
     {
         if (null !== $response = $this->checkAuth(array(AdminResources::MODULE), array('DpdPickup'), AccessManager::UPDATE)) {

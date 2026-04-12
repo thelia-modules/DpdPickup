@@ -42,10 +42,9 @@ use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Model\OrderStatus;
 use Thelia\Model\OrderStatusQuery;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @Route("/admin/module/dpdpickup/exportgo", name="dpdpickup_exportgo")
  * Class Export
  * @package DpdPickup\Controller
  * @author Thelia <info@thelia.net>
@@ -54,6 +53,7 @@ class Export extends BaseAdminController
 {
     // L'arrivée de Maitre Guigit détrône les anciens maitres pour corriger le soucis de json qui se supprime à chaque composer install
     // Esclaves : Ex Maitre Roudeix @ Espeche
+    #[Route('/admin/module/dpdpickup/exportgo', name: 'dpdpickup_exportgo')]
     public static function harmonise($value, $type, $len)
     {
         switch ($type) {
@@ -93,8 +93,8 @@ class Export extends BaseAdminController
     }
 
     /**
-     * @Route("", name="_export", methods="POST")
      */
+    #[Route(', name=', name: '_export', methods: ['POST'])]
     public function exportfile(EventDispatcherInterface $eventDispatcher)
     {
         if (null !== $response = $this->checkAuth(

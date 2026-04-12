@@ -9,7 +9,7 @@ use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\Exception\FormValidationException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class ConfigurationController
@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
- * @Route("/admin/module/dpdpickup/config", name="dpdpickup_config")
  */
 class ConfigurationController extends BaseAdminController
 {
@@ -27,6 +26,7 @@ class ConfigurationController extends BaseAdminController
     /**
      * @Route("", name="_save", methods="POST")
      */
+    #[Route('/admin/module/dpdpickup/config', name: 'dpdpickup_config')]
     public function configureAction()
     {
         if (null !== $response = $this->checkAuth([AdminResources::MODULE], ['DpdPickup'], [AccessManager::CREATE, AccessManager::UPDATE])) {

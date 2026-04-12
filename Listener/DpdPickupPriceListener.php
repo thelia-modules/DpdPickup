@@ -28,7 +28,7 @@ class DpdPickupPriceListener implements EventSubscriberInterface
     /**
      * @return array The event names to listen to
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             DpdPickupEvents::DPDPICKUP_PRICE_CREATE => ['createOrUpdate', 128],
