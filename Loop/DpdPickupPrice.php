@@ -44,14 +44,14 @@ class DpdPickupPrice extends BaseLoop implements ArraySearchLoopInterface
     /**
      * @return ArgumentCollection
      */
-    protected function getArgDefinitions()
+    protected function getArgDefinitions(): ArgumentCollection
     {
         return new ArgumentCollection(
             Argument::createIntTypeArgument('area', null, true)
         );
     }
 
-    public function buildArray()
+    public function buildArray(): array
     {
         $area = $this->getArea();
 
@@ -67,7 +67,7 @@ class DpdPickupPrice extends BaseLoop implements ArraySearchLoopInterface
         return $areaPrices;
     }
 
-    public function parseResults(LoopResult $loopResult)
+    public function parseResults(LoopResult $loopResult): LoopResult
     {
         foreach ($loopResult->getResultDataCollection() as $maxWeight => $price) {
             $loopResultRow = new LoopResultRow();

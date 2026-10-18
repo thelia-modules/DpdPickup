@@ -46,14 +46,14 @@ class DpdPickupUrlTracking extends BaseLoop implements ArraySearchLoopInterface
      */
     const BASE_URL = "http://www.dpd.fr/traces_info_%s";
 
-    protected function getArgDefinitions()
+    protected function getArgDefinitions(): ArgumentCollection
     {
         return new ArgumentCollection(
             Argument::createAnyTypeArgument('ref', null, true)
         );
     }
 
-    public function buildArray()
+    public function buildArray(): array
     {
         if (null !== $order = OrderQuery::create()->findOneByRef($this->getRef())) {
             return [$order->getRef() => $order->getDeliveryRef()];
@@ -62,7 +62,7 @@ class DpdPickupUrlTracking extends BaseLoop implements ArraySearchLoopInterface
         return [];
     }
 
-    public function parseResults(LoopResult $loopResult)
+    public function parseResults(LoopResult $loopResult): LoopResult
     {
         foreach ($loopResult->getResultDataCollection() as $ref => $code) {
             $loopResultRow = new LoopResultRow();
