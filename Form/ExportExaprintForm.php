@@ -40,7 +40,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class ExportExaprintForm extends BaseForm
 {
-    public static function getName()
+    public static function getName(): string
     {
         return "dpdpickup_export";
     }

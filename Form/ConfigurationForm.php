@@ -16,7 +16,7 @@ use Thelia\Form\BaseForm;
  */
 class ConfigurationForm extends BaseForm
 {
-    public static function getName()
+    public static function getName(): string
     {
         return "dpdpickup_config_form";
     }

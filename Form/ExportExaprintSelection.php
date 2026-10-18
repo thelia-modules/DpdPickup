@@ -40,7 +40,7 @@ use Thelia\Model\OrderQuery;
  */
 class ExportExaprintSelection extends BaseForm
 {
-    public static function getName()
+    public static function getName(): string
     {
         return "dpdpickup_selection";
     }
