@@ -24,6 +24,7 @@
 namespace DpdPickup\Loop;
 
 use DpdPickup\DpdPickup;
+use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Thelia\Core\Translation\Translator;
 use Thelia\Log\Tlog;
 use Thelia\Model\AddressQuery;
@@ -48,7 +49,7 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
     /**
      * @return ArgumentCollection
      */
-    protected function getArgDefinitions()
+    protected function getArgDefinitions(): ArgumentCollection
     {
         return new ArgumentCollection(
             Argument::createAnyTypeArgument("zipcode", ""),
@@ -56,7 +57,7 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
         );
     }
 
-    public function buildModelCriteria()
+    public function buildModelCriteria(): ModelCriteria
     {
         $zipcode = $this->getZipcode();
         $city = $this->getCity();
@@ -64,22 +65,21 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
             $this->zipcode = $zipcode;
             $this->city = $city;
             $this->addressflag = false;
-        } else {
-            if (null !== $customer = $this->securityContext->getCustomerUser()) {
-                $search = AddressQuery::create();
 
-                $search
-                    ->filterByCustomerId($customer->getId())
-                    ->filterByIsDefault(true);
-            } else {
-                throw new \ErrorException("Customer not connected.");
-            }
-
-            return $search;
+            // The zipcode and city are searched directly: the criteria must not return any address
+            return AddressQuery::create()->filterById(0);
         }
+
+        if (null === $customer = $this->securityContext->getCustomerUser()) {
+            throw new \ErrorException("Customer not connected.");
+        }
+
+        return AddressQuery::create()
+            ->filterByCustomerId($customer->getId())
+            ->filterByIsDefault(true);
     }
 
-    public function parseResults(LoopResult $loopResult)
+    public function parseResults(LoopResult $loopResult): LoopResult
     {
         $excludeZipCodes = DpdPickup::getConfigExcludeZipCode();
 
@@ -128,7 +128,7 @@ class DpdPickupAround extends BaseLoop implements PropelSearchLoopInterface
                 )
             );
 
-            return array();
+            return $loopResult;
         }
 
         $xml = new \SimpleXMLElement($response->GetPudoListResult->any);
