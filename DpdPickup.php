@@ -32,10 +32,11 @@ use Propel\Runtime\ActiveQuery\Join;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symfony\Component\Finder\Finder;
-use Thelia\Exception\OrderException;
-use Thelia\Install\Database;
+use Thelia\Core\Install\Database;
+use Thelia\Domain\Order\Exception\OrderException;
 use Thelia\Model\Country;
 use Thelia\Model\Map\AreaTableMap;
+use Thelia\Model\OrderPostage;
 use Thelia\Model\State;
 use Thelia\Module\AbstractDeliveryModule;
 use Thelia\Module\AbstractDeliveryModuleWithState;
@@ -92,7 +93,7 @@ class DpdPickup extends AbstractDeliveryModuleWithState
 
     private static $prices = null;
 
-    public function postActivation(ConnectionInterface $con = null): void
+    public function postActivation(?ConnectionInterface $con = null): void
     {
         $database = new Database($con->getWrappedConnection());
 
@@ -110,7 +111,7 @@ class DpdPickup extends AbstractDeliveryModuleWithState
      * @param string $newVersion
      * @param ConnectionInterface|null $con
      */
-    public function update($currentVersion, $newVersion, ConnectionInterface $con = null): void
+    public function update($currentVersion, $newVersion, ?ConnectionInterface $con = null): void
     {
         $finder = (new Finder())->files()->name('#.*?\.sql#')->sortByName()->in(self::UPDATE_PATH);
 
@@ -150,7 +151,7 @@ class DpdPickup extends AbstractDeliveryModuleWithState
             $areaJoin = new Join(DpdpickupPriceTableMap::COL_AREA_ID, AreaTableMap::COL_ID, Criteria::INNER_JOIN);
             $dpdPickupPrices = DpdpickupPriceQuery::create()
                 ->addJoinObject($areaJoin)
-                ->withColumn(AreaTableMap::NAME, 'NAME')
+                ->withColumn(AreaTableMap::COL_NAME, 'NAME')
                 ->orderByAreaId()
                 ->orderByWeightMax()
                 ->find()
@@ -185,7 +186,7 @@ class DpdPickup extends AbstractDeliveryModuleWithState
      *
      * @return boolean
      */
-    public function isValidDelivery(Country $country, State $state = null)
+    public function isValidDelivery(Country $country, ?State $state = null): bool
     {
         $cartWeight = $this->getRequest()->getSession()->getSessionCart($this->getDispatcher())->getWeight();
 
@@ -274,7 +275,7 @@ class DpdPickup extends AbstractDeliveryModuleWithState
         return $this->buildOrderPostage($postage, $country, $locale, self::getConfigValue(self::DPD_PICKUP_POINT_TAX_RULE_ID));
     }
 
-    public function getPostage(Country $country, State $state = null)
+    public function getPostage(Country $country, ?State $state = null): OrderPostage|float
     {
         $request = $this->getRequest();
 
