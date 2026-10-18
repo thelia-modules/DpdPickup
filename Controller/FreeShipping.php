@@ -27,7 +27,7 @@ use DpdPickup\DpdPickup;
 use DpdPickup\Model\IcirelaisFreeshipping;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Thelia\Controller\Admin\BaseAdminController;
-use Thelia\Core\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Tools\URL;
@@ -56,9 +56,9 @@ class FreeShipping extends BaseAdminController
 
             $save = new IcirelaisFreeshipping();
             $save->setActive(!empty($data))->save();
-            $response = Response::create('');
+            $response = new Response('');
         } catch (\Exception $e) {
-            $response = JsonResponse::create(array("error"=>$e->getMessage()), 500);
+            $response = new JsonResponse(array("error"=>$e->getMessage()), 500);
         }
 
         return $response;
