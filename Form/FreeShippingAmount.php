@@ -58,7 +58,7 @@ class FreeShippingAmount extends BaseForm
     /**
      * @return string the name of you form. This name must be unique
      */
-    public static function getName()
+    public static function getName(): string
     {
         return "dpdpickup_freeshipping_amount_form";
     }

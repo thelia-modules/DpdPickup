@@ -34,7 +34,7 @@ use DpdPickup\DpdPickup;
  */
 class DpdPickupDelivery extends Delivery
 {
-    public function parseResults(LoopResult $loopResult)
+    public function parseResults(LoopResult $loopResult): LoopResult
     {
         $icirelaiskey = DpdPickup::getModuleId();
 

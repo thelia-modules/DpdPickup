@@ -44,8 +44,8 @@
 
     <hooks>
         <hook id="dpdpickup.delivery.show" class="DpdPickup\Hook\DpdPickupHook" scope="request">
-            <tag name="hook.event_listener" event="order-delivery.extra" method="renderDpdPickupChoice"/>
-            <tag name="hook.event_listener" event="order-invoice.delivery-address" method="renderDeliveryAddress"/>
+            <tag name="hook.event_listener" event="order-delivery.extra" type="front" method="renderDpdPickupChoice"/>
+            <tag name="hook.event_listener" event="order-invoice.delivery-address" type="front" method="renderDeliveryAddress"/>
         </hook>
     </hooks>
 

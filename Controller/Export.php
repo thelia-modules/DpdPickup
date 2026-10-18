@@ -32,7 +32,7 @@ use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\Translation\Translator;
 use DpdPickup\Model\OrderAddressIcirelaisQuery;
-use Thelia\Core\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Thelia\Log\Tlog;
 use Thelia\Model\Order;
 use Thelia\Model\OrderAddressQuery;
@@ -137,7 +137,7 @@ class Export extends BaseAdminController
         }
 
         if (!$valid) {
-            return Response::create(
+            return new Response(
                 Translator::getInstance()->trans(
                     "The EXAPRINT configuration is missing. Please correct it.",
                     [],
@@ -187,7 +187,7 @@ class Export extends BaseAdminController
         } catch (\Exception $e) {
             Tlog::getInstance()->error("Form dpdpickup.selection sent with bad infos. ");
 
-            return Response::create(
+            return new Response(
                 Translator::getInstance()->trans(
                     "Got invalid data : %err",
                     ['%err' => $e->getMessage()],

@@ -39,12 +39,12 @@ use Thelia\Core\Translation\Translator;
 
 class CheckRightsLoop extends BaseLoop implements ArraySearchLoopInterface
 {
-    protected function getArgDefinitions()
+    protected function getArgDefinitions(): ArgumentCollection
     {
         return new ArgumentCollection();
     }
 
-    public function buildArray()
+    public function buildArray(): array
     {
         $ret = array();
         $dir = __DIR__."/../Config/";
@@ -85,7 +85,7 @@ class CheckRightsLoop extends BaseLoop implements ArraySearchLoopInterface
 
         return $ret;
     }
-    public function parseResults(LoopResult $loopResult)
+    public function parseResults(LoopResult $loopResult): LoopResult
     {
         foreach ($loopResult->getResultDataCollection() as $arr) {
             $loopResultRow = new LoopResultRow();

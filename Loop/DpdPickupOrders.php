@@ -24,6 +24,7 @@
 namespace DpdPickup\Loop;
 
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Thelia\Core\Template\Loop\Order;
 use DpdPickup\DpdPickup;
 use Thelia\Model\OrderQuery;
@@ -35,7 +36,7 @@ use Thelia\Model\OrderQuery;
  */
 class DpdPickupOrders extends Order
 {
-    public function buildModelCriteria()
+    public function buildModelCriteria(): ModelCriteria
     {
         return OrderQuery::create()
             ->filterByDeliveryModuleId(DpdPickup::getModuleId())

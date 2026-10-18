@@ -10,7 +10,7 @@ class ZipCodeListTransformer implements DataTransformerInterface
      * @param  string[] $zipCode
      * @return string
      */
-    public function transform($zipCode)
+    public function transform(mixed $zipCode): string
     {
         if ($zipCode === null) {
             return '';
@@ -27,7 +27,7 @@ class ZipCodeListTransformer implements DataTransformerInterface
      * @param  string $zipCodes
      * @return string[]
      */
-    public function reverseTransform($zipCodes)
+    public function reverseTransform(mixed $zipCodes): array
     {
         $return = [];
 

@@ -11,12 +11,12 @@ use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
 
 class DpdPickupDeliveryMode extends BaseLoop implements ArraySearchLoopInterface
 {
-    protected function getArgDefinitions()
+    protected function getArgDefinitions(): ArgumentCollection
     {
         return new ArgumentCollection();
     }
 
-    public function buildArray()
+    public function buildArray(): array
     {
         return [
             [
@@ -25,7 +25,7 @@ class DpdPickupDeliveryMode extends BaseLoop implements ArraySearchLoopInterface
         ];
     }
 
-    public function parseResults(LoopResult $loopResult)
+    public function parseResults(LoopResult $loopResult): LoopResult
     {
         foreach ($loopResult->getResultDataCollection() as $mode) {
             $loopResultRow = new LoopResultRow();

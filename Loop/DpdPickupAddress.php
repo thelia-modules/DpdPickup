@@ -24,6 +24,7 @@
 namespace DpdPickup\Loop;
 
 use DpdPickup\Model\AddressIcirelaisQuery;
+use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Thelia\Core\Template\Loop\Address;
 use Thelia\Core\Template\Element\LoopResult;
 use Thelia\Core\Template\Element\LoopResultRow;
@@ -43,7 +44,7 @@ class DpdPickupAddress extends Address
     {
         $this->exists = AddressIcirelaisQuery::create()->findPK($id) !== null;
     }
-    public function buildModelCriteria()
+    public function buildModelCriteria(): ModelCriteria
     {
         $id = $this->getId();
         $this->setExists($id[0]);
@@ -52,7 +53,7 @@ class DpdPickupAddress extends Address
                 AddressIcirelaisQuery::create()->filterById($id[0]) :
                 parent::buildModelCriteria();
     }
-    public function parseResults(LoopResult $loopResult)
+    public function parseResults(LoopResult $loopResult): LoopResult
     {
         if (!$this->exists) {
             return parent::parseResults($loopResult);
